@@ -31,7 +31,12 @@ tix_get_latest_version_for_platform()
   return;
 }
 
+# Chino
 tix_update_files_and_restart() {
+
+  # Borrar todo lo que está en /Applications/TixApp/
+  # Reemplzar por todo o que bajé
+  #
   return;
 }
 
