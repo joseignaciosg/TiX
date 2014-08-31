@@ -99,7 +99,7 @@
 					</h4>
 					<p>Las mediciones se realizan todo el tiempo, generando un
 						informe, tanto en formato web interactivo como en PDF mensual,
-						detallando los momentos en que su proveedor de Internet no pude
+						detallando los momentos en que su proveedor de Internet no puede
 						entregarle el tr&aacute;fico m&aacute;ximo contratado.</p>
 				</div>
 				<div class="span4">
