@@ -10,7 +10,7 @@ set :keep_releases, 5
 namespace :deploy do
   desc 'Restart application'
 
-  namespace :python_app do
+  namespace :python do
     task :deploy 
 
     after :deploy, :copy_files do
@@ -29,17 +29,12 @@ namespace :deploy do
     end
   end
 
-  namespace :web_app do
+  namespace :web do
     task :deploy 
 
     after :deploy, :package_war do
       on roles(:app) do
         execute "cd #{fetch(:deploy_to)}/current/TiX/ && mvn package && cp target/tix*.war /home/pfitba/#{fetch(:war_filename)}"
-      end
-    end
-
-    after :package_war, :restart_tomcat do
-      on roles(:app) do
         if fetch(:application).match /production/
           execute :sudo, :cp, "/home/pfitba/#{fetch(:war_filename)} /var/lib/tomcat7/webapps/ROOT.war"
         else
@@ -47,6 +42,13 @@ namespace :deploy do
         end
       end
     end
+
+    after :package_war, :restart_tomcat do
+      on roles(:app) do
+        execute :sudo, "service tomcat7 restart"
+      end
+    end
+
   end
 
   after :publishing, "python:deploy"
