@@ -6,4 +6,4 @@ hibernate.dialect          = org.hibernate.dialect.PostgreSQLDialect
 jdbc.driverClassName       = org.postgresql.Driver
 jdbc.url                   = jdbc:postgresql://localhost:5432/tix_db_staging
 jdbc.username              = tix_user_db
-dbc.password               = 54bf1n6
+jdbc.password               = 54bf1n6

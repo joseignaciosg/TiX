@@ -3,7 +3,7 @@ lock '3.2.1'
 set :application, 'tix_production'
 set :repo_url, 'git@github.com:joseignaciosg/TiX.git'
 set :format, :pretty
-set :log_level, :info
+set :log_level, :debug
 set :pty, true
 set :keep_releases, 5
 
