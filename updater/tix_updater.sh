@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-shopt -s extglob
-set -o errtrace
-set -o errexit
+# shopt -s extglob
+# set -o errtrace
+# set -o errexit
 
 tix_update_initialize()
 {
-  DEFAULT_SOURCES=(github.com/wayneeseguin/rvm)
+  DEFAULT_SOURCES=(github.com/joseignaciosg/TiX)
 
   BASH_MIN_VERSION="3.2.25"
   if
@@ -19,120 +19,33 @@ tix_update_initialize()
   fi
 
   export HOME PS4
-  export rvm_trace_flag rvm_debug_flag rvm_user_install_flag rvm_ignore_rvmrc rvm_prefix rvm_path
+  export tix_trace_flag tix_debug_flag tix_user_install_flag tix_ignore_rvmrc tix_prefix tix_path
 
-  PS4="+ \${BASH_SOURCE##\${rvm_path:-}} : \${FUNCNAME[0]:+\${FUNCNAME[0]}()}  \${LINENO} > "
+  PS4="+ \${BASH_SOURCE##\${tix_path:-}} : \${FUNCNAME[0]:+\${FUNCNAME[0]}()}  \${LINENO} > "
 }
 
-log()  { return }
-debug(){ return }
-fail() { return }
+log()  { printf "%b\n" "$*"; }
+debug(){ [[ ${tix_debug_flag:-0} -eq 0 ]] || printf "Running($#): $*"; }
+fail() { log "\nERROR: $*\n" ; exit 1 ; }
 
-tix_update_commands_setup()
+tix_get_latest_version_for_platform()
 {
-  return
+  return;
 }
 
-usage()
-{
-  return
+tix_update_files_and_restart() {
+  return;
 }
 
-## duplication marker 32fosjfjsznkjneuera48jae
-__rvm_curl_output_control()
-{
-  return
-}
-
-## duplication marker 32fosjfjsznkjneuera48jae
-# -S is automatically added to -s
-# __rvm_curl()
-# (
-# return
-# )
-
-rvm_error()  { return }
-__rvm_which(){ return }
-__rvm_debug_command()
-{
-  return
-}
-rvm_is_a_shell_function()
-{
-  return
-}
-
-# Searches the tags for the highest available version matching a given pattern.
-# fetch_version (github.com/wayneeseguin/rvm bitbucket.org/mpapis/rvm) 1.10. -> 1.10.3
-# fetch_version (github.com/wayneeseguin/rvm bitbucket.org/mpapis/rvm) 1.10. -> 1.10.3
-# fetch_version (github.com/wayneeseguin/rvm bitbucket.org/mpapis/rvm) 1.    -> 1.11.0
-# fetch_version (github.com/wayneeseguin/rvm bitbucket.org/mpapis/rvm) ""    -> 2.0.1
-fetch_version()
-{
-  return
-}
-
-# Returns a sorted list of all version tags from a repository
-fetch_versions()
-{
-  return
-}
-
-update_release()
-{
-  return
-}
-
-update_head()
-{
-  return
-}
-
-# duplication marker dfkjdjngdfjngjcszncv
-# Drop in cd which _doesn't_ respect cdpath
-__rvm_cd()
-{
-  return
-}
-
-get_and_unpack()
-{
-  return
-}
-
-tix_update_default_settings()
-{
-  return
-}
-
-tix_update_parse_params()
-{
-  return
-}
-
-tix_update_validate_rvm_path()
-{
-  return
-}
-
-tix_update_select_and_get_version()
-{
-  return
-}
-
-tix_update_main()
-{
-  return
-}
-
-# tix_update_ruby_and_gems()
-# (
-# return
-# )
 
 tix_update()
 {
-  return
+  # Hace las validaciones iniciales para garantizar que el script funcione, o falla y deja algo en algún log.
+  tix_update_initialize
+  # Obtiene la última versión del servidor (a definir) y lo extrae en /tmp/tix_update/
+  tix_get_latest_version_for_platform
+  # Agarra los archivos /tmp/tix_update/ y los copia sobre donde se encuentre la instalación actual, o instala el update, según la plataforma.
+  tix_update_files_and_restart
 }
 
 tix_update "$@"
