@@ -23,8 +23,8 @@ namespace :deploy do
     after :copy_files, :restart_service do
       on roles(:app) do
         env = fetch(:application).gsub(/_releases/,"").gsub(/tix_/,"")
-        execute "/etc/init.d/serverTiX-#{env} stop && sleep 1"
-        execute "/etc/init.d/serverTiX-#{env} start"
+        execute "sudo /etc/init.d/serverTiX-#{env} stop"
+        execute "sudo /etc/init.d/serverTiX-#{env} start"
       end
     end
   end
