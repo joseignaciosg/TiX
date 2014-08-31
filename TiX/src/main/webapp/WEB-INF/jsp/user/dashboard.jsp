@@ -14,9 +14,9 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
 	              	<li class="nav-header">Instalaciones </li>
-	              	
-	              	
-	              	
+
+
+
 	              	<li class='<c:if test="${user.defaultInstallation.id == currentInstallation.id}">active listExpanded</c:if><c:if test="${user.defaultInstallation.id != currentInstallation.id}">listCollapsed</c:if>'>
 							<a id="toggler" href="./dashboard?nickname=${user.nickname}&graphtype=${currentGraphType}&ins=${user.defaultInstallation.id}" data-toggle="collapse" class="toggler active" data-target="#${user.defaultInstallation.id}_isps">
 								<i class="icon-folder-open"></i>
@@ -25,7 +25,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 							</a>
 					</li>
 					<ul id="${user.defaultInstallation.id}_isps" class="<c:if test="${user.defaultInstallation.id != currentInstallation.id}">collapse</c:if>">
-		    				<li  class='<c:if test="${user.defaultInstallation.id == currentInstallation.id && requiredISP == null}">activeISP</c:if>'><a  href="./dashboard?nickname=${user.nickname}&graphtype=${currentGraphType}&ins=${user.defaultInstallation.id}">General  </a></li>		
+		    				<li  class='<c:if test="${user.defaultInstallation.id == currentInstallation.id && requiredISP == null}">activeISP</c:if>'><a  href="./dashboard?nickname=${user.nickname}&graphtype=${currentGraphType}&ins=${user.defaultInstallation.id}">General  </a></li>
 			    			<c:forEach var="isp" items="${ispDefaultInstallations}">
 			              		<li class='<c:if test="${user.defaultInstallation.id == currentInstallation.id && isp.id == requiredISP.id}">activeISP</c:if>'><a href="./dashboard?nickname=${user.nickname}&graphtype=${currentGraphType}&ins=${user.defaultInstallation.id}&isp=${isp.id}">${isp.name}</a></li>
 		             		</c:forEach>
@@ -53,9 +53,9 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 			              	</ul>
 			              </c:if>
 					</c:forEach>
-					
-					
-					
+
+
+
 	  	          <li class="divider"></li>
 	              	<li><a href="../installation/downloadapp"><i class="icon-plus-sign"></i>Nueva instalaci&oacute;n</a></li>
 	              	<li><a href="../installation/allinstallations"><i class="icon-pencil"></i>Editar instalaci&oacute;nes</a></li>
@@ -67,9 +67,10 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
-        
-        
+
+
         <div class="span9">
+            <br />
 			<c:choose>
 	        	<c:when test="${noRecords}">
 	        		<div class="span12">
@@ -289,4 +290,3 @@ format: 'dd/mm/yyyy',
 </script>
 
 </html>
-Status API Training Shop Blog About © 2014 GitHub, Inc. Terms Privacy Security Contact

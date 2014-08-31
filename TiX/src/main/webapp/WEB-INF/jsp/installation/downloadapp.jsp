@@ -33,6 +33,14 @@
 								</a>
 							</li>
 							<li class="span3">
+								<p style="text-align: center;">Linux i386</p>
+								<a href="<c:url value='/download/tix_unix_i386.deb'/>" class="thumbnail"> <img
+									alt="Linux"
+									style=""
+									src="<c:url value='/img/linuxlogo.jpg'/>">
+								</a>
+							</li>
+							<li class="span3">
 								<p style="text-align: center;">OSX Mavericks (10.9)</p>
 								<a href="<c:url value='/download/tix_osx_mavericks.dmg'/>" class="thumbnail"> <img
 									alt="Apple Mavericks"
@@ -40,14 +48,14 @@
 									src="<c:url value='/img/applelogo.jpg'/>">
 								</a>
 							</li>
-							<li class="span3">
+							<!--<li class="span3">
 								<p style="text-align: center;">OSX Mountain Lion (10.8)</p>
 								<a href="<c:url value='/download/tix_osx_mountain.dmg'/>" class="thumbnail"> <img
 									alt="Apple Mountain Lion"
 									style=""
 									src="<c:url value='/img/applelogo.jpg'/>">
 								</a>
-							</li>
+							</li>-->
 							<!--<li class="span3">
 								<p style="text-align: center;">Windows</p>
 								<a href="<c:url value='/download/tix_windows.exe'/>" class="thumbnail"> <img
