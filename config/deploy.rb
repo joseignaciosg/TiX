@@ -11,7 +11,9 @@ namespace :deploy do
   desc 'Restart application'
 
   namespace :python_app do
-    task :copy_files do
+    task :deploy 
+
+    after :deploy, :copy_files do
       on roles(:app) do
         execute "mkdir -p #{fetch(:install_to)} || true"
         execute "cp -rv #{fetch(:deploy_to)}/current/TiX/PythonApp/ServerApp/* #{fetch(:install_to)}"
@@ -28,7 +30,9 @@ namespace :deploy do
   end
 
   namespace :web_app do
-    task :package_war do
+    task :deploy 
+
+    after :deploy, :package_war do
       on roles(:app) do
         execute "cd #{fetch(:deploy_to)}/current/TiX/ && mvn package && cp target/tix*.war /home/pfitba/#{fetch(:war_filename)}"
       end
@@ -45,6 +49,6 @@ namespace :deploy do
     end
   end
 
-  after :publishing, "python_app:copy_files"
-  after :publishing, "web_app:package_war"
+  after :publishing, "python:deploy"
+  after :publishing, "web:deploy"
 end
