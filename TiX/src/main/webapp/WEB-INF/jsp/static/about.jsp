@@ -14,7 +14,7 @@
 				<div class="span12">
 					<h3>Sobre el Proyecto TiX</h3>
 					<p>El proyecto TiX nace de un subsidio de LACNIC con el fin de diponer de
-						una herramienta para medir la calidad de los accesos a Internet.</p> 
+						una herramienta para medir la calidad de los accesos a Internet.</p>
 					<p>Del mismo participan las siguintes instituciones:</p>
 				</div>
 				<div class="span12">
@@ -42,11 +42,11 @@
 							</ul>
 						</div>
 					</div>
-					
+
 					<div class="span12 offset2">
-						<div class="row-fluid">	
+						<div class="row-fluid">
 							<ul class="thumbnails">
-								
+
 								<li class="span4" style="text-align: center;"><a href="http://www.innova-red.net/" target="_blank"> <img
 											alt="InnovaRED"
 											class="img-polaroid"
@@ -78,7 +78,9 @@
 			<div class="row">
 				<div class="span12">
 					<h3>Colaboradores</h3>
-					<p>Alan Karpovsky (<a href="http://www.itba.edu.ar/" target="_blank">ITBA</a>)</p> 
+					<p>Cristian Pereyra (<a href="http://www.itba.edu.ar/" target="_blank">ITBA</a>)</p>
+					<p>José Ignacio Galindo (<a href="http://www.itba.edu.ar/" target="_blank">ITBA</a>)</p>
+					<p>Alan Karpovsky (<a href="http://www.itba.edu.ar/" target="_blank">ITBA</a>)</p>
 					<p>Nicolas Loreti (<a href="http://www.itba.edu.ar/" target="_blank">ITBA</a>)</p>
 					<p>Paula Verghelet (<a href="http://www.uba.ar/" target="_blank">UBA</a>)</p>
 					<p>Ing. Esteban Poggio (<a href="http://www.uba.ar/" target="_blank">UBA</a>)</p>
