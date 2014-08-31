@@ -38,10 +38,10 @@ namespace :deploy do
         execute "cd #{fetch(:deploy_to)}/current/TiX/ && (sed -i 's/classpath:setup.properties/classpath:setup.properties-#{env}/' ./src/main/resources/data.xml)"
         execute "cd #{fetch(:deploy_to)}/current/TiX/ && mvn package && cp target/tix*.war /home/pfitba/#{fetch(:war_filename)}"
         if fetch(:application).match /production/
+          execute :sudo, "rm -rf /var/lib/tomcat7/webapps/ROOT*"
           execute :sudo, :cp, "/home/pfitba/#{fetch(:war_filename)} /var/lib/tomcat7/webapps/ROOT.war"
         else
-          execute :sudo, "rm -rf /var/lib/tomcat7/webapps/#{fetch(:war_filename).gsub("\.war", "")}"
-          execute :sudo, "rm -rf /var/lib/tomcat7/webapps/#{fetch(:war_filename).gsub("\.war", "")}.war"
+          execute :sudo, "rm -rf /var/lib/tomcat7/webapps/#{fetch(:war_filename).gsub("\.war", "")}*"
           execute :sudo, :cp, "/home/pfitba/#{fetch(:war_filename)} /var/lib/tomcat7/webapps/#{fetch(:war_filename)}"
         end
       end
