@@ -79,7 +79,7 @@
 				<div class="span12">
 					<h3>Colaboradores</h3>
 					<p>Cristian Pereyra (<a href="http://www.itba.edu.ar/" target="_blank">ITBA</a>)</p>
-					<p>José Ignacio Galindo (<a href="http://www.itba.edu.ar/" target="_blank">ITBA</a>)</p>
+					<p>Jos&eacute; Ignacio Galindo (<a href="http://www.itba.edu.ar/" target="_blank">ITBA</a>)</p>
 					<p>Alan Karpovsky (<a href="http://www.itba.edu.ar/" target="_blank">ITBA</a>)</p>
 					<p>Nicolas Loreti (<a href="http://www.itba.edu.ar/" target="_blank">ITBA</a>)</p>
 					<p>Paula Verghelet (<a href="http://www.uba.ar/" target="_blank">UBA</a>)</p>
