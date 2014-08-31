@@ -70,6 +70,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 
         <div class="span9">
+            <br />
 			<c:choose>
 	        	<c:when test="${noRecords}">
 	        		<div class="span12">
