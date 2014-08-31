@@ -35,7 +35,7 @@ namespace :deploy do
     after :deploy, :package_war do
       on roles(:app) do
         env = fetch(:application).gsub(/_releases/,"").gsub(/tix_/,"")
-        execute "cd #{fetch(:deploy_to)}/current/TiX/ && (sed -i 's/classpath:setup.properties/classpath:setup.properties-#{env}/' ./TiX/src/main/resources/data.xml)"
+        execute "cd #{fetch(:deploy_to)}/current/TiX/ && (sed -i 's/classpath:setup.properties/classpath:setup.properties-#{env}/' ./src/main/resources/data.xml)"
         execute "cd #{fetch(:deploy_to)}/current/TiX/ && mvn package && cp target/tix*.war /home/pfitba/#{fetch(:war_filename)}"
         if fetch(:application).match /production/
           execute :sudo, :cp, "/home/pfitba/#{fetch(:war_filename)} /var/lib/tomcat7/webapps/ROOT.war"
