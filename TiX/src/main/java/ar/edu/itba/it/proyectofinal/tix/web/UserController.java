@@ -167,7 +167,11 @@ public class UserController {
 		TreeMap<Installation, List<ISP>> sorted_map = new TreeMap<Installation, List<ISP>>(
 				bvc);
 		sorted_map.putAll(installationISPMap);
-
+		
+		List<ISP> ispDefaultInstallations = sorted_map.get(reqProfile.getDefaultInstallation());
+		
+		mav.addObject("ispDefaultInstallations", ispDefaultInstallations);
+		
 		mav.addObject("installationISPMap", sorted_map);
 
 		if (requiredInstallation == null) { // URL param "ins" not found, set
@@ -259,7 +263,6 @@ public class UserController {
 		public ValueComparator(Map<Installation, List<ISP>> base) {
 			this.base = base;
 		}
-
 		@Override
 		public int compare(Installation o1, Installation o2) {
 			return o1.getName().compareTo(o2.getName());
