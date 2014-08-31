@@ -18,10 +18,8 @@ tix_update_initialize()
     exit 1
   fi
 
-  export HOME PS4
-  export tix_trace_flag tix_debug_flag tix_user_install_flag tix_ignore_rvmrc tix_prefix tix_path
-
-  PS4="+ \${BASH_SOURCE##\${tix_path:-}} : \${FUNCNAME[0]:+\${FUNCNAME[0]}()}  \${LINENO} > "
+  export HOME
+  export tix_trace_flag tix_debug_flag tix_path
 }
 
 log()  { printf "%b\n" "$*"; }
