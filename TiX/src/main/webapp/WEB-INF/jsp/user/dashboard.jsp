@@ -147,7 +147,6 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
             		}
             	 }
 
-
                  var fechas = ${javaChart.timestamps};
                  var title = "${javaChart.title}";
                  //var redmarker = ${javaChart.redmarker};
@@ -218,6 +217,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
                          plotOptions: {
                 series: {
                     cursor: 'pointer',
+                    turboThreshold: 0,
                     point: {
                         events: {
                             click: function() {
