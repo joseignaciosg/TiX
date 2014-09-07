@@ -20,7 +20,24 @@ get_and_unpack() {
   _url=${1}
   _file="release.zip"
   echo $_url;
-   $(which curl) -sSL ${_url} -o ./${_file}
+  $(which curl) -sSL ${_url} -o ./${_file}
+}
+
+get_os() {
+  os="linux"
+  case `uname` in
+    Linux)
+      os="linux"
+      ;;
+    Darwin)
+      ;;
+      os="linux"
+  esac
+  return os
+}
+
+get_variant() {
+  "test"
 }
 
 tix_get_latest_version_for_platform()
@@ -28,7 +45,9 @@ tix_get_latest_version_for_platform()
   DEFAULT_SOURCES=(github.com/joseignaciosg/TiX)
   typeset _source _sources _url _version
   _sources=$DEFAULT_SOURCES
-  _version="linux/test/0.1"
+  os=get_os()
+  variant=get_variant()
+  _version="$os/$variant/head"
   for _source in "${_sources[@]}"
   do
     case ${_source} in
@@ -46,7 +65,6 @@ tix_get_latest_version_for_platform()
 
 # Chino
 tix_update_files_and_restart() {
-
   # Borrar todo lo que está en /Applications/TixApp/
   # Reemplzar por todo o que bajé
   #
