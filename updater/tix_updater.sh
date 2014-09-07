@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-shopt -s extglob
-set -o errtrace
-set -o errexit
-set -e
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $DIR/tix_lib.sh
 
 tix_update_initialize()
 {
@@ -12,11 +10,7 @@ tix_update_initialize()
   export tix_trace_flag tix_debug_flag tix_path tix_cancel
 }
 
-log()  { printf "%b\n" "$*"; }
-debug(){ [[ ${tix_debug_flag:-0} -eq 0 ]] || printf "Running($#): $*"; }
-fail() { log "\nERROR: $*\n" ; exit 1 ; }
-
-get_sha_for_file() {
+get_sha_for_file() { 
   current_sha=$(curl -sSL ${_api_url} | sed 's/[{}]/''/g' | grep "\"sha\"" | awk '{ print $2 }' | sed 's/\"//g' | sed 's/,//g')
   export current_sha;
 }
@@ -49,53 +43,6 @@ get_and_unpack() {
   fi
 }
 
-get_os() {
-  os="linux"
-  case `uname` in
-    Linux)
-      os="linux"
-      ;;
-    Darwin)
-      os="mac"
-      ;;
-  esac
-  os="linux"
-}
-
-get_variant() {
-  variant="mavericks";
-  case $os in
-    linux)
-      uname=$(uname -a)
-      if [[ $uname =~ "x86" ]]; then
-        variant="x86"
-      fi
-      if [[ $uname =~ "i386" ]]; then
-        variant="x86"
-      fi
-      if [[ $uname =~ "i686" ]]; then
-        variant="x86"
-      fi
-      if [[ $uname =~ "x86_64" ]]; then
-        variant="x64"
-      fi
-      if [[ $uname =~ "x64" ]]; then
-        variant="x64"
-      fi
-      ;;
-    mac)
-      ver=$(uname -a | awk '{ print $3 }');
-      if [[ $ver =~ "13" ]]; then
-        variant="mavericks"
-      fi
-      if [[ $ver =~ "12" ]]; then
-        variant="mountain_lion"
-      fi
-      ;;
-  esac
-  variant="test";
-}
-
 tix_get_latest_version_for_platform()
 {
   DEFAULT_SOURCES=(github.com/joseignaciosg/TiX)
@@ -125,10 +72,8 @@ tix_update_files_and_restart() {
     do
        kill -9 ${i} 2&>1;
     done
-    echo "Restarting server"
   fi
 }
-
 
 tix_update()
 {
