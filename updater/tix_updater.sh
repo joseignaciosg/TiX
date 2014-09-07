@@ -15,7 +15,6 @@ log()  { printf "%b\n" "$*"; }
 debug(){ [[ ${tix_debug_flag:-0} -eq 0 ]] || printf "Running($#): $*"; }
 fail() { log "\nERROR: $*\n" ; exit 1 ; }
 
-
 get_sha_for_file() {
   current_sha=$(curl -sSL https://api.github.com/repos/joseignaciosg/TiX/git/refs/tags/linux/test/head | sed 's/[{}]/''/g' | grep "\"sha\"" | awk '{ print $2 }' | sed 's/\"//g' | sed 's/,//g')
   export current_sha;
@@ -86,9 +85,9 @@ tix_get_latest_version_for_platform()
 {
   DEFAULT_SOURCES=(github.com/joseignaciosg/TiX)
   typeset _source _sources _url _version
-  _sources=$DEFAULT_SOURCES
   get_os
   get_variant
+  _sources=$DEFAULT_SOURCES
   _version="$os/$variant/head"
   for _source in "${_sources[@]}"
   do
@@ -108,26 +107,19 @@ tix_get_latest_version_for_platform()
   return;
 }
 
-# Chino
 tix_update_files_and_restart() {
   mkdir -p downloaded;
   invalid_file=$(file release.zip | grep ASCII | wc -l)
   if [[ $invalid_file -eq 1 ]]; then
-    echo "INVALID UPDATE FILE -- PLEASE CHECK THE DOWNLOAD URL";
-  fi
-  if [[ $invalid_file -eq 0 ]]; then
+    echo "INVALID UPDATE FILE -- PLEASE CHECK THE DOWNLOAD URL"
+  else
     unzip release.zip downloaded;
-
-    # matando proceso
     for i in $(ps aux | grep "/etc/TIX/app/TixClientApp" | grep -v grep | awk '{ print $2 }' | sort -n)
     do
        echo killing process with pid ${i}
        kill -9 ${i}
     done
-
-    echo "Restarint server"
-    # /etc/TIX/app/startupAppCaller.sh
-    return;
+    echo "Restarting server"
   fi
 }
 
