@@ -86,9 +86,9 @@ tix_get_latest_version_for_platform()
 {
   DEFAULT_SOURCES=(github.com/joseignaciosg/TiX)
   typeset _source _sources _url _version
-  _sources=$DEFAULT_SOURCES
   get_os
   get_variant
+  _sources=$DEFAULT_SOURCES
   _version="$os/$variant/head"
   for _source in "${_sources[@]}"
   do
