@@ -86,6 +86,13 @@ tix_update_files_and_restart() {
   else
     tix_extract_files
     tix_kill_processes
+    get_os
+    case $os in
+      linux)
+        ;;
+      mac)
+        ;;
+    esac
   fi
 }
 
