@@ -8,7 +8,7 @@ tix_update_initialize()
 {
   DEFAULT_SOURCES=(github.com/joseignaciosg/TiX)
   export HOME
-  export tix_trace_flag tix_debug_flag tix_path
+  export tix_trace_flag tix_debug_flag tix_path tix_cancel
 }
 
 log()  { printf "%b\n" "$*"; }
@@ -16,7 +16,7 @@ debug(){ [[ ${tix_debug_flag:-0} -eq 0 ]] || printf "Running($#): $*"; }
 fail() { log "\nERROR: $*\n" ; exit 1 ; }
 
 get_sha_for_file() {
-  current_sha=$(curl -sSL https://api.github.com/repos/joseignaciosg/TiX/git/refs/tags/linux/test/head | sed 's/[{}]/''/g' | grep "\"sha\"" | awk '{ print $2 }' | sed 's/\"//g' | sed 's/,//g')
+  current_sha=$(curl -sSL ${_api_url} | sed 's/[{}]/''/g' | grep "\"sha\"" | awk '{ print $2 }' | sed 's/\"//g' | sed 's/,//g')
   export current_sha;
 }
 
@@ -24,13 +24,19 @@ get_and_unpack() {
   typeset _url
   _url=${1}
   _file="release.zip"
-  if [[ $current_sha == $(cat release.zip.sha) ]]; then
-    echo "Avoiding redownload based on githubs' SHA"
+  if [[ $current_sha == "" ]]; then
+    echo ERROR: No release found for the current operating system!
+    tix_cancel=true
+    export tix_cancel
   else
-    echo Downloading from $_url;
-    $(which curl) -sSL ${_url} -o ./${_file}
-    sha=$(unzip -l ${_file} | head -n 2 | tail -n 1)
-    echo $sha > release.zip.sha
+    if [[ $current_sha == $(cat release.zip.sha) ]]; then
+      echo "Avoiding redownload based on githubs' SHA"
+    else
+      echo Downloading from $_url;
+      $(which curl) -sSL ${_url} -o ./${_file}
+      sha=$(unzip -l ${_file} | head -n 2 | tail -n 1)
+      echo $sha > release.zip.sha
+    fi
   fi
 }
 
@@ -44,7 +50,7 @@ get_os() {
       os="mac"
       ;;
   esac
-  os="linux"
+  # os="linux"
 }
 
 get_variant() {
@@ -78,7 +84,7 @@ get_variant() {
       fi
       ;;
   esac
-  variant="test";
+  # variant="test";
 }
 
 tix_get_latest_version_for_platform()
@@ -103,7 +109,7 @@ tix_update_files_and_restart() {
   mkdir -p downloaded;
   invalid_file=$(file release.zip | grep ASCII | wc -l)
   if [[ $invalid_file -eq 1 ]]; then
-    echo "INVALID UPDATE FILE -- PLEASE CHECK THE DOWNLOAD URL"
+    echo "ERROR: INVALID UPDATE FILE -- PLEASE CHECK THE DOWNLOAD URL"
   else
     unzip release.zip downloaded;
     for i in $(ps aux | grep "/etc/TIX/app/TixClientApp" | grep -v grep | awk '{ print $2 }' | sort -n)
@@ -122,8 +128,12 @@ tix_update()
   tix_update_initialize
   # Obtiene la última versión del servidor (a definir) y lo extrae en /tmp/tix_update/
   tix_get_latest_version_for_platform
-  # Agarra los archivos /tmp/tix_update/ y los copia sobre donde se encuentre la instalación actual, o instala el update, según la plataforma.
-  tix_update_files_and_restart
+  if [[ $tix_cancel == true ]]; then
+    echo ERROR: Error getting the latest TiX release
+  else
+    # Agarra los archivos /tmp/tix_update/ y los copia sobre donde se encuentre la instalación actual, o instala el update, según la plataforma.
+    tix_update_files_and_restart
+  fi
 }
 
 tix_update "$@"
