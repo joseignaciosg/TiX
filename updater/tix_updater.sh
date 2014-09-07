@@ -39,12 +39,21 @@ get_variant() {
   variant="mavericks";
   case $os in
     linux)
-      uname=$(uname -a);
-	  echo $uname
+      uname=$(uname -a)
+      echo $uname
       if [[ $uname =~ "x86" ]]; then
         variant="x86"
       fi
+      if [[ $uname =~ "i386" ]]; then
+        variant="x86"
+      fi
+      if [[ $uname =~ "i686" ]]; then
+        variant="x86"
+      fi
       if [[ $uname =~ "x86_64" ]]; then
+        variant="x64"
+      fi
+      if [[ $uname =~ "x64" ]]; then
         variant="x64"
       fi
       ;;
