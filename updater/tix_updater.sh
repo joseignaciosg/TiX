@@ -33,6 +33,7 @@ get_os() {
       os="mac"
       ;;
   esac
+  os="linux"
 }
 
 get_variant() {
@@ -66,6 +67,7 @@ get_variant() {
       fi
       ;;
   esac
+  variant="test";
 }
 
 tix_get_latest_version_for_platform()
@@ -93,21 +95,25 @@ tix_get_latest_version_for_platform()
 
 # Chino
 tix_update_files_and_restart() {
+  mkdir -p downloaded;
+  invalid_file=$(file release.zip | grep ASCII | wc -l)
+  if [[ $invalid_file -eq 1 ]]; then
+    echo "INVALID UPDATE FILE -- PLEASE CHECK THE DOWNLOAD URL";
+  fi
+  if [[ $invalid_file -eq 0 ]]; then
+    unzip release.zip downloaded;
 
+    # matando proceso
+    for i in $(ps aux | grep "/etc/TIX/app/TixClientApp" | grep -v grep | awk '{ print $2 }' | sort -n)
+    do
+       echo killing process with pid ${i}
+       kill -9 ${i}
+    done
 
-   #matando proceso
-   for i in $(ps aux | grep "/etc/TIX/app/TixClientApp" | grep -v grep | awk '{ print $2 }' | sort -n)
-   do
-      echo killing process with pid ${i}
-      kill -9 ${i}
-   done
-
-   #levantando procesos nuevamente
-   /etc/TIX/app/startupAppCaller.sh
-
-
-
-   return;
+    echo "Restarint server"
+    # /etc/TIX/app/startupAppCaller.sh
+    return;
+  fi
 }
 
 
