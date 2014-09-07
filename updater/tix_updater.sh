@@ -19,8 +19,8 @@ get_and_unpack() {
   typeset _url
   _url=${1}
   _file="release.zip"
-  echo $_url;
-  echo $(which curl) -sSL ${_url} -o ./${_file}
+  echo Downloading from $_url;
+  $(which curl) -sSL ${_url} -o ./${_file}
 }
 
 get_os() {
@@ -40,7 +40,6 @@ get_variant() {
   case $os in
     linux)
       uname=$(uname -a)
-      echo $uname
       if [[ $uname =~ "x86" ]]; then
         variant="x86"
       fi
