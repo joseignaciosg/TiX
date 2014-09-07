@@ -15,12 +15,24 @@ log()  { printf "%b\n" "$*"; }
 debug(){ [[ ${tix_debug_flag:-0} -eq 0 ]] || printf "Running($#): $*"; }
 fail() { log "\nERROR: $*\n" ; exit 1 ; }
 
+
+get_sha_for_file() {
+  current_sha=$(curl -sSL https://api.github.com/repos/joseignaciosg/TiX/git/refs/tags/linux/test/head | sed 's/[{}]/''/g' | grep "\"sha\"" | awk '{ print $2 }' | sed 's/\"//g' | sed 's/,//g')
+  export current_sha;
+}
+
 get_and_unpack() {
   typeset _url
   _url=${1}
   _file="release.zip"
-  echo Downloading from $_url;
-  $(which curl) -sSL ${_url} -o ./${_file}
+  if [[ $current_sha == $(cat release.zip.sha) ]]; then
+    echo "Avoiding redownload based on githubs' SHA"
+  else
+    echo Downloading from $_url;
+    $(which curl) -sSL ${_url} -o ./${_file}
+    sha=$(unzip -l ${_file} | head -n 2 | tail -n 1)
+    echo $sha > release.zip.sha
+  fi
 }
 
 get_os() {
@@ -83,11 +95,14 @@ tix_get_latest_version_for_platform()
     case ${_source} in
       (bitbucket.org*)
         _url=https://${_source}/get/${_version}.zip
+        echo "UNSUPPORTED API CALL ON BITBUCKET"
         ;;
       (*)
         _url=https://${_source}/archive/${_version}.zip
+        _api_url=https://api.$(echo $_source | sed 's/github\.com/github\.com\/repos/')/git/refs/tags/${_version}
         ;;
     esac
+    get_sha_for_file ${_api_url}
     get_and_unpack ${_url} && return
   done
   return;
