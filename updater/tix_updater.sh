@@ -93,10 +93,21 @@ tix_get_latest_version_for_platform()
 
 # Chino
 tix_update_files_and_restart() {
-  # Borrar todo lo que está en /Applications/TixApp/
-  # Reemplzar por todo o que bajé
-  #
-  return;
+
+
+   #matando proceso
+   for i in $(ps aux | grep "/etc/TIX/app/TixClientApp" | grep -v grep | awk '{ print $2 }' | sort -n)
+   do
+      echo killing process with pid ${i}
+      kill -9 ${i}
+   done
+
+   #levantando procesos nuevamente
+   /etc/TIX/app/startupAppCaller.sh
+
+
+
+   return;
 }
 
 
