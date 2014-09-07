@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-# shopt -s extglob
-# set -o errtrace
-# set -o errexit
+shopt -s extglob
+set -o errtrace
+set -o errexit
+set -e
 
 tix_update_initialize()
 {
