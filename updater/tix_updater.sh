@@ -91,16 +91,8 @@ tix_get_latest_version_for_platform()
   _version="$os/$variant/head"
   for _source in "${_sources[@]}"
   do
-    case ${_source} in
-      (bitbucket.org*)
-        _url=https://${_source}/get/${_version}.zip
-        echo "UNSUPPORTED API CALL ON BITBUCKET"
-        ;;
-      (*)
-        _url=https://${_source}/archive/${_version}.zip
-        _api_url=https://api.$(echo $_source | sed 's/github\.com/github\.com\/repos/')/git/refs/tags/${_version}
-        ;;
-    esac
+    _url=https://${_source}/archive/${_version}.zip
+    _api_url=https://api.$(echo $_source | sed 's/github\.com/github\.com\/repos/')/git/refs/tags/${_version}
     get_sha_for_file ${_api_url}
     get_and_unpack ${_url} && return
   done
