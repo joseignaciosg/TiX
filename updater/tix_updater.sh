@@ -20,7 +20,7 @@ get_and_unpack() {
   _url=${1}
   _file="release.zip"
   echo $_url;
-  $(which curl) -sSL ${_url} -o ./${_file}
+  echo $(which curl) -sSL ${_url} -o ./${_file}
 }
 
 get_os() {
@@ -30,14 +30,35 @@ get_os() {
       os="linux"
       ;;
     Darwin)
+      os="mac"
       ;;
-      os="linux"
   esac
-  return os
+  EXPORT os;
 }
 
 get_variant() {
-  "test"
+  variant="mavericks";
+  case os in
+    linux)
+      uname=$(uname -a);
+      if [ ver ~= "x86" ]; then
+        variant="x86"
+      fi
+      if [ ver ~= "x86_64" ]; then
+        variant="x86_64"
+      fi
+      ;;
+    mac)
+      ver=$(uname -a | awk '{ print $3 }');
+      if [ ver ~= "13" ]; then
+        variant="mavericks"
+      fi
+      if [ ver ~= "12" ]; then
+        variant="mountain_lion"
+      fi
+      ;;
+  esac
+  EXPORT variant;
 }
 
 tix_get_latest_version_for_platform()
@@ -45,8 +66,8 @@ tix_get_latest_version_for_platform()
   DEFAULT_SOURCES=(github.com/joseignaciosg/TiX)
   typeset _source _sources _url _version
   _sources=$DEFAULT_SOURCES
-  os=get_os()
-  variant=get_variant()
+  get_os
+  get_variant
   _version="$os/$variant/head"
   for _source in "${_sources[@]}"
   do
