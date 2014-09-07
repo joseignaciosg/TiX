@@ -14,7 +14,7 @@ get_os() {
       os="mac"
       ;;
   esac
-  os="linux"
+  #os="linux"
 }
 
 get_variant() {
@@ -48,5 +48,5 @@ get_variant() {
       fi
       ;;
   esac
-  variant="test";
+  #variant="test";
 }
