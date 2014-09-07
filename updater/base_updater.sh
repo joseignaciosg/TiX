@@ -592,8 +592,7 @@ rvm_install_parse_params()
         ;;
 
       (--version|version)
-        version="$1"
-        shift
+        version="$1" shift
         ;;
 
       (head)

@@ -7,17 +7,6 @@
 tix_update_initialize()
 {
   DEFAULT_SOURCES=(github.com/joseignaciosg/TiX)
-
-  BASH_MIN_VERSION="3.2.25"
-  if
-    [[ -n "${BASH_VERSION:-}" &&
-      "$(\printf "%b" "${BASH_VERSION:-}\n${BASH_MIN_VERSION}\n" | LC_ALL=C \sort -t"." -k1,1n -k2,2n -k3,3n | \head -n1)" != "${BASH_MIN_VERSION}"
-    ]]
-  then
-    echo "BASH ${BASH_MIN_VERSION} required (you have $BASH_VERSION)"
-    exit 1
-  fi
-
   export HOME
   export tix_trace_flag tix_debug_flag tix_path
 }
@@ -26,8 +15,32 @@ log()  { printf "%b\n" "$*"; }
 debug(){ [[ ${tix_debug_flag:-0} -eq 0 ]] || printf "Running($#): $*"; }
 fail() { log "\nERROR: $*\n" ; exit 1 ; }
 
+get_and_unpack() {
+  typeset _url
+  _url=${1}
+  _file="release.zip"
+  echo $_url;
+   $(which curl) -sSL ${_url} -o ./${_file}
+}
+
 tix_get_latest_version_for_platform()
 {
+  DEFAULT_SOURCES=(github.com/joseignaciosg/TiX)
+  typeset _source _sources _url _version
+  _sources=$DEFAULT_SOURCES
+  _version="linux/test/0.1"
+  for _source in "${_sources[@]}"
+  do
+    case ${_source} in
+      (bitbucket.org*)
+        _url=https://${_source}/get/${_version}.zip
+        ;;
+      (*)
+        _url=https://${_source}/archive/${_version}.zip
+        ;;
+    esac
+    get_and_unpack ${_url} && return
+  done
   return;
 }
 
