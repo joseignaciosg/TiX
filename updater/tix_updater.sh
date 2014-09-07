@@ -9,7 +9,6 @@ tix_update_initialize()
   export HOME
   export tix_trace_flag tix_debug_flag tix_path tix_cancel
 }
-
 get_sha_for_file() { 
   current_sha=$(curl -sSL ${_api_url} | sed 's/[{}]/''/g' | grep "\"sha\"" | awk '{ print $2 }' | sed 's/\"//g' | sed 's/,//g')
   export current_sha;
@@ -61,17 +60,32 @@ tix_get_latest_version_for_platform()
   return;
 }
 
+tix_extract_files() { 
+  echo "Extracting files to ./downloaded"
+  unzip release.zip -d downloaded > /dev/null;
+  mkdir downloaded.1
+  mv downloaded/*/* downloaded.1;
+  rm -rf downloaded
+  mv downloaded.1 downloaded;
+}
+
+tix_kill_processes() {
+  echo "Killing processes"
+  for i in $(ps aux | grep "/etc/TIX/app/TixClientApp" | grep -v grep | awk '{ print $2 }' | sort -n)
+  do
+     kill -9 ${i} 2>&1;
+  done
+}
+
 tix_update_files_and_restart() {
+  rm -rf downloaded;
   mkdir -p downloaded;
   invalid_file=$(file release.zip | grep ASCII | wc -l)
   if [[ $invalid_file -eq 1 ]]; then
     echo "ERROR: INVALID UPDATE FILE -- PLEASE CHECK THE DOWNLOAD URL"
   else
-    unzip release.zip downloaded;
-    for i in $(ps aux | grep "/etc/TIX/app/TixClientApp" | grep -v grep | awk '{ print $2 }' | sort -n)
-    do
-       kill -9 ${i} 2&>1;
-    done
+    tix_extract_files
+    tix_kill_processes
   fi
 }
 
