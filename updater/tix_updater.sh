@@ -58,7 +58,7 @@ get_os() {
       os="mac"
       ;;
   esac
-  # os="linux"
+  os="linux"
 }
 
 get_variant() {
@@ -92,7 +92,7 @@ get_variant() {
       fi
       ;;
   esac
-  # variant="test";
+  variant="test";
 }
 
 tix_get_latest_version_for_platform()
@@ -122,8 +122,7 @@ tix_update_files_and_restart() {
     unzip release.zip downloaded;
     for i in $(ps aux | grep "/etc/TIX/app/TixClientApp" | grep -v grep | awk '{ print $2 }' | sort -n)
     do
-       echo killing process with pid ${i}
-       kill -9 ${i}
+       kill -9 ${i} 2&>1;
     done
     echo "Restarting server"
   fi
