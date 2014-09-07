@@ -20,14 +20,18 @@ get_sha_for_file() {
   export current_sha;
 }
 
+no_release_found() {
+  echo ERROR: No release found for the current operating system!
+  tix_cancel=true
+  export tix_cancel
+}
+
 get_and_unpack() {
   typeset _url
   _url=${1}
   _file="release.zip"
   if [[ $current_sha == "" ]]; then
-    echo ERROR: No release found for the current operating system!
-    tix_cancel=true
-    export tix_cancel
+    no_release_found
   else
     if [[ $current_sha == $(cat release.zip.sha) ]]; then
       echo "Avoiding redownload based on githubs' SHA"
@@ -35,7 +39,11 @@ get_and_unpack() {
       echo Downloading from $_url;
       $(which curl) -sSL ${_url} -o ./${_file}
       sha=$(unzip -l ${_file} | head -n 2 | tail -n 1)
-      echo $sha > release.zip.sha
+      if [[ $sha =~ /release\.zip/ ]]; then
+        no_release_found
+      else
+        echo $sha > release.zip.sha
+      fi
     fi
   fi
 }
