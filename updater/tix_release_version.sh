@@ -10,25 +10,23 @@ current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 create_new_tag() {
   echo "Commiting the package"
-  git add -A .
-  git commit -m "Release sources for $os/$variant/head"
+  git add -A . > /dev/null
+  git commit -m "Release sources for $os/$variant/head" > /dev/null
   echo "Moving to 'releases' branch"
-  git checkout origin/releases;
-  git checkout releases;
-  echo "Creating or moving to branch release/$os/$variant"
-  git checkout -b release/$os/$variant || git checkout release/$os/$variant
+  git checkout origin/releases > /dev/null
+  git checkout releases > /dev/null
   echo "Clearing 'releases' folder"
   rm -rf releases/*
   echo "Copying files from $current_branch"
-  git checkout $current_branch -- releases/
+  git checkout $current_branch -- releases/ > /dev/null
   echo "Commiting release"
-  git add -A .
-  git commit -m "Release sources for $os/$variant/head"
+  git add -A . > /dev/null
+  git commit -m "Release sources for $os/$variant/head" > /dev/null
   echo "Creating tag"
-  git tag $os/$variant/head --force
+  git tag $os/$variant/head --force > /dev/null
   echo "Created tag $os/$variant/head on branch release/$os/$variant"
   echo "Finishing..."
-  git checkout $current_branch
+  git checkout $current_branch > /dev/null
   echo "DONE!"
 }
 
