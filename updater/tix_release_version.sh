@@ -34,7 +34,14 @@ create_new_tag() {
 
 package_os() {
   get_os
-  $DIR/../scripts/package_$os\.sh
+  case $os in
+    linux)
+      $DIR/../scripts/package_linux.sh
+      ;;
+    mac)
+      $DIR/../scripts/package_osx.sh
+      ;;
+  esac
 }
 
 prepare_files() {
