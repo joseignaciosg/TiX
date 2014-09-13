@@ -16,9 +16,9 @@ create_new_tag() {
   git checkout origin/releases > /dev/null
   git checkout releases > /dev/null
   echo "Clearing 'releases' folder"
-  rm -rf releases/*
+  rm -rfv *
   echo "Copying files from $current_branch"
-  git merge --no-ff $current_branch -- releases/ > /dev/null
+  git checkout $current_branch -- releases/ > /dev/null
   echo "Commiting release"
   git add -A . > /dev/null
   git commit -m "Release sources for $os/$variant/head" > /dev/null
