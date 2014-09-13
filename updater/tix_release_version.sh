@@ -35,10 +35,10 @@ package_os() {
   get_os
   case $os in
     linux)
-      $DIR/../scripts/package_linux.sh > /dev/null
+      $DIR/../scripts/package_linux.sh 2>&1 > /dev/null
       ;;
     mac)
-      $DIR/../scripts/package_osx.sh > /dev/null
+      $DIR/../scripts/package_osx.sh 2>&1 > /dev/null
       ;;
   esac
 }
