@@ -6,7 +6,7 @@ source $DIR/tix_lib.sh
 get_os
 get_variant
 
-current_branch = $(git rev-parse --abbrev-ref HEAD)
+current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 echo "Moving to 'releases' branch"
 git checkout origin/releases;
