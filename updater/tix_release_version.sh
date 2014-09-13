@@ -19,6 +19,7 @@ rm -rf releases/*
 echo "Copying files from $current_branch"
 git checkout $current_branch -- releases/
 echo "Commiting release"
+git add -A .
 git commit -m "Release sources for $os/$variant/head"
 echo "Creating tag"
 git tag $os/$variant/head --force
