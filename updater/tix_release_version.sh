@@ -31,7 +31,7 @@ create_new_tag() {
 }
 
 package_os() {
-  echo "Packaging TIX"
+  echo "Packaging TIX..."
   get_os
   case $os in
     linux)
