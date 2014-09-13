@@ -16,7 +16,7 @@ create_new_tag() {
   git checkout origin/releases;
   git checkout releases;
   echo "Creating or moving to branch release/$os/$variant"
-  git checkout -b release/$os/$variant
+  git checkout -b release/$os/$variant || git checkout release/$os/$variant
   echo "Clearing 'releases' folder"
   rm -rf releases/*
   echo "Copying files from $current_branch"
