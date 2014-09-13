@@ -31,13 +31,14 @@ create_new_tag() {
 }
 
 package_os() {
+  echo "Packaging TIX"
   get_os
   case $os in
     linux)
-      $DIR/../scripts/package_linux.sh
+      $DIR/../scripts/package_linux.sh > /dev/null
       ;;
     mac)
-      $DIR/../scripts/package_osx.sh
+      $DIR/../scripts/package_osx.sh > /dev/null
       ;;
   esac
 }
