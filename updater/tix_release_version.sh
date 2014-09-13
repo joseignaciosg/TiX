@@ -24,7 +24,7 @@ create_new_tag() {
   git commit -m "Release sources for $os/$variant/head" > /dev/null
   echo "Creating tag"
   git tag $os/$variant/head --force > /dev/null
-  echo "Created tag $os/$variant/head on branch release/$os/$variant"
+  echo "Created tag $os/$variant/head on branch releases"
   echo "Finishing..."
   git checkout $current_branch > /dev/null
   echo "DONE!"
@@ -35,10 +35,10 @@ package_os() {
   get_os
   case $os in
     linux)
-      $DIR/../scripts/package_linux.sh 2>&1 > /dev/null
+      $DIR/../scripts/package_linux.sh 2>&1 | xargs echo > /dev/null
       ;;
     mac)
-      $DIR/../scripts/package_osx.sh 2>&1 > /dev/null
+      $DIR/../scripts/package_osx.sh 2>&1 | xargs echo > /dev/null
       ;;
   esac
 }
