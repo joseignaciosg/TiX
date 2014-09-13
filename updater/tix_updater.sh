@@ -91,6 +91,7 @@ tix_update_files_and_restart() {
       linux)
         ;;
       mac)
+        sudo cp -rv downloaded/releases/TixApp.app/* /Applications/TixApp.app/
         ;;
     esac
   fi
