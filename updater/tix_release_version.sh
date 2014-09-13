@@ -16,6 +16,7 @@ create_new_tag() {
   git checkout origin/releases > /dev/null
   git checkout releases > /dev/null
   echo "Clearing 'releases' folder"
+  ls
   rm -rfv $DIR/../*
   rm -rfv $DIR/../releases/*
   echo "Copying files from $current_branch"
