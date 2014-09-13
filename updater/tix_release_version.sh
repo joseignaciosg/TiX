@@ -34,19 +34,19 @@ create_new_tag() {
 
 package_os() {
   get_os
-  ../scripts/package_$os\.sh
+  $DIR/../scripts/package_$os\.sh
 }
 
 prepare_files() {
   get_os
   get_variant
-  rm -rf ../releases/*
+  rm -rf $DIR/../releases/*
   case $os in
     linux)
-      cp -r ../dist/TixApp ../releases/
+      cp -r $DIR/../dist/TixApp $DIR/../releases/
       ;;
     mac)
-      cp -r ../dist/Tix.app ../releases/
+      cp -r $DIR/../dist/Tix.app $DIR/../releases/
       ;;
   esac
 }
