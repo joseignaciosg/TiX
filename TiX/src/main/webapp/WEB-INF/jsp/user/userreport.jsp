@@ -116,6 +116,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 	                         plotOptions: {
 	                series: {
 	                    cursor: 'pointer',
+	                    enableMouseTracking: false,
 	                    point: {
 	                        events: {
 	                            click: function() {
