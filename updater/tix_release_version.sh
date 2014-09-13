@@ -9,6 +9,9 @@ get_variant
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 create_new_tag() {
+  echo "Commiting the package"
+  git add -A .
+  git commit -m "Release sources for $os/$variant/head"
   echo "Moving to 'releases' branch"
   git checkout origin/releases;
   git checkout releases;
@@ -29,7 +32,28 @@ create_new_tag() {
   echo "DONE!"
 }
 
+package_os() {
+  get_os
+  ../scripts/package_$os\.sh
+}
+
+prepare_files() {
+  get_os
+  get_variant
+  rm -rf ../releases/*
+  case $os in
+    linux)
+      cp -r ../dist/TixApp ../releases/
+      ;;
+    mac)
+      cp -r ../dist/Tix.app ../releases/
+      ;;
+  esac
+}
+
 tix_release_version() {
+  package_os
+  prepare_files
   create_new_tag
 }
 
