@@ -52,7 +52,7 @@ prepare_files() {
       cp -r $DIR/../dist/TixApp $DIR/../releases/
       ;;
     mac)
-      cp -r $DIR/../dist/Tix.app $DIR/../releases/
+      cp -r $DIR/../dist/TixApp.app $DIR/../releases/
       ;;
   esac
 }
