@@ -48,5 +48,5 @@ get_variant() {
       fi
       ;;
   esac
-  #variant="test";
+  variant="test";
 }
