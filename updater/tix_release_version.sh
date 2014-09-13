@@ -6,6 +6,7 @@ source $DIR/tix_lib.sh
 get_os
 get_variant
 
+variant="mountain_lion"
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 create_new_tag() {
