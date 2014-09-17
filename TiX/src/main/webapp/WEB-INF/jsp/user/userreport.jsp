@@ -117,6 +117,8 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 	                series: {
 	                    cursor: 'pointer',
 	                    enableMouseTracking: false,
+	                    shadow: false, 
+	                    animation: false, 
 	                    point: {
 	                        events: {
 	                            click: function() {
