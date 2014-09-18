@@ -8,7 +8,7 @@
 # Start the service FOO
 start() {
         echo "Starting TiX server.."
-        screen -A -L -m -d -S udpServerTiempos sudo python /home/pfitba/ServerAppProduction/udpServerTiempos.py &
+        screen -A -L -m -d -S udpServerTiempos sudo python /home/pfitba/tix_production/udpServerTiempos.py &
         echo "Started."
         ### Create the lock file ###
         # touch /var/lock/subsys/TIX
