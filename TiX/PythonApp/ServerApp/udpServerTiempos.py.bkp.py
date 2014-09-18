@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-# servidor udp 
-# ejemplo de la documentacion de python 
+# servidor udp
+# ejemplo de la documentacion de python
 # http://docs.python.org/2/library/socketserver.html
-# modificado para permitir el registro del timestamp en la respuesta  
+# modificado para permitir el registro del timestamp en la respuesta
 
 import SocketServer
 import datetime
@@ -19,7 +19,7 @@ from random import randrange
 
 
 config = ConfigParser.ConfigParser()
-config.read('/home/pfitba/ServerAppProduction/tixserver-deploy.cfg')
+config.read('/home/pfitba/tix_production/tixserver-deploy.cfg')
 SERVER_HOST = config.get("TiXServer", "SERVER_HOST") #TODO: Change TEST!
 SERVER_PORT = config.getint("TiXServer", "SERVER_PORT")
 TEST_SERVER_HOST = config.get("TiXServer", "TEST_SERVER_HOST") #TODO: Change TEST!
@@ -27,9 +27,9 @@ TEST_SERVER_PORT = config.getint("TiXServer", "TEST_SERVER_PORT")
 installDirUnix = config.get("TiXServer", "installDirUnix")
 tixBaseUrl = config.get("TiXServer", "tixBaseUrl")
 
-sys.path.append('/home/pfitba/ServerAppProduction/data_processing/')
+sys.path.append('/home/pfitba/tix_production/data_processing/')
 import completo_III
-sys.path.append('/home/pfitba/ServerAppProduction/ip_to_as/')
+sys.path.append('/home/pfitba/tix_production/ip_to_as/')
 import info
 
 import logging
@@ -48,7 +48,7 @@ formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 
 # add ch to logger
-logger.addHandler(hdlr) 
+logger.addHandler(hdlr)
 
 # Logger examples
 # logger.debug("debug message")
@@ -61,7 +61,7 @@ def ts():
   # time en microsegundos
   timestamp= datetime.datetime.now().strftime("%H:%M:%S:%f").split(':')
   en_microsegundos=float(timestamp[0])*3600*(10**6)+float(timestamp[1])*60*(10**6)+float(timestamp[2])*(10**6)+float(timestamp[3])
-  #print timestamp 
+  #print timestamp
   #print en_microsegundos
   return str(int(en_microsegundos)) # <- en microsegundos, en hexa
 
@@ -96,7 +96,7 @@ def remove_old_files(dirpath, client_msg_filename):
      logger.error("El archivo de log tiene un nombre invalido: " + dirpath + "/" + file_name)
 
   return None
-    
+
 
 class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
     """
@@ -107,16 +107,16 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
     """
 
     def handle(self):
-        tstamp=ts() 
+        tstamp=ts()
         data = self.request[0].strip()
         socket = self.request[1]
-         
+
         msg = data.split('!!')
-        #este_thread=threading.current_thread() 
+        #este_thread=threading.current_thread()
         #threads_activos=threading.activeCount() #threading.enumerate()
-        
+
         #print "{} wrote:".format(self.client_address[0])
-        # print msg[0]+'|'+msg[1]+'|'+msg[2]+'1'+msg[3]        
+        # print msg[0]+'|'+msg[1]+'|'+msg[2]+'1'+msg[3]
 
         if len(msg)>4:# depende de si es un mensaje corto o un mensaje largo
         #Mensaje largo
@@ -132,7 +132,7 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
         else:
         #Mensaje corto
           socket.sendto(msg[0]+'|'+ tstamp +'|' + str(ts()) + '|' + msg[3], self.client_address)
-    
+
     def worker_thread(self, msg):
         large_package_msg = msg[4].split(';;')
         if len(large_package_msg)>=3 and large_package_msg[0]=='DATA':
@@ -153,23 +153,23 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
           # En el servidor se hace el VERIFY, para esto se necesita tambien la firma!
           pubKey = rsa.PublicKey.load_pkcs1(client_pub_key_str)
 
-          if rsa.verify(client_plain_msg, client_signed_msg, pubKey): 
+          if rsa.verify(client_plain_msg, client_signed_msg, pubKey):
             logger.debug("Chequeo de integridad satisfactorio para " + client_msg_filename)
             client_data = dbmanager.DBManager.getInstallationAndClientId(client_pub_key_str_b64)
-            
+
             if client_data is not None:
               installation_id = client_data[0]
               client_id = client_data[1]
               client_ip = str(self.client_address[0])
 
               #Client folder format: IP_cli_CLIENTID_ins_INSID
-              client_server_folder = client_ip + "_cli_" + str(client_id) + "_ins_" + str(installation_id) 
+              client_server_folder = client_ip + "_cli_" + str(client_id) + "_ins_" + str(installation_id)
               logger.info("Salvando " + client_msg_filename + " en " + client_server_folder)
               client_records_server_folder = installDirUnix + "/records/" + client_server_folder
               if not os.path.exists(client_records_server_folder):
                 logger.info("Creando directorio: " + client_server_folder)
                 os.makedirs(client_records_server_folder)
-                
+
               logFile = open(client_records_server_folder + "/" + client_msg_filename.split("/")[-1:][0], 'wb')
               logFile.write(client_plain_msg)
               logFile.close()
@@ -190,11 +190,11 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                   logger.error("Error al procesar los archivos de " + client_server_folder)
                 else:
                   cwd = os.getcwd()
-                  os.chdir('/home/pfitba/ServerAppProduction/data_processing')
+                  os.chdir('/home/pfitba/tix_production/data_processing')
                   ansDictionary = completo_III.analyse_data(files_to_process)
                   os.chdir(cwd)
 
-                  # Remove 10 oldest logs        
+                  # Remove 10 oldest logs
                   for count in range(0,9):
                     if os.path.isfile(files_to_process[count]) == True:
                       os.remove(files_to_process[count])
@@ -210,7 +210,7 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                   r = requests.post(tixBaseUrl + 'bin/api/newISPPost', data=json.dumps(payload), headers=headers)
 
                   jsonUserData = []
-                  
+
                   try:
                           jsonUserData = json.loads(r.text) # Parseo la respuesta JSON de la API de TiX
                   except Exception, e:
@@ -226,7 +226,7 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                   try:
                           dbmanager.DBManager.insert_record(ansDictionary['calidad_Down'],ansDictionary['utiliz_Down'],ansDictionary['H_RS_Down'],ansDictionary['H_Wave_Down'],time.strftime('%Y-%m-%d %H:%M:%S'),ansDictionary['calidad_Up'],ansDictionary['utiliz_Up'],ansDictionary['H_RS_Up'],ansDictionary['H_Wave_Up'],False,False,installation_id,isp_id,client_id)
                   except Exception, e:
-                          logger.error("Error al insertar nuevo record en la DB de la carpeta: " + client_records_server_folder)        
+                          logger.error("Error al insertar nuevo record en la DB de la carpeta: " + client_records_server_folder)
                           logger.error(e)
 
 class ThreadingUDPServer(SocketServer.ThreadingMixIn, SocketServer.UDPServer):
@@ -241,8 +241,8 @@ if __name__ == "__main__":
       logger.info("Directorios inexistentes, creando directorios en: " + tix_server_path)
       os.makedirs(tix_server_path)
       os.makedirs(tix_server_records_path)
-      
-    HOST, PORT = TEST_SERVER_HOST, TEST_SERVER_PORT 
+
+    HOST, PORT = TEST_SERVER_HOST, TEST_SERVER_PORT
 #   HOST='127.0.0.1'
 #   PORT=5005
     # Ctrl-C will cleanly kill all spawned threads
@@ -252,7 +252,7 @@ if __name__ == "__main__":
     # Create the server, binding to localhost on port 9999
     #server = SocketServer.UDPServer((HOST, PORT), MyUDPHandler)
     server = ThreadingUDPServer((HOST, PORT), ThreadingUDPRequestHandler)
-    
+
     #Threaded version
     server_thread= threading.Thread(target=server.serve_forever)
     logger.info("Starting server (" + str(HOST) + ":" + str(PORT) + ") thread " + server_thread.name)
@@ -262,5 +262,5 @@ if __name__ == "__main__":
     # Activate the server; this will keep running until you
     # interrupt the program with Ctrl-C
     #server.serve_forever()
-    
-    
+
+

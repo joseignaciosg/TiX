@@ -1,5 +1,5 @@
 #!/bin/bash
-ps aux | grep udpServerTiempos.py| grep -v grep
+ps aux | grep udpServerTiempos | grep -v grep
 # if not found - equals to 1, start it
 if [ $? -eq 1 ];
 then

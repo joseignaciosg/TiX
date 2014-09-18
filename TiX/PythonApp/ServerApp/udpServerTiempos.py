@@ -24,7 +24,7 @@ rollbar.init('bfb83f64a6e64b5998cd28f2376827e2', 'production')  # access_token, 
 config = ConfigParser.ConfigParser()
 
 if len(sys.argv) < 2:
-    configFilePath = '/home/pfitba/ServerAppProduction/tixserver-deploy.cfg'
+    configFilePath = '/home/pfitba/tix_production/tixserver-deploy.cfg'
 else:
     configFilePath = sys.argv[1]
 
@@ -36,9 +36,9 @@ TEST_SERVER_PORT = config.getint("TiXServer", "TEST_SERVER_PORT")
 installDirUnix   = config.get("TiXServer", "installDirUnix")
 tixBaseUrl       = config.get("TiXServer", "tixBaseUrl")
 
-sys.path.append('/home/pfitba/ServerAppProduction/data_processing/')
+sys.path.append('/home/pfitba/tix_production/data_processing/')
 import completo_III
-sys.path.append('/home/pfitba/ServerAppProduction/ip_to_as/')
+sys.path.append('/home/pfitba/tix_production/ip_to_as/')
 import info
 
 import logging
@@ -246,7 +246,7 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                                 logger.error("Error al procesar los archivos de " + client_server_folder)
                             else:
                                 cwd = os.getcwd()
-                                os.chdir('/home/pfitba/ServerAppProduction/data_processing')
+                                os.chdir('/home/pfitba/tix_production/data_processing')
                                 ansDictionary = completo_III.analyse_data(files_to_process)
                                 logger.debug(ansDictionary)
                                 os.chdir(cwd)
