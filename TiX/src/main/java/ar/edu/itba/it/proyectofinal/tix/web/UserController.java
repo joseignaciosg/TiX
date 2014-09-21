@@ -331,9 +331,9 @@ public class UserController {
 		List<String> ispNames = new ArrayList<String>();
 
 		//TODO
-		//Nowadays just shows the data from last 6 months
+		//Nowadays just shows the data from last month
 		 DateTime maxDate = new DateTime();
-		 DateTime minDate = maxDate.minusDays(180);
+		 DateTime minDate = maxDate.minusDays(30);
 		 List<Double> medians = new ArrayList<Double>();
 		 List<List<Double>> medianList = new ArrayList<List<Double>>();
 
