@@ -138,7 +138,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		x_1 = aux + paso/2
 		vector_tiempos.append(x_1)
 
-	#Entradas para hacer las estimaciones 
+	#Entradas para hacer las estimaciones
 	t_first = vector_tiempos[0]
 	P_max = max(frecuencias)
 	indice_t_Pmax = lista_frecuencias.index(P_max)
@@ -147,7 +147,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 
 	# Truncamiento de la información
 	limite_truncamiento = t_Pmax + desvio #3*desvio
-	#print "desvio: "+str(desvio)+"  t_Pmax: "+str(t_Pmax)+"  limite_truncamiento: "+str(limite_truncamiento)#+"  vector_tiempos: "+str(vector_tiempos) 
+	#print "desvio: "+str(desvio)+"  t_Pmax: "+str(t_Pmax)+"  limite_truncamiento: "+str(limite_truncamiento)#+"  vector_tiempos: "+str(vector_tiempos)
 	tiempos_truncados = []		# Almaceno en este vector los tiempos truncados
 	for t in vector_tiempos:
 		if t <= limite_truncamiento:
@@ -212,7 +212,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		aux.append(tT_S)
 		info_necesaria[file_name] = aux
 	#------------------------------------------
-		
+
 	dsv_estimado = p1[2]
 	# Calculo umbral para paquetes encolados
 	umbral_S = tiempo_estimado + dsv_estimado
@@ -243,7 +243,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	# Datos para el ajuste
 	xcorr = almaceno_tiempos[elementos_tiempo]
 	ycorr = lista_frecuencias[0:len(xcorr)]
-	# Datos truncados	
+	# Datos truncados
 	xrest = vector_tiempos[len(xcorr):len(vector_tiempos)]
 	yrest = lista_frecuencias[len(ycorr):len(lista_frecuencias)]
 
@@ -254,7 +254,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		if p > umbral_S:
 			sq_S = sq_S + 1
 
-	#### Para graficar el histograma: descomentar las siguientes lineas 
+	#### Para graficar el histograma: descomentar las siguientes lineas
 	## Calculo los puntos de la funcion continua de ajuste
 	#arreglo = numpy.arange(t_first, limite_truncamiento, 0.01)
 	#fn_est = fitfunc(p1, arreglo)
@@ -415,7 +415,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		info_necesaria[file_name] = aux
 	#------------------------------------------
 
-	#### Para graficar el histograma: descomentar las siguientes lineas 
+	#### Para graficar el histograma: descomentar las siguientes lineas
 	## Calculo los puntos de la funcion continua de ajuste
 	#arreglo = numpy.arange(t_first, limite_truncamiento, 0.01)
 	#fn_est = fitfunc(p1, arreglo)
@@ -446,7 +446,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		#------------------------------------------
 		info_necesaria[file_name] = datos
 		#------------------------------------------
-		
+
 	# Calculo de la capacidad asimetrica usando la mediana como estimador
 	# C = (l_L - l_S)/Mr    eq. (16) TiX
 	datos = info_necesaria[file_name]
@@ -516,7 +516,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 				tiempos_BA = t4_t3_actual - t4_t3_anterior
 				data_BA.append(tiempos_BA)
 
-	# CALCULO SENTIDO AB	
+	# CALCULO SENTIDO AB
 	tAB_min = min(data_AB)
 	tAB_max = max(data_AB)
 
@@ -696,7 +696,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
                 #####################################################################
 		#  Escritura en archivo de salida
                 #####################################################################
-		#fsalida_abs=file_name+'.calculos' # IMPORTANTE: depende de la entrada 
+		#fsalida_abs=file_name+'.calculos' # IMPORTANTE: depende de la entrada
 		#f = open(fsalida_abs, 'w')
 		#cadena_00 = '# tT_S = '+str(tT_S)+' useg\n'
 		#f.write(cadena_00)
@@ -809,7 +809,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		#print 'tqA + tqB(',n,'):', tqA_tqB
 		aux_00.append(tqA_tqB)	# valores = [sec_num, length, t1, t2, t3, t4, tT, tA_ins, tB_ins, tau, tqA_tqB]
 		datos_almacenados[n] = aux_00
-		# 
+		#
 		# Para graficar desfasaje entre relojes
 		# tqA(i) + deltaPsi(i) = t2(i) - t1(i) - l(i)/CA - tau      eq. (20) TiX
 		tqA_deltaPsi = t2 - t1 - tA_ins - tau
@@ -1114,7 +1114,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 
 		# guess some fit parameters
 		p0 = scipy.c_[P_max, t_Pmax, desvio]
-		
+
 		almaceno_tiempos = {}
 		almaceno_cv = {}
 		almaceno_estimadores = {}
@@ -1124,17 +1124,17 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			xcorr = vector_tiempos[0:el+1]
 			ycorr = lista_frecuencias[0:len(xcorr)]
 			almaceno_tiempos[el] = xcorr
-		
+
 			# fit a gaussian
 			p1, success = scipy.optimize.leastsq(errfunc, p0.copy()[0], args=(xcorr,ycorr))
 			#p1=p0[0]
-			
+
 			almaceno_estimadores[el] = p1
-		
+
 			amp_estimada = round(p1[0],3)
 			tiempo_estimado = round(p1[1],3)
 			dsv_estimado = round(p1[2],3)
-		
+
 			# Calculo coeficiente de variacion
 			cv = round(dsv_estimado/tiempo_estimado, 4)
 			if cv > 0:
@@ -1177,7 +1177,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		#plt.legend()
 		#plt.show()
 
-		# Calculo del umbral	
+		# Calculo del umbral
 		umbral = tiempo_estimado + dsv_estimado
 		#print "umbral:"+str(umbral)
 		# Calculo de utilizacion global contando cantidad de paquetes que superan el umbral
@@ -1446,13 +1446,13 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 				else:
 					y1_rs.append(0.5)
 					y2_wavelet.append(0.5)
-				
+
 				if os.path.isfile(filew) == True:
 					os.remove(filew)
 				tiempo.append(x)
 				x = x + 5
 				ventana = ventana + salto
-		
+
 		## Para graficar parametro de Hurst en ventana
 		#plt.plot(tiempo,y1_rs, 'r-', label='RS')
 		#plt.plot(tiempo,y2_wavelet, 'b-', label='Wavelet')
@@ -1511,7 +1511,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		utilizacion = 0
 		h_rs = 0
 		h_wave = 0
-		numer = 0 
+		numer = 0
 		for n in range(len(tiempo)-10,len(tiempo)):
 			if ((eje_y[n] < umbral_utiliz) and ((y1_rs[n]+y2_wavelet[n])/2 > umbral_H)):
 				calidad=calidad+1
@@ -1540,7 +1540,7 @@ def random_word(length):
    return ''.join(random.choice(string.lowercase) for i in range(length))
 
 def analyse_data(files_to_process):
-	
+
 	# print "Processing files:", files_to_process
 	leer = []
 	for file_name in files_to_process:
@@ -1568,7 +1568,7 @@ def analyse_data(files_to_process):
 
 	return ansDictionary
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
 
 	if len(sys.argv) < 2:
      		print "usage: ./completo.py <files_to_process>\n"
