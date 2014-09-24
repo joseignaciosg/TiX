@@ -3,7 +3,7 @@ lock '3.2.1'
 set :application, 'tix_production'
 set :repo_url, 'git@github.com:joseignaciosg/TiX.git'
 set :format, :pretty
-set :log_level, :debug
+set :log_level, :info
 set :pty, true
 set :keep_releases, 5
 
@@ -17,6 +17,7 @@ namespace :deploy do
       on roles(:app) do
         execute "mkdir -p #{fetch(:install_to)} || true"
         execute "cp -rv #{fetch(:deploy_to)}/current/TiX/PythonApp/ServerApp/* #{fetch(:install_to)}"
+        execute "cd #{fetch(:install_to)} && git checkout ./data_processing/"
       end
     end
 
