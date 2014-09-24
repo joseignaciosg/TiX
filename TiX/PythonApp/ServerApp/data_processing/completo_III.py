@@ -28,11 +28,11 @@
 # lambda_S
 # lambda_L
 
-#import pylab
+#import pylab # comentar en la version produccion
 import scipy
 import scipy.optimize
 import numpy
-#import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt # comentar en la versio�n produccoón
 import os
 import subprocess
 import time
@@ -76,11 +76,21 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	# lambda_S
 	# lambda_L
 
+        ### Tiempos cortos y largos tiene un arreglo con enteros, con los tiempos de los paquetes cortos y largos
 	# Tiempos cortos
 	probes_short = []			# En este vector acumulo todos los tT de paquetes cortos para hacer el histograma
 	# Tiempos largos
 	probes_large = []			# En este vector acumulo todos los tT de paquetes largos para hacer el histograma
+
 	indice=0
+	t1_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+	t2_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+	t3_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+	t4_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+	st1 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+	st2 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+	st3 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+	st4 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
 	for line in leer:
 		if line[0] != '#':
 			aux_00 = line.split('|')
@@ -88,10 +98,34 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			#print aux_00
 			num_sec = indice
 			length  = float(aux_00[2])
-			t1  = float(aux_00[3])
-			t2  = float(aux_00[4])
-			t3  = float(aux_00[5])
-			t4  = float(aux_00[6].split('\n')[0])
+			t1  = float(aux_00[3]) 
+			t2  = float(aux_00[4]) 
+			t3  = float(aux_00[5]) 
+			t4  = float(aux_00[6].split('\n')[0]) 
+			t1  = t1 + st1 
+			t2  = t2 + st2
+			t3  = t3 + st3
+			t4  = t4 + st4
+			if (t1-t1_o < 0):
+				#st1=86400000000 # 1 dia en microsegundos
+				t1  = t1 + st1
+				print "DEBUG ****t1 negativo, t1:"+str(t1)+" t1_o:"+str(t1_o)+" t1-t1_o:"+str(t1-t1_o)
+			if (t2-t2_o < 0):
+				#st2=86400000000 # 1 dia en microsegundos
+				t2  = t2 + st2
+				print "DEBUG ****t2 negativo, t2:"+str(t2)+" t2_o:"+str(t2_o)+" t2-t2_o:"+str(t2-t2_o)
+			if (t3-t3_o < 0):
+				#st3=86400000000 # 1 dia en microsegundos
+				t3  = t3 + st3
+				print "DEBUG ****t3 negativo, t3:"+str(t3)+" t3_o:"+str(t3_o)+" t3-t3_o:"+str(t3-t3_o)
+			if (t4-t4_o < 0):
+				#st4=86400000000 # 1 dia en microsegundos
+				t4  = t4 + st4
+				print "DEBUG ****t4 negativo, t4:"+str(t4)+" t4_o:"+str(t4_o)+" t4-t4_o:"+str(t4-t4_o)
+			t1_o= t1 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+			t2_o= t2 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+			t3_o= t3 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+			t4_o= t4 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
 			indice = indice +1
 			t2_t1 = t2-t1
 			t3_t2 = t3-t2
@@ -126,8 +160,10 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 
 	# Salida del histograma
 	frecuencias = histo[0]
-	lista_frecuencias = numpy.ndarray.tolist(frecuencias)		# lo convierto a un array para poder accederlo por indice
 	tiempos = histo[1]
+
+        ### Listado de Frecuencias y tiempos del histograma
+	lista_frecuencias = numpy.ndarray.tolist(frecuencias)		# lo convierto a un array para poder accederlo por indice
 	lista_tiempos = numpy.ndarray.tolist(tiempos)				# lo convierto a un array para poder accederlo por indice
 
 	# Convierto el vector de tiempos a la misma longitud que el de frecuencias, calculando el punto de acumulacion en el punto medio del intervalo
@@ -138,17 +174,21 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		x_1 = aux + paso/2
 		vector_tiempos.append(x_1)
 
-	#Entradas para hacer las estimaciones
-	t_first = vector_tiempos[0]
+	#Entradas para hacer las estimaciones 
 	P_max = max(frecuencias)
 	indice_t_Pmax = lista_frecuencias.index(P_max)
+
+	t_first = vector_tiempos[0]
 	t_Pmax = vector_tiempos[indice_t_Pmax]
 	desvio = max(delta,(t_Pmax - t_first))
 
 	# Truncamiento de la información
-	limite_truncamiento = t_Pmax + desvio #3*desvio
-	#print "desvio: "+str(desvio)+"  t_Pmax: "+str(t_Pmax)+"  limite_truncamiento: "+str(limite_truncamiento)#+"  vector_tiempos: "+str(vector_tiempos)
-	tiempos_truncados = []		# Almaceno en este vector los tiempos truncados
+	limite_truncamiento = t_Pmax + 3*desvio #3*desvio
+	#print "desvio: "+str(desvio)+"  t_Pmax: "+str(t_Pmax)+"  limite_truncamiento: "+str(limite_truncamiento)#+"  vector_tiempos: "+str(vector_tiempos) 
+
+        ### Trunca todos los tiempos 
+	# Almaceno en este vector los tiempos truncados
+	tiempos_truncados = []		
 	for t in vector_tiempos:
 		if t <= limite_truncamiento:
 			tiempos_truncados.append(t)
@@ -173,14 +213,16 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	#rango_ajuste = range(len(tiempos_truncados) , len(tiempos_truncados)+1)
 	#print rango_ajuste
 	for el in rango_ajuste:
-                ################################## !!!!!!!  UNSAFE CODE! NO Bounds are set for the following two lines and len(xcorr) can be > len(ycorr) in some cases
 		xcorr = vector_tiempos[0:el+1]
 		ycorr = lista_frecuencias[0:len(xcorr)]
 		almaceno_tiempos[el] = xcorr
 
 		# fit a gaussian
-		p1, success = scipy.optimize.leastsq(errfunc, p0.copy()[0], args=(xcorr,ycorr))
-		#p1=p0[0]
+                try: 
+			p1, success = scipy.optimize.leastsq(errfunc, p0.copy()[0], args=(xcorr,ycorr))
+                except: 
+			p1=p0.copy()[0]
+			pass
 		almaceno_estimadores[el] = p1
 
 		amp_estimada = p1[0]
@@ -212,10 +254,10 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		aux.append(tT_S)
 		info_necesaria[file_name] = aux
 	#------------------------------------------
-
+		
 	dsv_estimado = p1[2]
 	# Calculo umbral para paquetes encolados
-	umbral_S = tiempo_estimado + dsv_estimado
+	umbral_S = tiempo_estimado + 3* dsv_estimado
 	# SALIDA
 	tH_S = umbral_S
 	#------------------------------------------
@@ -243,7 +285,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	# Datos para el ajuste
 	xcorr = almaceno_tiempos[elementos_tiempo]
 	ycorr = lista_frecuencias[0:len(xcorr)]
-	# Datos truncados
+	# Datos truncados	
 	xrest = vector_tiempos[len(xcorr):len(vector_tiempos)]
 	yrest = lista_frecuencias[len(ycorr):len(lista_frecuencias)]
 
@@ -254,11 +296,10 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		if p > umbral_S:
 			sq_S = sq_S + 1
 
-	#### Para graficar el histograma: descomentar las siguientes lineas
+	#### Para graficar el histograma: descomentar las siguientes lineas 
 	## Calculo los puntos de la funcion continua de ajuste
 	#arreglo = numpy.arange(t_first, limite_truncamiento, 0.01)
 	#fn_est = fitfunc(p1, arreglo)
-
 	#plt.plot(xcorr,ycorr, 'go')
 	#plt.plot(xcorr,ycorr, 'g-', label='Histograma')
 	#plt.plot(xrest,yrest, 'bo')
@@ -301,7 +342,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	desvio = max(delta,(t_Pmax - t_first))
 
 	# Truncamiento
-	limite_truncamiento = t_Pmax + desvio #3*desvio
+	limite_truncamiento = t_Pmax + 3*desvio #3*desvio
 	tiempos_truncados = []
 	for t in vector_tiempos:
 	    if t <= limite_truncamiento:
@@ -328,7 +369,11 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	    almaceno_tiempos[el] = xcorr
 
 	    # fit a gaussian
-	    p1, success = scipy.optimize.leastsq(errfunc, p0.copy()[0], args=(xcorr,ycorr))
+            try: 
+		p1, success = scipy.optimize.leastsq(errfunc, p0.copy()[0], args=(xcorr,ycorr))
+            except: 
+		p1=p0.copy()[0]
+		pass
 	    #p1=p0[0]
 	    almaceno_estimadores[el] = p1
 
@@ -363,7 +408,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 
 	dsv_estimado = p1[2]
 	# Calculo umbral para paquetes encolados
-	umbral_L = tiempo_estimado + dsv_estimado
+	umbral_L = tiempo_estimado + 3* dsv_estimado
 	# SALIDA
 	tH_L = umbral_L
 	#------------------------------------------
@@ -415,12 +460,11 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		info_necesaria[file_name] = aux
 	#------------------------------------------
 
-	#### Para graficar el histograma: descomentar las siguientes lineas
+	#### Para graficar el histograma: descomentar las siguientes lineas 
 	## Calculo los puntos de la funcion continua de ajuste
+	## Para graficar el histograma
 	#arreglo = numpy.arange(t_first, limite_truncamiento, 0.01)
 	#fn_est = fitfunc(p1, arreglo)
-
-	## Para graficar el histograma
 	#plt.plot(xcorr,ycorr, 'go')
 	#plt.plot(xcorr,ycorr, 'g-', label='Histograma')
 	#plt.plot(xrest,yrest, 'bo')
@@ -446,7 +490,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		#------------------------------------------
 		info_necesaria[file_name] = datos
 		#------------------------------------------
-
+		
 	# Calculo de la capacidad asimetrica usando la mediana como estimador
 	# C = (l_L - l_S)/Mr    eq. (16) TiX
 	datos = info_necesaria[file_name]
@@ -516,7 +560,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 				tiempos_BA = t4_t3_actual - t4_t3_anterior
 				data_BA.append(tiempos_BA)
 
-	# CALCULO SENTIDO AB
+	# CALCULO SENTIDO AB	
 	tAB_min = min(data_AB)
 	tAB_max = max(data_AB)
 
@@ -558,7 +602,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	desvio = max(delta,(t_Pmax - t_first))
 
 	# Truncamiento
-	limite_truncamiento = t_Pmax + desvio
+	limite_truncamiento = t_Pmax + 3*desvio
 	tiempos_truncados = []
 	for t in data_AB:
 		if t <= limite_truncamiento:
@@ -631,7 +675,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	desvio = max(delta,(t_Pmax - t_first))
 
 	# Truncamiento
-	limite_truncamiento = t_Pmax + desvio
+	limite_truncamiento = t_Pmax + 3*desvio
 	tiempos_truncados = []
 	for t in data_BA:
 		if t <= limite_truncamiento:
@@ -696,7 +740,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
                 #####################################################################
 		#  Escritura en archivo de salida
                 #####################################################################
-		#fsalida_abs=file_name+'.calculos' # IMPORTANTE: depende de la entrada
+		#fsalida_abs=file_name+'.calculos' # IMPORTANTE: depende de la entrada 
 		#f = open(fsalida_abs, 'w')
 		#cadena_00 = '# tT_S = '+str(tT_S)+' useg\n'
 		#f.write(cadena_00)
@@ -809,7 +853,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		#print 'tqA + tqB(',n,'):', tqA_tqB
 		aux_00.append(tqA_tqB)	# valores = [sec_num, length, t1, t2, t3, t4, tT, tA_ins, tB_ins, tau, tqA_tqB]
 		datos_almacenados[n] = aux_00
-		#
+		# 
 		# Para graficar desfasaje entre relojes
 		# tqA(i) + deltaPsi(i) = t2(i) - t1(i) - l(i)/CA - tau      eq. (20) TiX
 		tqA_deltaPsi = t2 - t1 - tA_ins - tau
@@ -1114,7 +1158,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 
 		# guess some fit parameters
 		p0 = scipy.c_[P_max, t_Pmax, desvio]
-
+		
 		almaceno_tiempos = {}
 		almaceno_cv = {}
 		almaceno_estimadores = {}
@@ -1124,17 +1168,20 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			xcorr = vector_tiempos[0:el+1]
 			ycorr = lista_frecuencias[0:len(xcorr)]
 			almaceno_tiempos[el] = xcorr
-
+		
 			# fit a gaussian
-			p1, success = scipy.optimize.leastsq(errfunc, p0.copy()[0], args=(xcorr,ycorr))
-			#p1=p0[0]
-
+                	try: 
+				p1, success = scipy.optimize.leastsq(errfunc, p0.copy()[0], args=(xcorr,ycorr))
+                	except: 
+				p1=p0.copy()[0]
+				pass
+			
 			almaceno_estimadores[el] = p1
-
+		
 			amp_estimada = round(p1[0],3)
 			tiempo_estimado = round(p1[1],3)
 			dsv_estimado = round(p1[2],3)
-
+		
 			# Calculo coeficiente de variacion
 			cv = round(dsv_estimado/tiempo_estimado, 4)
 			if cv > 0:
@@ -1177,8 +1224,8 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		#plt.legend()
 		#plt.show()
 
-		# Calculo del umbral
-		umbral = tiempo_estimado + dsv_estimado
+		# Calculo del umbral	
+		umbral = tiempo_estimado + 3* dsv_estimado
 		#print "umbral:"+str(umbral)
 		# Calculo de utilizacion global contando cantidad de paquetes que superan el umbral
 		util = 0
@@ -1390,10 +1437,18 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 					#print " resultados: "+str(resultados)
 					if len(resultados) != 0:
 						aux_01 = resultados.split('RS plot H= ')
-						RS = aux_01[1].split(' \n')[0]
+						RSa = aux_01[1].split(' \n')
+						if len(RSa[0]) != 0:
+					   		RS = RSa[0]
+						else:
+					   		RS = 0.5
 						y1_rs.append(round(float(RS), 3))
 						aux_02 = aux_01[1].split('Wavelet H= ')
-						wavelet = aux_02[1].split(' +/-')[0]
+						waveleta = aux_02[1].split(' +/-')[0]
+						if len(waveleta) != 0:
+					   		wavelet = float(waveleta)
+						else:
+					   		wavelet = 0.5
 						y2_wavelet.append(round(float(wavelet), 3))
 						#aux_03 = aux_01[1].split('Loc. W. H= ')
 						#localW = aux_03[1].split(' \n')[0]
@@ -1432,10 +1487,18 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 				#print " resultados: "+str(resultados)
 				if len(resultados) != 0:
 					aux_01 = resultados.split('RS plot H= ')
-					RS = aux_01[1].split(' \n')[0]
+					RSa = aux_01[1].split(' \n')
+					if len(RSa[0]) != 0:
+					   RS = RSa[0]
+					else:
+					   RS = 0.5
 					y1_rs.append(round(float(RS), 3))
 					aux_02 = aux_01[1].split('Wavelet H= ')
-					wavelet = aux_02[1].split(' +/-')[0]
+					waveleta = aux_02[1].split(' +/-')[0]
+					if len(waveleta) != 0:
+					   wavelet = float(waveleta)
+					else:
+					   wavelet = 0.5
 					y2_wavelet.append(round(float(wavelet), 3))
 					#aux_03 = aux_01[1].split('Loc. W. H= ')
 					#localW = aux_03[1].split(' \n')[0]
@@ -1446,13 +1509,13 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 				else:
 					y1_rs.append(0.5)
 					y2_wavelet.append(0.5)
-
+				
 				if os.path.isfile(filew) == True:
 					os.remove(filew)
 				tiempo.append(x)
 				x = x + 5
 				ventana = ventana + salto
-
+		
 		## Para graficar parametro de Hurst en ventana
 		#plt.plot(tiempo,y1_rs, 'r-', label='RS')
 		#plt.plot(tiempo,y2_wavelet, 'b-', label='Wavelet')
@@ -1511,7 +1574,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		utilizacion = 0
 		h_rs = 0
 		h_wave = 0
-		numer = 0
+		numer = 0 
 		for n in range(len(tiempo)-10,len(tiempo)):
 			if ((eje_y[n] < umbral_utiliz) and ((y1_rs[n]+y2_wavelet[n])/2 > umbral_H)):
 				calidad=calidad+1
@@ -1519,6 +1582,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			h_rs = h_rs + y1_rs[n]
 			h_wave = h_wave + y2_wavelet[n]
 			numer=numer+1
+			#print sentido
 			#print "calidad",calidad
 			#print "utilizacion",eje_y[n]
 			#print "h_rs",y1_rs[n]
@@ -1540,7 +1604,7 @@ def random_word(length):
    return ''.join(random.choice(string.lowercase) for i in range(length))
 
 def analyse_data(files_to_process):
-
+	
 	# print "Processing files:", files_to_process
 	leer = []
 	for file_name in files_to_process:
@@ -1568,7 +1632,7 @@ def analyse_data(files_to_process):
 
 	return ansDictionary
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
 
 	if len(sys.argv) < 2:
      		print "usage: ./completo.py <files_to_process>\n"
