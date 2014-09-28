@@ -19,5 +19,5 @@ include
 lib
 share
 Tix.dmg
-*.pkg
+/*.pkg
 .settings
