@@ -19,6 +19,7 @@ create_new_tag() {
   rm -rfv *
   echo "Copying files from $current_branch"
   git checkout $current_branch -- releases/ > /dev/null
+  rm -rvf releases/**/*.deb
   echo "Commiting release"
   git add -A . > /dev/null
   git commit -m "Release sources for $os/$variant/head" > /dev/null
