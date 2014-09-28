@@ -38,7 +38,7 @@ package_os() {
       $DIR/../scripts/package_linux.sh 2>&1 | xargs echo > /dev/null
       ;;
     mac)
-      $DIR/../scripts/package_osx.sh 2>&1 | xargs echo > /dev/null
+      $DIR/../scripts/package_osx.sh
       ;;
   esac
 }
