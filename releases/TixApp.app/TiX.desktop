@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=TiX
+Comment=Network Performance Monitor
+Exec=/usr/share/tix/TixApp
+Icon=TiX
+Terminal=false
