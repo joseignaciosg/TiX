@@ -10,6 +10,7 @@ current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 create_new_tag() {
   echo "Commiting the package"
+  rm -rvf releases/**/*.deb
   git add -A . > /dev/null
   git commit -m "Release sources for $os/$variant/head" > /dev/null
   echo "Moving to 'releases' branch"
