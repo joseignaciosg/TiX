@@ -77,7 +77,7 @@ class LoginScreen(BoxLayout): #BoxLayout para poner arriba el form y abajo el bo
 
     headerLayout = BoxLayout(orientation='horizontal')
     headerLabelsLayout = BoxLayout(orientation='vertical')
-    headerLabelsLayout.add_widget(Label(text='Proyecto TiX UPDATED', font_size=24))
+    headerLabelsLayout.add_widget(Label(text='Proyecto TiX UPDATED 2', font_size=24))
     headerLabelsLayout.add_widget(Label(text='Iniciar sesion', font_size=18))
 
     headerLayout.add_widget(headerLabelsLayout)
