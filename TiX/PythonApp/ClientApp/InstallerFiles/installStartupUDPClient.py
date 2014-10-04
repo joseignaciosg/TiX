@@ -85,6 +85,10 @@ def unix_common_files_copy():
   chmod_x(src_path(startupAppCaller))
   link(src_path(startupAppCaller),dest_path(startupAppCaller))
 
+  # Copy startupAppCaller and make executable
+  chmod_x(src_path(tixUpdater))
+  link(src_path(tixUpdater),dest_path(tixUpdater))
+
 def darwin_install_client():
   # Set as root, copy to launchers, and tell osx we're inside
   os.system('sudo chown root %s' % src_path(darwinLaunchFile))
