@@ -10,6 +10,8 @@ current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 create_new_tag() {
   echo "Commiting the package"
+  rm -rvf releases/**/*.deb
+  rm -rvf releases/**/*.dmg
   git add -A . > /dev/null
   git commit -m "Release sources for $os/$variant/head" > /dev/null
   echo "Moving to 'releases' branch"
@@ -19,6 +21,7 @@ create_new_tag() {
   rm -rfv *
   echo "Copying files from $current_branch"
   git checkout $current_branch -- releases/ > /dev/null
+  rm -rvf releases/**/*.deb
   echo "Commiting release"
   git add -A . > /dev/null
   git commit -m "Release sources for $os/$variant/head" > /dev/null
@@ -35,10 +38,11 @@ package_os() {
   get_os
   case $os in
     linux)
-      $DIR/../scripts/package_linux.sh 2>&1 | xargs echo > /dev/null
+
+      bash $DIR/../scripts/package_linux.sh 2>&1 | xargs echo > /dev/null
       ;;
     mac)
-      $DIR/../scripts/package_osx.sh
+      bash $DIR/../scripts/package_osx.sh 2>&1 | xargs echo > /dev/null
       ;;
   esac
 }

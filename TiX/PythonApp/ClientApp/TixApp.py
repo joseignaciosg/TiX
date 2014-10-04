@@ -59,7 +59,7 @@ class LoginScreen(BoxLayout): #BoxLayout para poner arriba el form y abajo el bo
         else:
           if os.path.exists(installDirUnix):
             self.show_already_installed_popup()
-          else:        
+          else:
             self.show_install_form()
 
   def analyze_is_admin(self):
@@ -77,7 +77,9 @@ class LoginScreen(BoxLayout): #BoxLayout para poner arriba el form y abajo el bo
 
     headerLayout = BoxLayout(orientation='horizontal')
     headerLabelsLayout = BoxLayout(orientation='vertical')
-    headerLabelsLayout.add_widget(Label(text='Proyecto TiX UPDATED', font_size=24))
+
+    headerLabelsLayout.add_widget(Label(text='Proyecto TiX', font_size=24))
+
     headerLabelsLayout.add_widget(Label(text='Iniciar sesion', font_size=18))
 
     headerLayout.add_widget(headerLabelsLayout)
@@ -274,7 +276,7 @@ def deleteExistingInstallation(self):
                 #         shutil.rmtree("/etc/TIX/")
 
                 sys_return = os.system("""osascript -e 'do shell script "./uninstallStartupUDPClient" with administrator privileges'""")
-        
+
         if(sys_return == 0): # Call to installation procedure
                 installation_return = 'Se ha borrado con exito la desinstalacion de TiX. Retornando al SO...'
                 sys_return = 0

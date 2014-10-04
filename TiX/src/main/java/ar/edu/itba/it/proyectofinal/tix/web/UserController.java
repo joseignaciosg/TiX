@@ -379,13 +379,8 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView ispcharts(
 			HttpSession session,
-			@RequestParam(value = "nickname", defaultValue = "") String nickname,
-			@RequestParam(value = "graphtype", defaultValue = "GENERAL_GRAPH") ChartType graphtype,
-			@RequestParam(value = "ins", required = false) Installation requiredInstallation,
-			@RequestParam(value = "isp", required = false) ISP requiredISP,
 			@RequestParam(value = "minDate", required = false) DateTime minDate,
-			@RequestParam(value = "maxDate", required = false) DateTime maxDate,
-			@RequestParam(value = "test", required = false) String test) {
+			@RequestParam(value = "maxDate", required = false) DateTime maxDate) {
 		
 		System.out.println("--------------------------------------------------------------------------------------------------------------------------------");
 		System.out.println("minDate: " + minDate );
@@ -455,6 +450,8 @@ public class UserController {
 
 		mav.addObject("disp_list", disp_list);
 		mav.addObject("boxplot_list", boxplot_list);
+		mav.addObject("minDate", minDate);
+		mav.addObject("minDate", minDate);
 
 		return mav;
 
