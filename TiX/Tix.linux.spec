@@ -11,7 +11,7 @@ base_path = '%s/TiX/PythonApp/ClientApp/' % pwd
 
 # Compile TixApp.py
 
-paths = ["TixApp.py",  "InstallerFiles/installStartupUDPClient.py",  "InstallerFiles/startupAppCaller.py",  "InstallerFiles/uninstallStartupUDPClient.py",  "InstallerFiles/tobeCopied/TixClientApp.py"]
+paths = ["TixApp.py",  "InstallerFiles/installStartupUDPClient.py",  "InstallerFiles/startupAppCaller.py",  "InstallerFiles/uninstallStartupUDPClient.py",  "InstallerFiles/toBeCopied/TixClientApp.py"]
   
 def collect_many(paths, base_path):
   ans = []
