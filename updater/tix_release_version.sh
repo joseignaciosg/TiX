@@ -38,7 +38,6 @@ package_os() {
   get_os
   case $os in
     linux)
-
       bash $DIR/../scripts/package_linux.sh 2>&1 | xargs echo > /dev/null
       ;;
     mac)
