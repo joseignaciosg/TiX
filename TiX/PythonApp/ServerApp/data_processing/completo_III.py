@@ -38,8 +38,15 @@ import subprocess
 import time
 import sys
 import random, string
+import ConfigParser
 
+config                          = ConfigParser.ConfigParser()
+pwd                             = os.getcwd()
+completoConfigPath              = '%s/completo_config.cfg'
+config.read(completoConfigPath)
 
+umbral_utiliz                   = (config.getfloat("CompletoIII", "umbralUtiliz"))
+umbral_H                        = (config.getfloat("CompletoIII", "umbralH"))
 
 def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	# Tamaños de paquetes definidos en 'udpClientTiempos.js'
@@ -1614,8 +1621,6 @@ def analyse_data(files_to_process):
 			leer +=f.readlines()
 			f.close()
 
-	umbral_utiliz=0.7 # leerlo de un archivo de configuracion
-	umbral_H=0.68     # leerlo de un archivo de configuracion
 	randomLogName = 'log_' + random_word(12)
 	(calidad_Up,utiliz_Up,H_RS_Up,H_Wave_Up,calidad_Down,utiliz_Down,H_RS_Down,H_Wave_Down)=resultados(randomLogName,leer,umbral_utiliz,umbral_H)
 	print "calidad_Up:",calidad_Up
