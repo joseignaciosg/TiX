@@ -99,12 +99,6 @@ def darwin_install_client():
   sys_return = os.system('sudo launchctl load %s' % darwin_launch_path(darwinLaunchFile))
 
 def linux_install_client():
-
-  print "setting cron job for updates"
-  chmod_x(src_path(tixUpdater))
-  os.system(tixUpdater)
-
-
   print "about to copy"
   chmod_x(src_path(startupAppCaller))
   cp_rf(src_path(startupAppCaller),init_path(startupAppCaller))
