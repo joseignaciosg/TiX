@@ -450,8 +450,13 @@ public class UserController {
 
 		mav.addObject("disp_list", disp_list);
 		mav.addObject("boxplot_list", boxplot_list);
-		mav.addObject("minDate", minDate);
-		mav.addObject("minDate", minDate);
+		if ( minDate !=  null){
+			mav.addObject("minDate", minDate.toString("dd/MM/yyyy"));
+		}
+		if (maxDate != null ){
+			mav.addObject("maxDate", maxDate.toString("dd/MM/yyyy"));	
+		}
+		
 
 		return mav;
 
