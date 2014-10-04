@@ -4,6 +4,7 @@ import shutil,errno,os,stat,platform,sys,getopt,subprocess,inspect, ConfigParser
 
 startupAppCaller = "startupAppCaller.sh"
 tixUpdater = "tix_updater.sh"
+tixLib = "tix_lib.sh"
 
 installDirUnix = "/etc/TIX"
 installDirUnixApp = installDirUnix + '/app'
@@ -88,6 +89,8 @@ def unix_common_files_copy():
   # Copy startupAppCaller and make executable
   chmod_x(src_path(tixUpdater))
   link(src_path(tixUpdater),dest_path(tixUpdater))
+  chmod_x(src_path(tixLib))
+  link(src_path(tixLib),dest_path(tixLib))
 
 def darwin_install_client():
   # Set as root, copy to launchers, and tell osx we're inside
