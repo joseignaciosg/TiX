@@ -10,7 +10,7 @@ tix_update_initialize()
   export tix_trace_flag tix_debug_flag tix_path tix_cancel
 }
 get_sha_for_file() { 
-  current_sha=$( ( curl -sSL ${_api_url} || (wget -O- ${_url}) ) | sed 's/[{}]/''/g' | grep "\"sha\"" | awk '{ print $2 }' | sed 's/\"//g' | sed 's/,//g')
+  current_sha=$( ( curl -sSL ${_api_url} || (wget -q -O- ${_api_url}) ) | sed 's/[{}]/''/g' | grep "\"sha\"" | awk '{ print $2 }' | sed 's/\"//g' | sed 's/,//g')
   export current_sha;
 }
 
@@ -31,7 +31,7 @@ get_and_unpack() {
       echo "Avoiding redownload based on githubs' SHA"
     else
       echo Downloading from $_url;
-      curl -sSL ${_url} -o ./${_file} || (wget -O- ${_url} > ./${_file})
+      curl -sSL ${_url} -o ./${_file} || (wget -q -O- ${_url} > ./${_file})
       sha=$(unzip -l ${_file} | head -n 2 | tail -n 1)
       if [[ $sha =~ /release\.zip/ ]]; then
         no_release_found
