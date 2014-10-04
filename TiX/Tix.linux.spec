@@ -7,7 +7,7 @@ install_hooks(globals())
 
 pwd = os.getcwd()
 
-base_path = '%s/Tix/PythonApp/ClientApp/' % pwd
+base_path = '%s/TiX/PythonApp/ClientApp/' % pwd
 
 # Compile TixApp.py
 
