@@ -378,7 +378,15 @@ public class UserController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView ispcharts(
-			HttpSession session) {
+			HttpSession session,
+			@RequestParam(value = "minDate", required = false) DateTime minDate,
+			@RequestParam(value = "maxDate", required = false) DateTime maxDate) {
+		
+		System.out.println("--------------------------------------------------------------------------------------------------------------------------------");
+		System.out.println("minDate: " + minDate );
+		System.out.println("maxDate: " + maxDate );
+		System.out.println("--------------------------------------------------------------------------------------------------------------------------------");
+		
 		ModelAndView mav = new ModelAndView();
 		User me = getSessionUser(session);
 
@@ -400,8 +408,11 @@ public class UserController {
 
 		//TODO
 		//Nowadays just shows the data from last 6 months
-		 DateTime maxDate = new DateTime();
-		 DateTime minDate = maxDate.minusDays(180);
+		if ( minDate == null && maxDate == null ){
+			 maxDate = new DateTime();
+			 minDate = maxDate.minusDays(180);
+		}
+		
 
 		for (ISP isp : isps) {
 			int id = isp.getId();
@@ -439,6 +450,13 @@ public class UserController {
 
 		mav.addObject("disp_list", disp_list);
 		mav.addObject("boxplot_list", boxplot_list);
+		if ( minDate !=  null){
+			mav.addObject("minDate", minDate.toString("dd/MM/yyyy"));
+		}
+		if (maxDate != null ){
+			mav.addObject("maxDate", maxDate.toString("dd/MM/yyyy"));	
+		}
+		
 
 		return mav;
 

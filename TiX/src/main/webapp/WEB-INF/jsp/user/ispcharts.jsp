@@ -7,30 +7,69 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <html>
 <head>
+<title>Graficos de utilizacion y calidad</title>
 
-<title>Histograms</title>
+<!-- CSS bootstrap styles -->
+<link href="<c:url value='/css/bootstrap.css'/>" rel="stylesheet">
+<!-- CSS Datepicker styles -->
+<link href="<c:url value='/css/datepicker.css'/>" rel="stylesheet">
+<link href="<c:url value='/css/tix.css'/>" rel="stylesheet">
+
+<!-- required for histograms -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="<c:url value='/js/bootstrap.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/bootstrap-datepicker.js'/>"></script>
+<script src="http://code.highcharts.com/stock/highstock.js"></script>
+<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="<c:url value='/js/tix.js'/>"></script>
+
+
 <!-- required for boxplots -->
 <script src="http://code.highcharts.com/highcharts-more.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+ --></head>
 
-</head>
 <body>
+<%@ include file="/WEB-INF/jsp/header.jsp"%>
+
+<br/><br/>
+
+<div class="span9">
+<form method="GET"  action="./ispcharts" class="form-horizontal offset2" style="padding-left:10px;">
+    <div class="input-prepend" data-date-format="dd-mm-yyyy">
+        <span class="add-on"><i class="icon-calendar"></i></span>
+            <input type="text" class="span8" value="${minDate}" name="minDate" id="dpd1" placeholder="Fecha desde"/>
+    </div>
+    <div class="input-prepend" data-date-format="dd-mm-yyyy">
+        <span class="add-on"><i class="icon-calendar"></i></span>
+            <input type="text" class="span8" value="${maxDate}" name="maxDate" id="dpd2" placeholder="Fecha hasta"/>
+    </div>
+    <c:if test="${requiredISP != null}">
+        <input type="hidden"  value="${requiredISP.id}" name="isp"/>
+    </c:if>
+    <input type="submit" class="btn btn-primary" value="Filtrar">
+</form>
+</div>
+
+<br/><br/>
 
 <h2 style="margin: 50px 180px 50px 180px;">Histogramas por ISP</h1>
+
 <c:forEach items="${disp_list}" var="entry">
     <div class="isp-container row-fluid" style="margin: 50px 180px 100px 180px; height:600px;">
         <h3 class="isp-name">${entry.isp_name}</h3>
             <!-- calidad -->
-            <div class="row-fluid span12">
+            <div class="row-fluid span8">
                 <div id="congestionup${entry.isp_id}" class="pull-left" style="height: 300px; width: 465px"></div>
                 <div id="congestiondown${entry.isp_id}" class="pull-right" style="height: 300px; width: 465px"></div>
             </div>
 
             <!-- Utilizacion -->
-            <div class="row-fluid span12">
+            <div class="row-fluid span8">
                 <div id="utilizacionup${entry.isp_id}" class="pull-left" style="height: 300px; width: 465px"></div>
                 <div id="utilizaciondown${entry.isp_id}" class="pull-right" style="height: 300px; width: 465px"></div>
             </div>
@@ -252,5 +291,36 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 </c:forEach>
 
 
+
+<script type="text/javascript">
+        var nowTemp = new Date();
+		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+		var checkin = $('#dpd1').datepicker({
+		  format: 'dd/mm/yyyy',
+		  onRender: function(date) {
+		    return date.valueOf() > now.valueOf() ? 'disabled' : '';
+		  }
+		}).on('changeDate', function(ev) {
+		  if (ev.date.valueOf() > checkout.date.valueOf()) {
+		    var newDate = new Date(ev.date)
+		    newDate.setDate(newDate.getDate() + 1);
+		    checkout.setValue(newDate);
+		  }
+		  checkin.hide();
+		  $('#dpd2')[0].focus();
+		}).data('datepicker');
+		var checkout = $('#dpd2').datepicker({
+		format: 'dd/mm/yyyy',
+		  onRender: function(date) {
+		    return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+		  }
+		}).on('changeDate', function(ev) {
+		  checkout.hide();
+		}).data('datepicker');
+</script>
+
+
 </body>
+
 </html>

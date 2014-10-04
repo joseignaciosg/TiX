@@ -9,8 +9,13 @@ tix_update_initialize()
   export HOME
   export tix_trace_flag tix_debug_flag tix_path tix_cancel
 }
+<<<<<<< HEAD
 get_sha_for_file() { 
   current_sha=$( ( curl -sSL ${_api_url} || (wget -q -O- ${_api_url}) ) | sed 's/[{}]/''/g' | grep "\"sha\"" | awk '{ print $2 }' | sed 's/\"//g' | sed 's/,//g')
+=======
+get_sha_for_file() {
+  current_sha=$(curl -sSL ${_api_url} | sed 's/[{}]/''/g' | grep "\"sha\"" | awk '{ print $2 }' | sed 's/\"//g' | sed 's/,//g')
+>>>>>>> 452c3ca15b685e80d62a1526e915373bbb26da2e
   export current_sha;
 }
 
@@ -60,7 +65,7 @@ tix_get_latest_version_for_platform()
   return;
 }
 
-tix_extract_files() { 
+tix_extract_files() {
   echo "Extracting files to ./downloaded"
   unzip release.zip -d downloaded > /dev/null;
   mkdir downloaded.1
@@ -89,6 +94,7 @@ tix_update_files_and_restart() {
     get_os
     case $os in
       linux)
+
         sudo cp -rfv downloaded/releases/TixApp/* /usr/share/tix/
         ;;
       mac)
