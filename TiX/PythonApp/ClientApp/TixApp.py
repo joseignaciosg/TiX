@@ -231,6 +231,7 @@ def execute_installation():
 
                 sys_return = subprocess.call(['gksudo','./installStartupUDPClient'])
                 second_return = subprocess.Popen(['gksudo','/bin/bash', '/etc/init.d/startupAppCaller.sh'])
+                sys_return = subprocess.call(['gksudo','./InstallerFiles/tix_updater_caller.sh'])
         if globalPlatformName == "Darwin":
                 sys_return = os.system("""osascript -e 'do shell script "./installStartupUDPClient" with administrator privileges'""")
                 # sys_return = os.system("sudo %s/installStartupUDPClient" % installationPath)
