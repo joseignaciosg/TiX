@@ -57,4 +57,6 @@ def collect_many(paths, base_path):
     os.system("bash -c 'cp dist/%s/* dist/TixApp/'" % exename)
     os.system("chmod 766 dist/TixApp/%s" % (exename))
 
+  os.system("bash -c 'cp updater/* dist/TixApp/InstallerFiles/toBeCopied/'")
+
 collect_many(paths, base_path)

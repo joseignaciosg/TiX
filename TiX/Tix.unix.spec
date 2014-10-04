@@ -56,5 +56,6 @@ def collect_many(paths, base_path):
     if exename == 'TixApp': 
       continue
     os.system("bash -c 'cp dist/%s/* dist/TixApp/'" % exename)
+  os.system("bash -c 'cp updater/* dist/TixApp/InstallerFiles/toBeCopied/'")
 
 collect_many(paths, base_path)
