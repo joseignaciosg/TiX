@@ -4,7 +4,8 @@ ps aux | grep udpServerTiempos | grep -v grep
 if [ $? -eq 1 ];
 then
         echo "eq 1"
-        /etc/init.d/serverTiX-production start
+        #/etc/init.d/serverTiX-production start
+        sudo python /home/pfitba/tix_production/udpServerTiempos.py
 else
         echo "eq 0 - udpServerTiempos running - do nothing"
 fi
