@@ -4,7 +4,7 @@
 #!/usr/bin/env ipython-2.7
 #
 #
-# Descripci√≥n del script
+# Descripción del script
 # SALIDAS
 # Este script genera como salida 4 archivos, por cada caso de entrada: caso 'l' y caso 'u'.
 # Salida 1
@@ -32,28 +32,18 @@
 import scipy
 import scipy.optimize
 import numpy
-#import matplotlib.pyplot as plt # comentar en la versio≥n producco√≥n
+#import matplotlib.pyplot as plt # comentar en la versio�n produccoón
 import os
 import subprocess
 import time
 import sys
 import random, string
-import ConfigParser
-
-config                          = ConfigParser.ConfigParser()
-pwd                             = os.getcwd()
-completoConfigPath              = '/home/pfitba/tix_production/data_processing/completo_config.cfg'
-config.read(completoConfigPath)
-
-umbral_utiliz                   = config.getfloat("CompletoIII", "umbralUtiliz")
-umbral_H                        = config.getfloat("CompletoIII", "umbralH")
-
 
 
 ### KEEP
 
 def resultados(file_name,leer,umbral_utiliz,umbral_H):
-	# Tama√±os de paquetes definidos en 'udpClientTiempos.js'
+	# Tamaños de paquetes definidos en 'udpClientTiempos.js'
 	#l_S = (60+8+20)*8       # [bits] 60 Bytes datos UDP + 8 Bytes header UDP + 20 Bytes header IP = 88 bytes
 	#l_L = (4262+8+3*20)*8   # [bits] 4262 Bytes datos UDP + 8 Bytes header UDP + 3*20 Bytes header IP (3 paquetes) = 4330 bytes
 	l_S = (48+8+20)*8		# [bits] 48 Bytes datos UDP + 8 Bytes header UDP + 20 Bytes header IP = 75 bytes
@@ -61,7 +51,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 
 	# Aca voy a almacenar informacion entre el archivo de datos y los calculos
 	# clave: file_name
-	# valores: [C_AB √≥ CA, C_BA √≥ CB, lambda_S, lambda_L]
+	# valores: [C_AB ó CA, C_BA ó CB, lambda_S, lambda_L]
 
 	info_necesaria = {}
 
@@ -72,8 +62,8 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	# tau = 0.5*min[tT(i) - tqA - tqB - l(i)/CA - l(i)/CB]		Eq. (17) TiX
 	##################################################################################################################################
 
-	# Descripci√≥n de la funci√≥n de este script:
-	# Condici√≥n necesaria: recibe como datos de entrada el/los archivos generados por el script conversion_salida.py
+	# Descripción de la función de este script:
+	# Condición necesaria: recibe como datos de entrada el/los archivos generados por el script conversion_salida.py
 	# Aquellos datos que no son necesarios como entrada para otro calculo se imprimen en el archivo de salida precedidos por el caracter #
 	# Como salida devuelve los valores calculados de:
 	# tT_S	# [useg] tiempo de transito para paquetes chicos
@@ -94,14 +84,15 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	probes_large = []			# En este vector acumulo todos los tT de paquetes largos para hacer el histograma
 
 	indice=0
-	t1_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	t2_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	t3_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	t4_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	st1 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	st2 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	st3 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	st4 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+        # Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+	t2_t1_o=0 # 0h
+	t3_t2_o=0 # 0h
+	t4_t3_o=0 # 0h
+	t1_o = 0 # 0h
+	t1c  = 0 # 0h
+	t2_o = 0 # 0h
+	t2c  = 0 # 0h
+	primero=False # 0h
 	for line in leer:
 		if line[0] != '#':
 			aux_00 = line.split('|')
@@ -109,38 +100,63 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			#print aux_00
 			num_sec = indice
 			length  = float(aux_00[2])
-			t1  = float(aux_00[3])
-			t2  = float(aux_00[4])
-			t3  = float(aux_00[5])
-			t4  = float(aux_00[6].split('\n')[0])
-			t1  = t1 + st1
-			t2  = t2 + st2
-			t3  = t3 + st3
-			t4  = t4 + st4
-			if (t1-t1_o < 0):
-				#st1=86400000000 # 1 dia en microsegundos
-				t1  = t1 + st1
-				print "DEBUG ****t1 negativo, t1:"+str(t1)+" t1_o:"+str(t1_o)+" t1-t1_o:"+str(t1-t1_o)
-			if (t2-t2_o < 0):
-				#st2=86400000000 # 1 dia en microsegundos
-				t2  = t2 + st2
-				print "DEBUG ****t2 negativo, t2:"+str(t2)+" t2_o:"+str(t2_o)+" t2-t2_o:"+str(t2-t2_o)
-			if (t3-t3_o < 0):
-				#st3=86400000000 # 1 dia en microsegundos
-				t3  = t3 + st3
-				print "DEBUG ****t3 negativo, t3:"+str(t3)+" t3_o:"+str(t3_o)+" t3-t3_o:"+str(t3-t3_o)
-			if (t4-t4_o < 0):
-				#st4=86400000000 # 1 dia en microsegundos
-				t4  = t4 + st4
-				print "DEBUG ****t4 negativo, t4:"+str(t4)+" t4_o:"+str(t4_o)+" t4-t4_o:"+str(t4-t4_o)
-			t1_o= t1 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-			t2_o= t2 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-			t3_o= t3 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-			t4_o= t4 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+			t1  = float(aux_00[3]) 
+			t2  = float(aux_00[4]) 
+			t3  = float(aux_00[5]) 
+			t4  = float(aux_00[6].split('\n')[0]) 
 			indice = indice +1
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			if (t1 - t1_o < -43200000000 ) and primero: 
+				print "DEBUG t1 negativo, t1 :"+str(t1)+"  t1_o:"+str(t1_o)
+				t1_o = t1
+				t1c  = t1c+float(86400000000)
+				print t1+t1c
+			else: 
+				t1_o = t1
+			if (t2 - t2_o < -43200000000 ) and primero: 
+				print "DEBUG t2 negativo, t2 :"+str(t2)+"  t1_o:"+str(t2_o)
+				t2_o = t2
+				t2c  = t2c+float(86400000000)
+				print t2+86400000000
+			else: 
+				t2_o = t2
+			t1=t1+t1c
+			t4=t4+t1c
+			t2=t2+t2c
+			t3=t3+t2c
+			### FIN 0h
 			t2_t1 = t2-t1
 			t3_t2 = t3-t2
 			t4_t3 = t4-t3
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			#print "DEBUG  t2_t1 , t2_t1:"+str(t2_t1)+" t2_t1_o:"+str(t2_t1_o)+" t2_t1 - t2_t1_o:"+str(t2_t1 - t2_t1_o)
+			#print "DEBUG  t3_t2 , t3_t2:"+str(t3_t2)+" t3_t2_o:"+str(t3_t2_o)+" t3_t2 - t3_t2_o:"+str(t3_t2 - t3_t2_o)
+			#print "DEBUG  t4_t3 , t4_t3:"+str(t4_t3)+" t4_t3_o:"+str(t4_t3_o)+" t4_t3 - t4_t3_o:"+str(t4_t3 - t4_t3_o)
+			#if (t2_t1 - t2_t1_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t2_t1 negativo, t2_t1:"+str(t2_t1)+" t2_t1_o:"+str(t2_t1_o)+" t2_t1 - t2_t1_o:"+str(t2_t1 - t2_t1_o)
+			#	t2_t1_o = t2_t1
+			#	print "t2_t1 + 86400000000 :"+str(t2_t1 + float(86400000000) )+" t2:"+str(t2)+" t1:"+str(t1)+" type(t2_t1)"+str(type(t2_t1))
+			#	#t2_t1 = t2_t1 + 86400000000 # 1 dia en microsegundos
+			#elif (t2_t1 - t2_t1_o > 43200000000)and primero:
+			#	print "DEBUG  t2_t1 positivo, t2_t1:"+str(t2_t1)+" t2_t1_o:"+str(t2_t1_o)+" t2_t1 - t2_t1_o:"+str(t2_t1 - t2_t1_o)
+			#	t2_t1_o = t2_t1
+			#	t2_t1 = t2_t1 - 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t2_t1_o = t2_t1
+			#if (t3_t2 - t3_t2_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t3_t2 negativo, t3_t2:"+str(t3_t2)+" t3_t2_o:"+str(t3_t2_o)+" t3_t2 - t3_t2_o:"+str(t3_t2 - t3_t2_o)
+			#	t3_t2_o = t3_t2
+			#	#t3_t2 = t3_t2 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t3_t2_o = t3_t2
+			#if (t4_t3 - t4_t3_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t4_t3 negativo, t4_t3:"+str(t4_t3)+" t4_t3_o:"+str(t4_t3_o)+" t4_t3 - t4_t3_o:"+str(t4_t3 - t4_t3_o)
+			#	t4_t3_o = t4_t3
+				#t4_t3 = t4_t3 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t4_t3_o = t4_t3
+			primero=True
+                        ######## FIN 0h #########
 			prop=int(length)/1500
 			length=length+prop*20
 			#print length,prop
@@ -155,9 +171,9 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			#t3_t2 = float(aux_00[6])
 			#t4_t3 = float(aux_00[7].split('\n')[0])
 			tT = t4_t3 + t2_t1		# tiempo de transito, Eq. (8) de TiX
-			if length < 144:		# Se usa la etiqueta '40'; NO es el tama√±o real
+			if length < 144:		# Se usa la etiqueta '40'; NO es el tamaño real
 				probes_short.append(tT)
-			elif length > 144:		# Se usa la etiqueta '1500'; NO es el tama√±o real
+			elif length > 144:		# Se usa la etiqueta '1500'; NO es el tamaño real
 				probes_large.append(tT)
 
 	# Informacion para calcular el histograma
@@ -185,7 +201,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		x_1 = aux + paso/2
 		vector_tiempos.append(x_1)
 
-	#Entradas para hacer las estimaciones
+	#Entradas para hacer las estimaciones 
 	P_max = max(frecuencias)
 	indice_t_Pmax = lista_frecuencias.index(P_max)
 
@@ -193,13 +209,13 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	t_Pmax = vector_tiempos[indice_t_Pmax]
 	desvio = max(delta,(t_Pmax - t_first))
 
-	# Truncamiento de la informaci√≥n
+	# Truncamiento de la información
 	limite_truncamiento = t_Pmax + 3*desvio #3*desvio
-	#print "desvio: "+str(desvio)+"  t_Pmax: "+str(t_Pmax)+"  limite_truncamiento: "+str(limite_truncamiento)#+"  vector_tiempos: "+str(vector_tiempos)
+	#print "desvio: "+str(desvio)+"  t_Pmax: "+str(t_Pmax)+"  limite_truncamiento: "+str(limite_truncamiento)#+"  vector_tiempos: "+str(vector_tiempos) 
 
-        ### Trunca todos los tiempos
+        ### Trunca todos los tiempos 
 	# Almaceno en este vector los tiempos truncados
-	tiempos_truncados = []
+	tiempos_truncados = []		
 	for t in vector_tiempos:
 		if t <= limite_truncamiento:
 			tiempos_truncados.append(t)
@@ -229,9 +245,9 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		almaceno_tiempos[el] = xcorr
 
 		# fit a gaussian
-                try:
+                try: 
 			p1, success = scipy.optimize.leastsq(errfunc, p0.copy()[0], args=(xcorr,ycorr))
-                except:
+                except: 
 			p1=p0.copy()[0]
 			pass
 		almaceno_estimadores[el] = p1
@@ -265,7 +281,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		aux.append(tT_S)
 		info_necesaria[file_name] = aux
 	#------------------------------------------
-
+		
 	dsv_estimado = p1[2]
 	# Calculo umbral para paquetes encolados
 	umbral_S = tiempo_estimado + 3* dsv_estimado
@@ -296,7 +312,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	# Datos para el ajuste
 	xcorr = almaceno_tiempos[elementos_tiempo]
 	ycorr = lista_frecuencias[0:len(xcorr)]
-	# Datos truncados
+	# Datos truncados	
 	xrest = vector_tiempos[len(xcorr):len(vector_tiempos)]
 	yrest = lista_frecuencias[len(ycorr):len(lista_frecuencias)]
 
@@ -307,7 +323,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		if p > umbral_S:
 			sq_S = sq_S + 1
 
-	#### Para graficar el histograma: descomentar las siguientes lineas
+	#### Para graficar el histograma: descomentar las siguientes lineas 
 	## Calculo los puntos de la funcion continua de ajuste
 	#arreglo = numpy.arange(t_first, limite_truncamiento, 0.01)
 	#fn_est = fitfunc(p1, arreglo)
@@ -324,7 +340,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	#plt.show()
 	##---------------------------------------------------------------
 	################################################################
-	# Comienzan los c√°lculos para paquetes grandes (L)
+	# Comienzan los cálculos para paquetes grandes (L)
 	tT_Lmin = int(min(probes_large))
 	tT_Lmax = int(max(probes_large))
 
@@ -380,9 +396,9 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	    almaceno_tiempos[el] = xcorr
 
 	    # fit a gaussian
-            try:
+            try: 
 		p1, success = scipy.optimize.leastsq(errfunc, p0.copy()[0], args=(xcorr,ycorr))
-            except:
+            except: 
 		p1=p0.copy()[0]
 		pass
 	    #p1=p0[0]
@@ -471,7 +487,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		info_necesaria[file_name] = aux
 	#------------------------------------------
 
-	#### Para graficar el histograma: descomentar las siguientes lineas
+	#### Para graficar el histograma: descomentar las siguientes lineas 
 	## Calculo los puntos de la funcion continua de ajuste
 	## Para graficar el histograma
 	#arreglo = numpy.arange(t_first, limite_truncamiento, 0.01)
@@ -490,7 +506,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	##---------------------------------------------------------------
 	################################################################
 
-	# Calculo de la capacidad sim√©trica	con pares de valores t2, t1
+	# Calculo de la capacidad simétrica	con pares de valores t2, t1
 	# Csim = 2*(l_L - l_S)/(tT_L - tT_S)	eq. (14) TiX
 	for file_name in info_necesaria.keys():
 		datos = info_necesaria[file_name]
@@ -501,7 +517,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		#------------------------------------------
 		info_necesaria[file_name] = datos
 		#------------------------------------------
-
+		
 	# Calculo de la capacidad asimetrica usando la mediana como estimador
 	# C = (l_L - l_S)/Mr    eq. (16) TiX
 	datos = info_necesaria[file_name]
@@ -510,6 +526,15 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 
 	t_no_encolados = []
 	indice=1
+        # Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+	t2_t1_o=0 # 0h
+	t3_t2_o=0 # 0h
+	t4_t3_o=0 # 0h
+	t1_o = 0 # 0h
+	t1c  = 0 # 0h
+	t2_o = 0 # 0h
+	t2c  = 0 # 0h
+	primero=False # 0h
 	for line in leer:
 		if line[0] != '#':
 			aux_00 = line.split('|')
@@ -520,9 +545,50 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			t3  = float(aux_00[5])
 			t4  = float(aux_00[6].split('\n')[0])
 			rtt=0
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			if (t1 - t1_o < -43200000000 ) and primero: 
+				print "DEBUG t1 negativo, t1 :"+str(t1)+"  t1_o:"+str(t1_o)
+				t1_o = t1
+				t1c  = t1c+float(86400000000)
+				print t1+t1c
+			else: 
+				t1_o = t1
+			if (t2 - t2_o < -43200000000 ) and primero: 
+				print "DEBUG t2 negativo, t2 :"+str(t2)+"  t1_o:"+str(t2_o)
+				t2_o = t2
+				t2c  = t2c+float(86400000000)
+				print t2+86400000000
+			else: 
+				t2_o = t2
+			t1=t1+t1c
+			t4=t4+t1c
+			t2=t2+t2c
+			t3=t3+t2c
+			### FIN 0h
 			t2_t1 = t2-t1
 			t3_t2 = t3-t2
 			t4_t3 = t4-t3
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			#if (t2_t1 - t2_t1_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t2_t1 negativo, t2_t1:"+str(t2_t1)+" t2_t1_o:"+str(t2_t1_o)+" t2_t1 - t2_t1_o:"+str(t2_t1 - t2_t1_o)
+			#	t2_t1_o = t2_t1
+			#	#t2_t1 = t2_t1 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t2_t1_o = t2_t1
+			#if (t3_t2 - t3_t2_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t3_t2 negativo, t3_t2:"+str(t3_t2)+" t3_t2_o:"+str(t3_t2_o)+" t3_t2 - t3_t2_o:"+str(t3_t2 - t3_t2_o)
+			#	t3_t2_o = t3_t2
+				#t3_t2 = t3_t2 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t3_t2_o = t3_t2
+			#if (t4_t3 - t4_t3_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t4_t3 negativo, t4_t3:"+str(t4_t3)+" t4_t3_o:"+str(t4_t3_o)+" t4_t3 - t4_t3_o:"+str(t4_t3 - t4_t3_o)
+			#	t4_t3_o = t4_t3
+			#	#t4_t3 = t4_t3 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t4_t3_o = t4_t3
+			primero=True
+                        ######## FIN 0h #########
 			if indice == 1:
 				interval = 0
 				t1_anterior = t1
@@ -549,9 +615,9 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 				if tT < tH_L:
 					t_no_encolados.append(componentes)
 
-	# Busco paquetes entre los no encolados consecutivos de diferente tama√±o
+	# Busco paquetes entre los no encolados consecutivos de diferente tamaño
 	# Consecutivos: t_no_encolados[i][0] - t_no_encolados[i-1][0] = 0.5
-	# Diferente tama√±o:  t_no_encolados[i][2] - t_no_encolados[i-1][2] = 1460.0
+	# Diferente tamaño:  t_no_encolados[i][2] - t_no_encolados[i-1][2] = 1460.0
 	data_AB = []	# t2,t1	=> upstream
 	data_BA = []	# t4,t3 => downstream
 	size_t_no_encolados = len(t_no_encolados)
@@ -571,7 +637,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 				tiempos_BA = t4_t3_actual - t4_t3_anterior
 				data_BA.append(tiempos_BA)
 
-	# CALCULO SENTIDO AB
+	# CALCULO SENTIDO AB	
 	tAB_min = min(data_AB)
 	tAB_max = max(data_AB)
 
@@ -751,7 +817,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
                 #####################################################################
 		#  Escritura en archivo de salida
                 #####################################################################
-		#fsalida_abs=file_name+'.calculos' # IMPORTANTE: depende de la entrada
+		#fsalida_abs=file_name+'.calculos' # IMPORTANTE: depende de la entrada 
 		#f = open(fsalida_abs, 'w')
 		#cadena_00 = '# tT_S = '+str(tT_S)+' useg\n'
 		#f.write(cadena_00)
@@ -793,6 +859,15 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	#lambda_L = float(datos_previos[3])
 	#
 	indice=1
+        # Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+	t2_t1_o=0 # 0h
+	t3_t2_o=0 # 0h
+	t4_t3_o=0 # 0h
+	t1_o = 0 # 0h
+	t1c  = 0 # 0h
+	t2_o = 0 # 0h
+	t2c  = 0 # 0h
+	primero=False # 0h
 	for line in leer:
 		if line[0] != '#':
 			aux_00 = line.split('|')
@@ -803,9 +878,50 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			t3  = float(aux_00[5])
 			t4  = float(aux_00[6].split('\n')[0])
 			rtt=0
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			if (t1 - t1_o < -43200000000 ) and primero: 
+				print "DEBUG t1 negativo, t1 :"+str(t1)+"  t1_o:"+str(t1_o)
+				t1_o = t1
+				t1c  = t1c+float(86400000000)
+				print t1+t1c
+			else: 
+				t1_o = t1
+			if (t2 - t2_o < -43200000000 ) and primero: 
+				print "DEBUG t2 negativo, t2 :"+str(t2)+"  t1_o:"+str(t2_o)
+				t2_o = t2
+				t2c  = t2c+float(86400000000)
+				print t2+86400000000
+			else: 
+				t2_o = t2
+			t1=t1+t1c
+			t4=t4+t1c
+			t2=t2+t2c
+			t3=t3+t2c
+			### FIN 0h
 			t2_t1 = t2-t1
 			t3_t2 = t3-t2
 			t4_t3 = t4-t3
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			#if (t2_t1 - t2_t1_o < -43200000000) and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t2_t1 negativo, t2_t1:"+str(t2_t1)+" t2_t1_o:"+str(t2_t1_o)+" t2_t1 - t2_t1_o:"+str(t2_t1 - t2_t1_o)
+			#	t2_t1_o = t2_t1
+				#t2_t1 = t2_t1 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t2_t1_o = t2_t1
+			#if (t3_t2 - t3_t2_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t3_t2 negativo, t3_t2:"+str(t3_t2)+" t3_t2_o:"+str(t3_t2_o)+" t3_t2 - t3_t2_o:"+str(t3_t2 - t3_t2_o)
+			#	t3_t2_o = t3_t2
+				#t3_t2 = t3_t2 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t3_t2_o = t3_t2
+			#if (t4_t3 - t4_t3_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t4_t3 negativo, t4_t3:"+str(t4_t3)+" t4_t3_o:"+str(t4_t3_o)+" t4_t3 - t4_t3_o:"+str(t4_t3 - t4_t3_o)
+			#	t4_t3_o = t4_t3
+				#t4_t3 = t4_t3 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t4_t3_o = t4_t3
+			primero=True
+                        ######## FIN 0h #########
 			if indice == 1:
 				interval = 0
 				t1_anterior = t1
@@ -828,9 +944,9 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			#t4_t3 = int(aux_00[7].split('\n')[0])
 			#t4 = t4_t3 + t3
 			tT = t2_t1 + t4_t3					# [tT] = useg
-			if length > 144:				# etiqueta, NO es el tama√±o real
+			if length > 144:				# etiqueta, NO es el tamaño real
 				size_paquete = l_L				# [bits]
-			elif length < 144:				# etiqueta, NO es el tama√±o real
+			elif length < 144:				# etiqueta, NO es el tamaño real
 				size_paquete = l_S				# [bits]
 			tA_ins = size_paquete/CA		# bits/Mbps = useg
 			tB_ins = size_paquete/CB		# bits/Mbps = useg
@@ -864,7 +980,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		#print 'tqA + tqB(',n,'):', tqA_tqB
 		aux_00.append(tqA_tqB)	# valores = [sec_num, length, t1, t2, t3, t4, tT, tA_ins, tB_ins, tau, tqA_tqB]
 		datos_almacenados[n] = aux_00
-		#
+		# 
 		# Para graficar desfasaje entre relojes
 		# tqA(i) + deltaPsi(i) = t2(i) - t1(i) - l(i)/CA - tau      eq. (20) TiX
 		tqA_deltaPsi = t2 - t1 - tA_ins - tau
@@ -914,7 +1030,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		if compara == 0:
 			Dpsi_v[m] = datos
 
-	# Estimaci√≥n del valor inicial si v[1] != 0
+	# Estimación del valor inicial si v[1] != 0
 	sec_inicial_i = indice_secuencias[0]
 	sec_inicial_v = pares_v[0][0]
 	if sec_inicial_i != sec_inicial_v:
@@ -931,7 +1047,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		datos = (sec_inicial_i, Dpsi_est)
 		Dpsi_v[sec_inicial_i] = datos
 
-	# Estimaci√≥n del valor final
+	# Estimación del valor final
 	sec_final_i = indice_secuencias[len(indice_secuencias)-1]
 	sec_final_v = pares_v[len(pares_v)-1][0]
 	if sec_final_i != sec_final_v:
@@ -989,7 +1105,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			else:
 				tqA_deltaPsi = t2 - t1 - tA_ins - tau
 				tqB_deltaPsi = t3 - t4 + tB_ins + tau
-				# Nueva idea: comparo con los anteriores para ver de cual esta m√°s cerca
+				# Nueva idea: comparo con los anteriores para ver de cual esta más cerca
 				sec_prev = indice_secuencias[s-1]
 				Dpsi_a_comparar = Dpsi_i[sec_prev][1]
 				if (abs(tqA_deltaPsi - Dpsi_a_comparar)) < (abs(tqB_deltaPsi - Dpsi_a_comparar)):
@@ -1169,7 +1285,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 
 		# guess some fit parameters
 		p0 = scipy.c_[P_max, t_Pmax, desvio]
-
+		
 		almaceno_tiempos = {}
 		almaceno_cv = {}
 		almaceno_estimadores = {}
@@ -1179,20 +1295,20 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			xcorr = vector_tiempos[0:el+1]
 			ycorr = lista_frecuencias[0:len(xcorr)]
 			almaceno_tiempos[el] = xcorr
-
+		
 			# fit a gaussian
-                	try:
+                	try: 
 				p1, success = scipy.optimize.leastsq(errfunc, p0.copy()[0], args=(xcorr,ycorr))
-                	except:
+                	except: 
 				p1=p0.copy()[0]
 				pass
-
+			
 			almaceno_estimadores[el] = p1
-
+		
 			amp_estimada = round(p1[0],3)
 			tiempo_estimado = round(p1[1],3)
 			dsv_estimado = round(p1[2],3)
-
+		
 			# Calculo coeficiente de variacion
 			cv = round(dsv_estimado/tiempo_estimado, 4)
 			if cv > 0:
@@ -1235,7 +1351,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		#plt.legend()
 		#plt.show()
 
-		# Calculo del umbral
+		# Calculo del umbral	
 		umbral = tiempo_estimado + 3* dsv_estimado
 		#print "umbral:"+str(umbral)
 		# Calculo de utilizacion global contando cantidad de paquetes que superan el umbral
@@ -1255,7 +1371,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			info_necesaria[file_name] = aux
 		#------------------------------------------
 
-		## Utilizaci√≥n instant√°nea
+		## Utilización instantánea
 		#ventana = 60
 		#salto = 1
 		#x = 1
@@ -1335,7 +1451,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		##plt.legend()
 		##plt.show()
 
-		# Utilizaci√≥n acumulada en una hora y luego ventana desplazada cada 5 minutos [depende de ventana y salto]
+		# Utilización acumulada en una hora y luego ventana desplazada cada 5 minutos [depende de ventana y salto]
 		# Acumulado en la primer hora y luego cada 5 minutos
 		tiempo = []
 		eje_y = []
@@ -1411,7 +1527,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		#plt.legend()
 		#plt.show()
 
-		# Par√°metro de Hurst acumulado en una hora y luego ventana desplazada cada 5 minutos [depende de 'ventana' y 'salto']
+		# Parámetro de Hurst acumulado en una hora y luego ventana desplazada cada 5 minutos [depende de 'ventana' y 'salto']
 		## Acumulado en la primer hora  y luego cada 5 minutos                               [usamos los anteriores         ]
 		tiempo = []
 		y1_rs = []
@@ -1520,13 +1636,13 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 				else:
 					y1_rs.append(0.5)
 					y2_wavelet.append(0.5)
-
+				
 				if os.path.isfile(filew) == True:
 					os.remove(filew)
 				tiempo.append(x)
 				x = x + 5
 				ventana = ventana + salto
-
+		
 		## Para graficar parametro de Hurst en ventana
 		#plt.plot(tiempo,y1_rs, 'r-', label='RS')
 		#plt.plot(tiempo,y2_wavelet, 'b-', label='Wavelet')
@@ -1585,8 +1701,9 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		utilizacion = 0
 		h_rs = 0
 		h_wave = 0
-		numer = 0
+		numer = 0 
 		for n in range(len(tiempo)-10,len(tiempo)):
+			#print "--> n:"+str(n)+"  len(eje_y):"+str(len(eje_y))+"  len(y1_rs):"+str(len(y1_rs))+"  len(y2_wavelet):"+str(len(y2_wavelet))
 			if ((eje_y[n] < umbral_utiliz) and ((y1_rs[n]+y2_wavelet[n])/2 > umbral_H)):
 				calidad=calidad+1
 			utilizacion = utilizacion + eje_y[n]
@@ -1615,7 +1732,7 @@ def random_word(length):
    return ''.join(random.choice(string.lowercase) for i in range(length))
 
 def analyse_data(files_to_process):
-
+	
 	# print "Processing files:", files_to_process
 	leer = []
 	for file_name in files_to_process:
@@ -1625,6 +1742,8 @@ def analyse_data(files_to_process):
 			leer +=f.readlines()
 			f.close()
 
+	umbral_utiliz=0.7 # leerlo de un archivo de configuracion
+	umbral_H=0.68     # leerlo de un archivo de configuracion
 	randomLogName = 'log_' + random_word(12)
 	(calidad_Up,utiliz_Up,H_RS_Up,H_Wave_Up,calidad_Down,utiliz_Down,H_RS_Down,H_Wave_Down)=resultados(randomLogName,leer,umbral_utiliz,umbral_H)
 	print "calidad_Up:",calidad_Up
@@ -1641,11 +1760,11 @@ def analyse_data(files_to_process):
 
 	return ansDictionary
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
 
 	if len(sys.argv) < 2:
      		print "usage: ./completo.py <files_to_process>\n"
      		sys.exit()
 
-	files_to_process=sys.argv[1]
+	files_to_process=[sys.argv[1]]
 	analyse_data(files_to_process)
