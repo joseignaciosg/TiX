@@ -38,15 +38,9 @@ import subprocess
 import time
 import sys
 import random, string
-import ConfigParser
 
-config                          = ConfigParser.ConfigParser()
-pwd                             = os.getcwd()
-completoConfigPath              = '%s/completo_config.cfg'
-config.read(completoConfigPath)
 
-umbral_utiliz                   = (config.getfloat("CompletoIII", "umbralUtiliz"))
-umbral_H                        = (config.getfloat("CompletoIII", "umbralH"))
+### KEEP
 
 def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	# Tamaños de paquetes definidos en 'udpClientTiempos.js'
@@ -90,14 +84,15 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	probes_large = []			# En este vector acumulo todos los tT de paquetes largos para hacer el histograma
 
 	indice=0
-	t1_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	t2_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	t3_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	t4_o=0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	st1 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	st2 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	st3 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-	st4 =0 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
+        # Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+	t2_t1_o=0 # 0h
+	t3_t2_o=0 # 0h
+	t4_t3_o=0 # 0h
+	t1_o = 0 # 0h
+	t1c  = 0 # 0h
+	t2_o = 0 # 0h
+	t2c  = 0 # 0h
+	primero=False # 0h
 	for line in leer:
 		if line[0] != '#':
 			aux_00 = line.split('|')
@@ -109,34 +104,59 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			t2  = float(aux_00[4]) 
 			t3  = float(aux_00[5]) 
 			t4  = float(aux_00[6].split('\n')[0]) 
-			t1  = t1 + st1 
-			t2  = t2 + st2
-			t3  = t3 + st3
-			t4  = t4 + st4
-			if (t1-t1_o < 0):
-				#st1=86400000000 # 1 dia en microsegundos
-				t1  = t1 + st1
-				print "DEBUG ****t1 negativo, t1:"+str(t1)+" t1_o:"+str(t1_o)+" t1-t1_o:"+str(t1-t1_o)
-			if (t2-t2_o < 0):
-				#st2=86400000000 # 1 dia en microsegundos
-				t2  = t2 + st2
-				print "DEBUG ****t2 negativo, t2:"+str(t2)+" t2_o:"+str(t2_o)+" t2-t2_o:"+str(t2-t2_o)
-			if (t3-t3_o < 0):
-				#st3=86400000000 # 1 dia en microsegundos
-				t3  = t3 + st3
-				print "DEBUG ****t3 negativo, t3:"+str(t3)+" t3_o:"+str(t3_o)+" t3-t3_o:"+str(t3-t3_o)
-			if (t4-t4_o < 0):
-				#st4=86400000000 # 1 dia en microsegundos
-				t4  = t4 + st4
-				print "DEBUG ****t4 negativo, t4:"+str(t4)+" t4_o:"+str(t4_o)+" t4-t4_o:"+str(t4-t4_o)
-			t1_o= t1 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-			t2_o= t2 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-			t3_o= t3 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
-			t4_o= t4 # para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH
 			indice = indice +1
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			if (t1 - t1_o < -43200000000 ) and primero: 
+				print "DEBUG t1 negativo, t1 :"+str(t1)+"  t1_o:"+str(t1_o)
+				t1_o = t1
+				t1c  = t1c+float(86400000000)
+				print t1+t1c
+			else: 
+				t1_o = t1
+			if (t2 - t2_o < -43200000000 ) and primero: 
+				print "DEBUG t2 negativo, t2 :"+str(t2)+"  t1_o:"+str(t2_o)
+				t2_o = t2
+				t2c  = t2c+float(86400000000)
+				print t2+86400000000
+			else: 
+				t2_o = t2
+			t1=t1+t1c
+			t4=t4+t1c
+			t2=t2+t2c
+			t3=t3+t2c
+			### FIN 0h
 			t2_t1 = t2-t1
 			t3_t2 = t3-t2
 			t4_t3 = t4-t3
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			#print "DEBUG  t2_t1 , t2_t1:"+str(t2_t1)+" t2_t1_o:"+str(t2_t1_o)+" t2_t1 - t2_t1_o:"+str(t2_t1 - t2_t1_o)
+			#print "DEBUG  t3_t2 , t3_t2:"+str(t3_t2)+" t3_t2_o:"+str(t3_t2_o)+" t3_t2 - t3_t2_o:"+str(t3_t2 - t3_t2_o)
+			#print "DEBUG  t4_t3 , t4_t3:"+str(t4_t3)+" t4_t3_o:"+str(t4_t3_o)+" t4_t3 - t4_t3_o:"+str(t4_t3 - t4_t3_o)
+			#if (t2_t1 - t2_t1_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t2_t1 negativo, t2_t1:"+str(t2_t1)+" t2_t1_o:"+str(t2_t1_o)+" t2_t1 - t2_t1_o:"+str(t2_t1 - t2_t1_o)
+			#	t2_t1_o = t2_t1
+			#	print "t2_t1 + 86400000000 :"+str(t2_t1 + float(86400000000) )+" t2:"+str(t2)+" t1:"+str(t1)+" type(t2_t1)"+str(type(t2_t1))
+			#	#t2_t1 = t2_t1 + 86400000000 # 1 dia en microsegundos
+			#elif (t2_t1 - t2_t1_o > 43200000000)and primero:
+			#	print "DEBUG  t2_t1 positivo, t2_t1:"+str(t2_t1)+" t2_t1_o:"+str(t2_t1_o)+" t2_t1 - t2_t1_o:"+str(t2_t1 - t2_t1_o)
+			#	t2_t1_o = t2_t1
+			#	t2_t1 = t2_t1 - 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t2_t1_o = t2_t1
+			#if (t3_t2 - t3_t2_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t3_t2 negativo, t3_t2:"+str(t3_t2)+" t3_t2_o:"+str(t3_t2_o)+" t3_t2 - t3_t2_o:"+str(t3_t2 - t3_t2_o)
+			#	t3_t2_o = t3_t2
+			#	#t3_t2 = t3_t2 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t3_t2_o = t3_t2
+			#if (t4_t3 - t4_t3_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t4_t3 negativo, t4_t3:"+str(t4_t3)+" t4_t3_o:"+str(t4_t3_o)+" t4_t3 - t4_t3_o:"+str(t4_t3 - t4_t3_o)
+			#	t4_t3_o = t4_t3
+				#t4_t3 = t4_t3 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t4_t3_o = t4_t3
+			primero=True
+                        ######## FIN 0h #########
 			prop=int(length)/1500
 			length=length+prop*20
 			#print length,prop
@@ -506,6 +526,15 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 
 	t_no_encolados = []
 	indice=1
+        # Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+	t2_t1_o=0 # 0h
+	t3_t2_o=0 # 0h
+	t4_t3_o=0 # 0h
+	t1_o = 0 # 0h
+	t1c  = 0 # 0h
+	t2_o = 0 # 0h
+	t2c  = 0 # 0h
+	primero=False # 0h
 	for line in leer:
 		if line[0] != '#':
 			aux_00 = line.split('|')
@@ -516,9 +545,50 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			t3  = float(aux_00[5])
 			t4  = float(aux_00[6].split('\n')[0])
 			rtt=0
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			if (t1 - t1_o < -43200000000 ) and primero: 
+				print "DEBUG t1 negativo, t1 :"+str(t1)+"  t1_o:"+str(t1_o)
+				t1_o = t1
+				t1c  = t1c+float(86400000000)
+				print t1+t1c
+			else: 
+				t1_o = t1
+			if (t2 - t2_o < -43200000000 ) and primero: 
+				print "DEBUG t2 negativo, t2 :"+str(t2)+"  t1_o:"+str(t2_o)
+				t2_o = t2
+				t2c  = t2c+float(86400000000)
+				print t2+86400000000
+			else: 
+				t2_o = t2
+			t1=t1+t1c
+			t4=t4+t1c
+			t2=t2+t2c
+			t3=t3+t2c
+			### FIN 0h
 			t2_t1 = t2-t1
 			t3_t2 = t3-t2
 			t4_t3 = t4-t3
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			#if (t2_t1 - t2_t1_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t2_t1 negativo, t2_t1:"+str(t2_t1)+" t2_t1_o:"+str(t2_t1_o)+" t2_t1 - t2_t1_o:"+str(t2_t1 - t2_t1_o)
+			#	t2_t1_o = t2_t1
+			#	#t2_t1 = t2_t1 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t2_t1_o = t2_t1
+			#if (t3_t2 - t3_t2_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t3_t2 negativo, t3_t2:"+str(t3_t2)+" t3_t2_o:"+str(t3_t2_o)+" t3_t2 - t3_t2_o:"+str(t3_t2 - t3_t2_o)
+			#	t3_t2_o = t3_t2
+				#t3_t2 = t3_t2 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t3_t2_o = t3_t2
+			#if (t4_t3 - t4_t3_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t4_t3 negativo, t4_t3:"+str(t4_t3)+" t4_t3_o:"+str(t4_t3_o)+" t4_t3 - t4_t3_o:"+str(t4_t3 - t4_t3_o)
+			#	t4_t3_o = t4_t3
+			#	#t4_t3 = t4_t3 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t4_t3_o = t4_t3
+			primero=True
+                        ######## FIN 0h #########
 			if indice == 1:
 				interval = 0
 				t1_anterior = t1
@@ -789,6 +859,15 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 	#lambda_L = float(datos_previos[3])
 	#
 	indice=1
+        # Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+	t2_t1_o=0 # 0h
+	t3_t2_o=0 # 0h
+	t4_t3_o=0 # 0h
+	t1_o = 0 # 0h
+	t1c  = 0 # 0h
+	t2_o = 0 # 0h
+	t2c  = 0 # 0h
+	primero=False # 0h
 	for line in leer:
 		if line[0] != '#':
 			aux_00 = line.split('|')
@@ -799,9 +878,50 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 			t3  = float(aux_00[5])
 			t4  = float(aux_00[6].split('\n')[0])
 			rtt=0
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			if (t1 - t1_o < -43200000000 ) and primero: 
+				print "DEBUG t1 negativo, t1 :"+str(t1)+"  t1_o:"+str(t1_o)
+				t1_o = t1
+				t1c  = t1c+float(86400000000)
+				print t1+t1c
+			else: 
+				t1_o = t1
+			if (t2 - t2_o < -43200000000 ) and primero: 
+				print "DEBUG t2 negativo, t2 :"+str(t2)+"  t1_o:"+str(t2_o)
+				t2_o = t2
+				t2c  = t2c+float(86400000000)
+				print t2+86400000000
+			else: 
+				t2_o = t2
+			t1=t1+t1c
+			t4=t4+t1c
+			t2=t2+t2c
+			t3=t3+t2c
+			### FIN 0h
 			t2_t1 = t2-t1
 			t3_t2 = t3-t2
 			t4_t3 = t4-t3
+        		# Esto es para compensar el problema de las 0hs, que los contadores vuelven a comenzar JIAH : # 0h
+			#if (t2_t1 - t2_t1_o < -43200000000) and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t2_t1 negativo, t2_t1:"+str(t2_t1)+" t2_t1_o:"+str(t2_t1_o)+" t2_t1 - t2_t1_o:"+str(t2_t1 - t2_t1_o)
+			#	t2_t1_o = t2_t1
+				#t2_t1 = t2_t1 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t2_t1_o = t2_t1
+			#if (t3_t2 - t3_t2_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t3_t2 negativo, t3_t2:"+str(t3_t2)+" t3_t2_o:"+str(t3_t2_o)+" t3_t2 - t3_t2_o:"+str(t3_t2 - t3_t2_o)
+			#	t3_t2_o = t3_t2
+				#t3_t2 = t3_t2 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t3_t2_o = t3_t2
+			#if (t4_t3 - t4_t3_o < -43200000000)and primero: # 0h, 43200000000 = 1/2 dia en microsegundos
+			#	print "DEBUG  t4_t3 negativo, t4_t3:"+str(t4_t3)+" t4_t3_o:"+str(t4_t3_o)+" t4_t3 - t4_t3_o:"+str(t4_t3 - t4_t3_o)
+			#	t4_t3_o = t4_t3
+				#t4_t3 = t4_t3 + 86400000000 # 1 dia en microsegundos
+			#else:
+			#	t4_t3_o = t4_t3
+			primero=True
+                        ######## FIN 0h #########
 			if indice == 1:
 				interval = 0
 				t1_anterior = t1
@@ -1583,6 +1703,7 @@ def resultados(file_name,leer,umbral_utiliz,umbral_H):
 		h_wave = 0
 		numer = 0 
 		for n in range(len(tiempo)-10,len(tiempo)):
+			#print "--> n:"+str(n)+"  len(eje_y):"+str(len(eje_y))+"  len(y1_rs):"+str(len(y1_rs))+"  len(y2_wavelet):"+str(len(y2_wavelet))
 			if ((eje_y[n] < umbral_utiliz) and ((y1_rs[n]+y2_wavelet[n])/2 > umbral_H)):
 				calidad=calidad+1
 			utilizacion = utilizacion + eje_y[n]
@@ -1621,6 +1742,8 @@ def analyse_data(files_to_process):
 			leer +=f.readlines()
 			f.close()
 
+	umbral_utiliz=0.7 # leerlo de un archivo de configuracion
+	umbral_H=0.68     # leerlo de un archivo de configuracion
 	randomLogName = 'log_' + random_word(12)
 	(calidad_Up,utiliz_Up,H_RS_Up,H_Wave_Up,calidad_Down,utiliz_Down,H_RS_Down,H_Wave_Down)=resultados(randomLogName,leer,umbral_utiliz,umbral_H)
 	print "calidad_Up:",calidad_Up
@@ -1643,5 +1766,5 @@ if __name__ == "__main__":
      		print "usage: ./completo.py <files_to_process>\n"
      		sys.exit()
 
-	files_to_process=sys.argv[1]
+	files_to_process=[sys.argv[1]]
 	analyse_data(files_to_process)

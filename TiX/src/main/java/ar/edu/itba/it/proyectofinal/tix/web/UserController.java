@@ -407,10 +407,10 @@ public class UserController {
 		List<IspBoxplotDisplayer> boxplot_list = new ArrayList<IspBoxplotDisplayer>();
 
 		//TODO
-		//Nowadays just shows the data from last 6 months
+		//Nowadays just shows the data from last month
 		if ( minDate == null && maxDate == null ){
 			 maxDate = new DateTime();
-			 minDate = maxDate.minusDays(180);
+			 minDate = maxDate.minusDays(30);
 		}
 		
 
