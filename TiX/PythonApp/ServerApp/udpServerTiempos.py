@@ -19,7 +19,7 @@ from base64 import b64decode
 from random import randrange
 
 import rollbar
-rollbar.init('0eb38579bae944c0aabbece8fba823d7', 'production')  # access_token, environment
+rollbar.init('a2f899737ec14e7bbe8a580f3fe94358', 'production')  # access_token, environment
 
 config = ConfigParser.ConfigParser()
 
@@ -108,10 +108,10 @@ def remove_old_files(dirpath, client_msg_filename):
 
             except Exception, e:
                 logger.error("No se ha podido eliminar el siguiente log antiguo: " + dirpath + "/" + file_name)
-        rollbar.report_exc_info()
+                rollbar.report_exc_info()
         except Exception, e:
             logger.error("El archivo de log tiene un nombre invalido: " + dirpath + "/" + file_name)
-        rollbar.report_exc_info()
+            rollbar.report_exc_info()
 
     return None
 
@@ -240,23 +240,30 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                         if len(os.walk(client_records_server_folder).next()[2]) == 60:
                             logger.info("La instalacion " + client_server_folder + " tiene 1h de datos. Empezando procesamiento ...")
 
+                            logger.info("checkpoint 1")
                             # print "Starting calculation for the following files:"
                             files_to_process =  get_files_by_mdate(client_records_server_folder)
                             #files_to_process = [f for f in get_files_by_mdate(client_records_server_folder) if re.match(r'log_*', f)]
 
+                            logger.info("checkpoint 2")
 
                             if len(files_to_process) < 60:
                                 logger.error("Error al procesar los archivos de " + client_server_folder)
                             else:
                                 cwd = os.getcwd()
                                 os.chdir('/home/pfitba/tix_production/data_processing')
+                                logger.info("checkpoint 3")
                                 ansDictionary = completo_III.analyse_data(files_to_process)
+                                logger.info("checkpoint 4")
                                 logger.debug(ansDictionary)
+                                logger.info("checkpoint 5")
                                 os.chdir(cwd)
+                                logger.info("checkpoint 6")
 
 
                                 logger.info("Completando logs en " + "compare_timestamps_"+ client_records_server_folder+".log" )
                                 file_compare=open("/etc/TIX/records/logs_compare/" + "compare_timestamps_"+ client_server_folder+".log","a")
+                                logger.info("checkpoint 7")
                                 logger.info("oldest file: " + get_oldest_file(client_records_server_folder))
                                 oldest_line = linecache.getline( client_records_server_folder +"/"+ get_oldest_file(client_records_server_folder), 1)
                                 newest_line = get_last_line( client_records_server_folder +"/" + get_newest_file(client_records_server_folder))
@@ -282,6 +289,7 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                                     new_isp_name = 'Unknown'
                                 payload = {'isp_name': str(new_isp_name)}
                                 headers = {'content-type': 'application/json'}
+                                logger.info("checkpoint 8")
                                 r = requests.post(tixBaseUrl + 'bin/api/newISPPost', data=json.dumps(payload), headers=headers)
 
                                 jsonUserData = []
@@ -292,14 +300,14 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                                 except Exception, e:
                                     rollbar.report_exc_info()
                                     isp_id = 0
-
+                                logger.info("checkpoint 9")
                                 if(r is not None and len(jsonUserData) > 0):
                                     isp_id = jsonUserData['id']
                                     logger.debug("Utilizando ISP = " + new_isp_name + " con ID = " + str(isp_id))
                                 else:
                                     logger.error("No se ha podido insertar el nuevo ISP en la DB, se utilizara default (" + client_server_folder + ") |  jsonUserData: " + str(jsonUserData))
                                     isp_id = 0
-
+                                logger.info("checkpoint 10")
                                 logger.debug("Intentando insertar nuevo record en la DB de la carpeta: " +  client_records_server_folder)
                                 try:
                                     dbmanager.DBManager.insert_record(ansDictionary['calidad_Down'],ansDictionary['utiliz_Down'],ansDictionary['H_RS_Down'],ansDictionary['H_Wave_Down'],time.strftime('%Y-%m-%d %H:%M:%S'),ansDictionary['calidad_Up'],ansDictionary['utiliz_Up'],ansDictionary['H_RS_Up'],ansDictionary['H_Wave_Up'],False,False,installation_id,isp_id,client_id)
