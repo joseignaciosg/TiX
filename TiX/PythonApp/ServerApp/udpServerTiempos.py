@@ -108,10 +108,10 @@ def remove_old_files(dirpath, client_msg_filename):
 
             except Exception, e:
                 logger.error("No se ha podido eliminar el siguiente log antiguo: " + dirpath + "/" + file_name)
-        rollbar.report_exc_info()
+                rollbar.report_exc_info()
         except Exception, e:
             logger.error("El archivo de log tiene un nombre invalido: " + dirpath + "/" + file_name)
-        rollbar.report_exc_info()
+            rollbar.report_exc_info()
 
     return None
 
