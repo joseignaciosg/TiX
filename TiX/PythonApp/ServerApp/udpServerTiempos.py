@@ -248,7 +248,6 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
 
                             if len(files_to_process) < 60:
                                 logger.error("Error al procesar los archivos de " + client_server_folder)
-                                 logger.info("Error al procesar los archivos")
                             else:
                                 cwd = os.getcwd()
                                 os.chdir('/home/pfitba/tix_production/data_processing')
