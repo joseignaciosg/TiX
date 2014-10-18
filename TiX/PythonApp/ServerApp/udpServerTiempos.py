@@ -239,10 +239,12 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                         if len(os.walk(client_records_server_folder).next()[2]) == 60:
                             logger.info("La instalacion " + client_server_folder + " tiene 1h de datos. Empezando procesamiento ...")
 
+                            logger.info("checkpoint 1")
                             # print "Starting calculation for the following files:"
                             files_to_process =  get_files_by_mdate(client_records_server_folder)
                             #files_to_process = [f for f in get_files_by_mdate(client_records_server_folder) if re.match(r'log_*', f)]
 
+                            logger.info("checkpoint 2")
 
                             if len(files_to_process) < 60:
                                 logger.error("Error al procesar los archivos de " + client_server_folder)
@@ -252,6 +254,7 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                                 ansDictionary = completo_III.analyse_data(files_to_process)
                                 logger.debug(ansDictionary)
                                 os.chdir(cwd)
+                                logger.info("checkpoint 3")
 
 
                                 logger.info("Completando logs en " + "compare_timestamps_"+ client_records_server_folder+".log" )
