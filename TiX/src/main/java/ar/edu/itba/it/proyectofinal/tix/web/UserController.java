@@ -114,7 +114,22 @@ public class UserController {
 
 	}
 
+	@SuppressWarnings("unchecked")
+	@RequestMapping(method = RequestMethod.GET)
+	public void  adminreport(HttpSession session, HttpServletResponse response) throws IOException {
+		
+		Process p = new ProcessBuilder("/home/pfitba/admin_reports/adminreport.sh").start();
+		// get your file as InputStream
+	    File initialFile = new File("/home/pfitba/admin_reports/");
+	    InputStream targetStream = new FileInputStream(initialFile);
+	    // copy it to response's OutputStream
+	    org.apache.commons.io.IOUtils.copy(targetStream, response.getOutputStream());
+	    response.flushBuffer();
+		
 
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView dashboard(
