@@ -19,7 +19,7 @@ from base64 import b64decode
 from random import randrange
 
 import rollbar
-rollbar.init('0eb38579bae944c0aabbece8fba823d7', 'production')  # access_token, environment
+rollbar.init('a2f899737ec14e7bbe8a580f3fe94358', 'production')  # access_token, environment
 
 config = ConfigParser.ConfigParser()
 
