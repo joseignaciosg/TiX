@@ -172,13 +172,14 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
             #Mensaje largo
                 socket.sendto(msg[0] + '|' + tstamp +'|' + str(ts()) + '|' + msg[3] + '|' + msg[4], self.client_address)
                 try:
-                    #logger.info("Llamo thread " + str(threading.activeCount()))
-                    thread = threading.Thread(target = self.worker_thread, args=(msg,))
-                    thread.start()
-                    thread.join()
+                    self.worker_thread(msg);
+                    # #logger.info("Llamo thread " + str(threading.activeCount()))
+                    # thread = threading.Thread(target = self.worker_thread, args=(msg,))
+                    # thread.start()
+                    # thread.join()
                 except Exception, e:
-                    logger.info("Error: No se pudo iniciar el thread")
-                    logger.info(str(e))
+                    # logger.info("Error: No se pudo iniciar el thread")
+                    # logger.info(str(e))
                     rollbar.report_exc_info()
             else:
             #Mensaje corto
