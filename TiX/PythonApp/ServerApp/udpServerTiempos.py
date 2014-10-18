@@ -178,8 +178,8 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                     # thread.start()
                     # thread.join()
                 except Exception, e:
-                    # logger.info("Error: No se pudo iniciar el thread")
-                    # logger.info(str(e))
+                    logger.info("Error: No se pudo iniciar el thread")
+                    logger.info(str(e))
                     rollbar.report_exc_info()
             else:
             #Mensaje corto
