@@ -23,7 +23,6 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <script type="text/javascript" src="<c:url value='/js/bootstrap.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/bootstrap-datepicker.js'/>"></script>
 <script src="http://code.highcharts.com/stock/highstock.js"></script>
-<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
 <script src="<c:url value='/js/tix.js'/>"></script>
 
 
@@ -38,7 +37,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <br/><br/>
 
-<div class="span9">
+<div class="span10">
 <form method="GET"  action="./ispcharts" class="form-horizontal offset2" style="padding-left:10px;">
     <div class="input-prepend" data-date-format="dd-mm-yyyy">
         <span class="add-on"><i class="icon-calendar"></i></span>
@@ -54,22 +53,26 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
     <input type="submit" class="btn btn-primary" value="Filtrar">
 </form>
 </div>
+<div class="span3">
+<form method="GET"  action="./ispcharts" class="form-horizontal offset2" style="padding-left:10px;">
+    <input type="submit" class="btn btn-primary" value="Generar PDF">
+</form>
+</div>
 
 <br/><br/>
 
-<h2 style="margin: 50px 180px 50px 180px;">Histogramas por ISP</h1>
 
 <c:forEach items="${disp_list}" var="entry">
-    <div class="isp-container row-fluid" style="margin: 50px 180px 100px 180px; height:600px;">
+    <div class="isp-container row-fluid" style="margin: 20px 50px 20px 100px; height:600px;">
         <h3 class="isp-name">${entry.isp_name}</h3>
             <!-- calidad -->
-            <div class="row-fluid span8">
+            <div class="row-fluid span8" style="width:1000px">
                 <div id="congestionup${entry.isp_id}" class="pull-left" style="height: 300px; width: 465px"></div>
                 <div id="congestiondown${entry.isp_id}" class="pull-right" style="height: 300px; width: 465px"></div>
             </div>
 
             <!-- Utilizacion -->
-            <div class="row-fluid span8">
+            <div class="row-fluid span8" style="width:1000px">
                 <div id="utilizacionup${entry.isp_id}" class="pull-left" style="height: 300px; width: 465px"></div>
                 <div id="utilizaciondown${entry.isp_id}" class="pull-right" style="height: 300px; width: 465px"></div>
             </div>
@@ -77,7 +80,6 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
     <hr/>
 </c:forEach>
 
-<h2 style="margin: 50px 180px 50px 180px;">Boxplots por ISP</h1>
 <c:forEach items="${boxplot_list}" var="entry">
     <h3 class="isp-name" style="margin-left:180px;">${entry.isp_name}</h3>
     <div id="container${entry.isp_id}" style="height: 400px; margin: auto; min-width: 310px; max-width: 600px"></div>
@@ -96,7 +98,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
                 type: 'column'
             },
             title: {
-                text: 'Histograma Calidad Subida',
+                text: '<b>Calidad Subida</b>',
                 x: -20 //center
             },
 
@@ -130,7 +132,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
             type: 'column'
         },
         title: {
-            text: 'Histograma Calidad Bajada',
+            text: '<b>Calidad Bajada</b>',
             x: -20 //center
         },
 
@@ -166,7 +168,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
             type: 'column'
         },
         title: {
-            text: 'Histograma Utilizacion Subida',
+            text: 'Utilizacion Subida',
             x: -20 //center
         },
 
@@ -200,7 +202,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
             type: 'column'
         },
         title: {
-            text: 'Histograma Utilizacion Bajada',
+            text: 'Utilizacion Bajada',
             x: -20 //center
         },
 
@@ -243,7 +245,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
         },
 
         title: {
-            text: 'Highcharts box plot ${entry.isp_name}'
+            text: '${entry.isp_name}'
         },
 
         plotOptions: {
@@ -261,7 +263,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
         xAxis: {
             minTickInterval: 1,
-            categories: ['Calidad Subida', 'Calidad Bajada', 'Utilizacion Subida', 'Utilizacion Bajada']
+            categories: ['<b>Calidad Subida</b>', '<b>Calidad Bajada</b>', 'Utilizacion Subida', 'Utilizacion Bajada']
         },
 
         yAxis:{
