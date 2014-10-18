@@ -17,8 +17,8 @@ namespace :deploy do
       on roles(:app) do
         execute "mkdir -p #{fetch(:install_to)} || true"
         execute "cd #{fetch(:install_to)} && git add -A ./data_processing/ && git commit -m 'preparing new deploy' || echo"
-        execute "cp -rv #{fetch(:deploy_to)}/current/TiX/PythonApp/ServerApp/* #{fetch(:install_to)}"
-        execute "cd #{fetch(:install_to)} && git checkout ./data_processing/"
+        execute "cp -rv #{fetch(:deploy_to)}/current/TiX/PythonApp/ServerApp/* #{fetch(:install_to)} || echo"
+        execute "cd #{fetch(:install_to)} && git checkout ./data_processing/ || echo"
       end
     end
 
