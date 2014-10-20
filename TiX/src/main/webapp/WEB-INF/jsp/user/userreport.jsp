@@ -30,15 +30,19 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 							<c:forEach items="${ispNames}"  var="entry " varStatus="status">
 								<tr>
 										<td>${ispNames[status.index]}</td>
-										<td><fmt:formatNumber value="${medianList[status.index][0]}" pattern="0.00"/></td>
-										<td><fmt:formatNumber value="${medianList[status.index][1]}" pattern="0.00"/></td>
-										<td><fmt:formatNumber value="${medianList[status.index][2]}" pattern="0.00"/></td>
-										<td><fmt:formatNumber value="${medianList[status.index][3]}" pattern="0.00"/></td>
+										<td><c:if test="${empty medianList[status.index][0]}">0</c:if><fmt:formatNumber value="${medianList[status.index][0]}" pattern="0.00"/></td>
+										<td><c:if test="${empty medianList[status.index][1]}">0</c:if><fmt:formatNumber value="${medianList[status.index][1]}" pattern="0.00"/></td>
+										<td><c:if test="${empty medianList[status.index][2]}">0</c:if><fmt:formatNumber value="${medianList[status.index][2]}" pattern="0.00"/>%</td>
+										<td><c:if test="${empty medianList[status.index][3]}">0</c:if><fmt:formatNumber value="${medianList[status.index][3]}" pattern="0.00"/>%</td>
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
 				</div>
+				<div id="meantabledescription">
+					Esta tabla muestra las medianas mensuales de cada uno de los parámetros estudiados para cada uno de los proveedores de internet que utilizó el usuario. 
+				</div>
+				</br></br>
 		</div>
 	</div>
 	<div class="container-fluid">
@@ -46,6 +50,10 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 	 <c:forEach items="${javaChart_list}" var="entry" varStatus="status">
 			<div id="graphcontainer${status.index}"></div>
+			<div id="chartdescription">
+					Este gráfico muestra la evolución de los cuatro parámetros estudiados con información para los datos obtenidos para la instalación ${userInstallations[status.index]}
+			</div>
+			</br></br>
 	 </c:forEach>
 
 	</div>

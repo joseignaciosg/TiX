@@ -363,9 +363,11 @@ public class UserController {
 
 		User reqProfile = userRepo.get(nickname);
 		List<Installation> userInstallations = reqProfile.getInstallations();
+		List<String> userInstallationsnames = new ArrayList<String>();
 		List<HighChart> javaChart_list = new ArrayList<HighChart>();
 
 		for (Installation install: userInstallations){
+			userInstallationsnames.add(install.getName());
 			List<Record> records = (List<Record>) recordRepo.getAll(reqProfile,
 					install, minDate, maxDate);
 
@@ -384,6 +386,7 @@ public class UserController {
 
 
 		mav.addObject("javaChart_list", javaChart_list);
+		mav.addObject("userInstallations", userInstallationsnames);
 		mav.addObject("ispNames", ispNames);
 		mav.addObject("medianList", medianList);
 
