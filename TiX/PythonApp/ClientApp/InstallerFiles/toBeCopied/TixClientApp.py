@@ -97,8 +97,10 @@ def pingUniq(num_uniq, logfile,t0, t0_filename, check,told):
 	client = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
 	try:
+                print "after read 0"
 		client.settimeout(5.0)
 
+                print "after read send"
 		client.sendto(message + "\n", (TEST_HOST, TEST_PORT))
 		if file_with_data == True:
 			#Delete data file
@@ -107,11 +109,15 @@ def pingUniq(num_uniq, logfile,t0, t0_filename, check,told):
 			file_with_data = False
 
 
+                print "after read 0 recv"
 		data = client.recv(8192)#(2048) para el mensaje largo
+                print "after read 1"
 		msg = data.split('|')
+                print "after read 2"
 		data = msg[0] + '|' + msg[1] + '|' + msg[2] + '|' + ts()#+ '|' + msg[4], en msg[4] queda el contenido del mensaje largo sin imprimir
 		# print 'Received', repr(data)
 
+                print "after read 3"
 		iph=20 #longitud ip header (min. 20 bytes)
 		udph=8 #longitud udp header (min. 8 bytes)
 		if (num_uniq % 2 == 0) :
@@ -119,6 +125,7 @@ def pingUniq(num_uniq, logfile,t0, t0_filename, check,told):
 		else:
 		      payload=len(data + '|'+ msg[4])
 		      #data: solo los timestamps, en msg[4] esta el contenido del mensaje largo
+                print "after read 4"
 
 		pack_len=str(iph + udph + payload)
 		log_msg(log_file, '|' + pack_len + '|' + data)
