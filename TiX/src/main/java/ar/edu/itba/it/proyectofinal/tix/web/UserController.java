@@ -502,7 +502,7 @@ public class UserController {
 			List<Record> recordsAux = new ArrayList<Record>();
 			
 			//FIltering by weekday
-			if (dayOfWeek != null && dayOfWeek != 0 ) {//this filter is on  
+			if (dayOfWeek != null && dayOfWeek != 0 && (minHour == null ||  maxHour == null  || minHour > maxHour) ) {//this filter is on  
 				for( Record r: records){
 					if ( r.getTimestamp().getDayOfWeek() == dayOfWeek ){
 						recordsAux.add(r);
@@ -510,6 +510,32 @@ public class UserController {
 				}
 				records = recordsAux;
 			}
+			
+			recordsAux.clear();
+			
+			//FIltering by hour
+			if (minHour != null && maxHour != null  && minHour < maxHour && (dayOfWeek == null || dayOfWeek == 0) ) {//this filter is on  
+				for( Record r: records){
+					if ( r.getTimestamp().getHourOfDay() >=  minHour && r.getTimestamp().getHourOfDay( ) <= maxHour){
+						recordsAux.add(r);
+					}
+				}
+				records = recordsAux;
+			}
+			
+			recordsAux.clear();
+			
+			//Two Filters are on
+			if (minHour != null && maxHour != null  && minHour < maxHour && dayOfWeek != null && dayOfWeek != 0 ) {  
+				for( Record r: records){
+					if ( r.getTimestamp().getHourOfDay() >=  minHour && r.getTimestamp().getHourOfDay( ) <= maxHour && r.getTimestamp().getDayOfWeek() == dayOfWeek){
+						recordsAux.add(r);
+					}
+				}
+				records = recordsAux;
+			}
+			
+			recordsAux.clear();
 						
 			
 //			System.out.println(minDate);
@@ -561,6 +587,12 @@ public class UserController {
 			mav.addObject("dayOfWeek", dayOfWeek);
 		}
 
+		if (minHour != null && maxHour != null){
+			mav.addObject("minHour", minHour);
+			mav.addObject("maxHour", maxHour);
+		}
+		
+		
 		return mav;
 
 	}
