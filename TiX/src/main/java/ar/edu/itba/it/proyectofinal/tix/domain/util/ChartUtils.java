@@ -137,6 +137,8 @@ public class ChartUtils {
 					: utilizaciondown_vec[4];
 
 			// values
+//			System.out.println("congestionup:" + congestionup);
+//			System.out.println("i: " + i);
 			congestionup_values.add(congestionup);
 			congestiondown_values.add(congestiondown);
 			utilizacionup_values.add(utilizacionup);
@@ -145,6 +147,7 @@ public class ChartUtils {
 			i++;
 		}
 
+		
 		// sorting
 		Collections.sort(congestionup_values);
 		Collections.sort(congestiondown_values);
@@ -159,48 +162,62 @@ public class ChartUtils {
 
 		boolean even = (i % 2 == 0) ? true : false;
 
+		System.out.println("The value of the index is:" +  i);
+		System.out.println("congestionup_values:" +  congestionup_values);
+
 		// medians
-		congestionup_vec[2] = !even ? congestionup_values.get(i / 2)
-				: ((congestionup_values.get((i / 2) - 1) + congestionup_values
-						.get((i / 2) + 1))) / 2;
-		congestiondown_vec[2] = !even ? congestiondown_values.get(i / 2)
-				: ((congestiondown_values.get((i / 2) - 1) + congestiondown_values
-						.get((i / 2) + 1))) / 2;
-		utilizacionup_vec[2] = !even ? utilizacionup_values.get(i / 2)
-				: ((utilizacionup_values.get((i / 2) - 1) + utilizacionup_values
-						.get((i / 2) + 1))) / 2;
-		utilizaciondown_vec[2] = !even ? utilizaciondown_values.get(i / 2)
-				: ((utilizaciondown_values.get((i / 2) - 1) + utilizaciondown_values
-						.get((i / 2) + 1))) / 2;
-		//System.out.println("utilizacionup_vec: " + utilizacionup_vec[2]);
+		if ( i == 2 ){
+			congestionup_vec[2] = (congestionup_values.get(0) + congestionup_values.get(1) ) /2;
+			congestiondown_vec[2] = (congestiondown_values.get(0) + congestiondown_values.get(1) ) /2;
+			utilizacionup_vec[2] = (utilizacionup_values.get(0) + utilizacionup_values.get(1) ) /2;
+			utilizaciondown_vec[2] = (utilizaciondown_values.get(0) + utilizaciondown_values.get(1) ) /2;
+		}else{
+			congestionup_vec[2] = !even ? congestionup_values.get(i / 2)
+					: ((congestionup_values.get((i / 2) - 1) + congestionup_values
+							.get((i / 2) + 1))) / 2;
+			congestiondown_vec[2] = !even ? congestiondown_values.get(i / 2)
+					: ((congestiondown_values.get((i / 2) - 1) + congestiondown_values
+							.get((i / 2) + 1))) / 2;
+			utilizacionup_vec[2] = !even ? utilizacionup_values.get(i / 2)
+					: ((utilizacionup_values.get((i / 2) - 1) + utilizacionup_values
+							.get((i / 2) + 1))) / 2;
+			utilizaciondown_vec[2] = !even ? utilizaciondown_values.get(i / 2)
+					: ((utilizaciondown_values.get((i / 2) - 1) + utilizaciondown_values
+							.get((i / 2) + 1))) / 2;
+		}
+		
 
-		// lower quartiles
-		congestionup_vec[1] = even ? congestionup_values.get(i / 4)
-				: ((congestionup_values.get((i / 4) - 1) + congestionup_values
-						.get((i / 4) + 1))) / 2;
-		congestiondown_vec[1] = even ? congestiondown_values.get(i / 4)
-				: ((congestiondown_values.get((i / 4) - 1) + congestiondown_values
-						.get((i / 4) + 1))) / 2;
-		utilizacionup_vec[1] = even ? utilizacionup_values.get(i / 4)
-				: ((utilizacionup_values.get((i / 4) - 1) + utilizacionup_values
-						.get((i / 4) + 1))) / 2;
-		utilizaciondown_vec[1] = even ? utilizaciondown_values.get(i / 4)
-				: ((utilizaciondown_values.get((i / 4) - 1) + utilizaciondown_values
-						.get((i / 4) - 1))) / 2;
+		if ( i != 2 ) {
+			// lower quartiles
+			congestionup_vec[1] = even ? congestionup_values.get(i / 4)
+					: ((congestionup_values.get((i / 4) - 1) + congestionup_values
+							.get((i / 4) + 1))) / 2;
+			congestiondown_vec[1] = even ? congestiondown_values.get(i / 4)
+					: ((congestiondown_values.get((i / 4) - 1) + congestiondown_values
+							.get((i / 4) + 1))) / 2;
+			utilizacionup_vec[1] = even ? utilizacionup_values.get(i / 4)
+					: ((utilizacionup_values.get((i / 4) - 1) + utilizacionup_values
+							.get((i / 4) + 1))) / 2;
+			utilizaciondown_vec[1] = even ? utilizaciondown_values.get(i / 4)
+					: ((utilizaciondown_values.get((i / 4) - 1) + utilizaciondown_values
+							.get((i / 4) - 1))) / 2;
 
-		// higher quartiles
-		congestionup_vec[3] = even ? congestionup_values.get(i / 4 * 3)
-				: ((congestionup_values.get(i / 4 * 3) - 1) + congestionup_values
-						.get((i / 4 * 3) + 1)) / 2;
-		congestiondown_vec[3] = even ? congestiondown_values.get(i / 4 * 3)
-				: ((congestiondown_values.get(i / 4 * 3) - 1) + congestiondown_values
-						.get((i / 4 * 3) + 1)) / 2;
-		utilizacionup_vec[3] = even ? utilizacionup_values.get(i / 4 * 3)
-				: ((utilizacionup_values.get(i / 4 * 3) - 1) + utilizacionup_values
-						.get((i / 4 * 3) + 1)) / 2;
-		utilizaciondown_vec[3] = even ? utilizaciondown_values.get(i / 4 * 3)
-				: ((utilizaciondown_values.get(i / 4 * 3) - 1) + utilizaciondown_values
-						.get((i / 4 * 3) - 1)) / 2;
+			// higher quartiles
+			congestionup_vec[3] = even ? congestionup_values.get(i / 4 * 3)
+					: ((congestionup_values.get(i / 4 * 3) - 1) + congestionup_values
+							.get((i / 4 * 3) + 1)) / 2;
+			congestiondown_vec[3] = even ? congestiondown_values.get(i / 4 * 3)
+					: ((congestiondown_values.get(i / 4 * 3) - 1) + congestiondown_values
+							.get((i / 4 * 3) + 1)) / 2;
+			utilizacionup_vec[3] = even ? utilizacionup_values.get(i / 4 * 3)
+					: ((utilizacionup_values.get(i / 4 * 3) - 1) + utilizacionup_values
+							.get((i / 4 * 3) + 1)) / 2;
+			utilizaciondown_vec[3] = even ? utilizaciondown_values.get(i / 4 * 3)
+					: ((utilizaciondown_values.get(i / 4 * 3) - 1) + utilizaciondown_values
+							.get((i / 4 * 3) - 1)) / 2;
+			
+		}
+
 
 //		printVec(congestionup_vec);
 //		printVec(congestiondown_vec);

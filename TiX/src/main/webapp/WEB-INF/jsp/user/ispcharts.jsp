@@ -74,13 +74,13 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
         <div class="pull-left">
             <label class="control-label" for="minHour">Hora de comienzo</label>
             <div class="controls">
-                <input type="text" name="minHour" id="minHour" placeholder="ejemplo: 8" value="${minHour}" />
+                <input type="text" name="minHour" id="minHour" placeholder="ejemplo: 8" value='<c:if test="${maxHour > minHour}">${minHour}</c:if>' />
             </div>
         </div>
         <div class="pull-left">
 	        <label class="control-label" for="maxHour">Hora de fin</label>
             <div class="controls">
-                <input type="text" name="maxHour" id="maxHour" placeholder="ejemplo: 22" value="${maxHour}" />
+                <input type="text" name="maxHour" id="maxHour" placeholder="ejemplo: 22" value='<c:if test="${maxHour > minHour}">${maxHour}</c:if>'/>
             </div>
           </div>
         <div class="pull-right">
