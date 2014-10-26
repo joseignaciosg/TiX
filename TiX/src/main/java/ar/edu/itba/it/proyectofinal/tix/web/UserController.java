@@ -511,7 +511,7 @@ public class UserController {
 				records = recordsAux;
 			}
 			
-			recordsAux.clear();
+			recordsAux = new ArrayList<Record>();
 			
 			//FIltering by hour
 			if (minHour != null && maxHour != null  && minHour < maxHour  ) {//this filter is on  
