@@ -16,22 +16,22 @@ import ar.edu.itba.it.proyectofinal.tix.domain.model.Record;
 
 public class ChartUtils {
 
-	
+
 	public static List<Double> generateMedians(List<Record> records) {
 		Iterator<Record> it = records.iterator();
-		
+
 		List<Double> medians = new ArrayList<Double>();
-		
-		//medians[0] congestion up 
+
+		//medians[0] congestion up
 		//medians[1] congestion down
 		//medians[2] utilizacion up
 		//medians[3] utilizacion down
-		
+
 		List<Double> congestionup_values = new ArrayList<Double>();
 		List<Double> congestiondown_values = new ArrayList<Double>();
 		List<Double> utilizacionup_values = new ArrayList<Double>();
 		List<Double> utilizaciondown_values = new ArrayList<Double>();
-		
+
 		int i = 0;
 		while (it.hasNext()) {
 			Record record = it.next();
@@ -48,15 +48,15 @@ public class ChartUtils {
 
 			i++;
 		}
-		
+
 		// sorting
 		Collections.sort(congestionup_values);
 		Collections.sort(congestiondown_values);
 		Collections.sort(utilizacionup_values);
 		Collections.sort(utilizaciondown_values);
-		
+
 		boolean even = (i % 2 == 0) ? true : false;
-		
+
 		// medians
 
 		if(congestionup_values.size() != 0 && congestiondown_values.size() != 0 && utilizacionup_values.size() != 0 && utilizaciondown_values.size() != 0 ){
@@ -73,12 +73,12 @@ public class ChartUtils {
 					: ((utilizaciondown_values.get((i / 2) - 1) + utilizaciondown_values
 							.get((i / 2) + 1))) / 2);
 		}
-		
 
-	
+
+
 		return medians;
 	}
-	
+
 	public static List<double[]> generateBoxplot(List<Record> records) {
 
 
@@ -95,12 +95,12 @@ public class ChartUtils {
 		double[] utilizaciondown_vec = new double[5];
 
 		List<double[]> values = new ArrayList<double[]>();
-		
-		
+
+
 		if (records.size() == 0){
 			return values;
 		}
-		
+
 		// values
 		List<Double> congestionup_values = new ArrayList<Double>();
 		List<Double> congestiondown_values = new ArrayList<Double>();
@@ -137,6 +137,8 @@ public class ChartUtils {
 					: utilizaciondown_vec[4];
 
 			// values
+//			System.out.println("congestionup:" + congestionup);
+//			System.out.println("i: " + i);
 			congestionup_values.add(congestionup);
 			congestiondown_values.add(congestiondown);
 			utilizacionup_values.add(utilizacionup);
@@ -145,69 +147,84 @@ public class ChartUtils {
 			i++;
 		}
 
+		
 		// sorting
 		Collections.sort(congestionup_values);
 		Collections.sort(congestiondown_values);
 		Collections.sort(utilizacionup_values);
 		Collections.sort(utilizaciondown_values);
-		
-		
 
-		
 
-		System.out.println("SORTED LIST: " + utilizacionup_values);
+
+
+
+		//System.out.println("SORTED LIST: " + utilizacionup_values);
 
 		boolean even = (i % 2 == 0) ? true : false;
 
+		System.out.println("The value of the index is:" +  i);
+		System.out.println("congestionup_values:" +  congestionup_values);
+
 		// medians
-		congestionup_vec[2] = !even ? congestionup_values.get(i / 2)
-				: ((congestionup_values.get((i / 2) - 1) + congestionup_values
-						.get((i / 2) + 1))) / 2;
-		congestiondown_vec[2] = !even ? congestiondown_values.get(i / 2)
-				: ((congestiondown_values.get((i / 2) - 1) + congestiondown_values
-						.get((i / 2) + 1))) / 2;
-		utilizacionup_vec[2] = !even ? utilizacionup_values.get(i / 2)
-				: ((utilizacionup_values.get((i / 2) - 1) + utilizacionup_values
-						.get((i / 2) + 1))) / 2;
-		utilizaciondown_vec[2] = !even ? utilizaciondown_values.get(i / 2)
-				: ((utilizaciondown_values.get((i / 2) - 1) + utilizaciondown_values
-						.get((i / 2) + 1))) / 2;
-		System.out.println("utilizacionup_vec: " + utilizacionup_vec[2]);
+		if ( i == 2 ){
+			congestionup_vec[2] = (congestionup_values.get(0) + congestionup_values.get(1) ) /2;
+			congestiondown_vec[2] = (congestiondown_values.get(0) + congestiondown_values.get(1) ) /2;
+			utilizacionup_vec[2] = (utilizacionup_values.get(0) + utilizacionup_values.get(1) ) /2;
+			utilizaciondown_vec[2] = (utilizaciondown_values.get(0) + utilizaciondown_values.get(1) ) /2;
+		}else{
+			congestionup_vec[2] = !even ? congestionup_values.get(i / 2)
+					: ((congestionup_values.get((i / 2) - 1) + congestionup_values
+							.get((i / 2) + 1))) / 2;
+			congestiondown_vec[2] = !even ? congestiondown_values.get(i / 2)
+					: ((congestiondown_values.get((i / 2) - 1) + congestiondown_values
+							.get((i / 2) + 1))) / 2;
+			utilizacionup_vec[2] = !even ? utilizacionup_values.get(i / 2)
+					: ((utilizacionup_values.get((i / 2) - 1) + utilizacionup_values
+							.get((i / 2) + 1))) / 2;
+			utilizaciondown_vec[2] = !even ? utilizaciondown_values.get(i / 2)
+					: ((utilizaciondown_values.get((i / 2) - 1) + utilizaciondown_values
+							.get((i / 2) + 1))) / 2;
+		}
+		
 
-		// lower quartiles
-		congestionup_vec[1] = even ? congestionup_values.get(i / 4)
-				: ((congestionup_values.get((i / 4) - 1) + congestionup_values
-						.get((i / 4) + 1))) / 2;
-		congestiondown_vec[1] = even ? congestiondown_values.get(i / 4)
-				: ((congestiondown_values.get((i / 4) - 1) + congestiondown_values
-						.get((i / 4) + 1))) / 2;
-		utilizacionup_vec[1] = even ? utilizacionup_values.get(i / 4)
-				: ((utilizacionup_values.get((i / 4) - 1) + utilizacionup_values
-						.get((i / 4) + 1))) / 2;
-		utilizaciondown_vec[1] = even ? utilizaciondown_values.get(i / 4)
-				: ((utilizaciondown_values.get((i / 4) - 1) + utilizaciondown_values
-						.get((i / 4) - 1))) / 2;
+		if ( i != 2 ) {
+			// lower quartiles
+			congestionup_vec[1] = even ? congestionup_values.get(i / 4)
+					: ((congestionup_values.get((i / 4) - 1) + congestionup_values
+							.get((i / 4) + 1))) / 2;
+			congestiondown_vec[1] = even ? congestiondown_values.get(i / 4)
+					: ((congestiondown_values.get((i / 4) - 1) + congestiondown_values
+							.get((i / 4) + 1))) / 2;
+			utilizacionup_vec[1] = even ? utilizacionup_values.get(i / 4)
+					: ((utilizacionup_values.get((i / 4) - 1) + utilizacionup_values
+							.get((i / 4) + 1))) / 2;
+			utilizaciondown_vec[1] = even ? utilizaciondown_values.get(i / 4)
+					: ((utilizaciondown_values.get((i / 4) - 1) + utilizaciondown_values
+							.get((i / 4) - 1))) / 2;
 
-		// higher quartiles
-		congestionup_vec[3] = even ? congestionup_values.get(i / 4 * 3)
-				: ((congestionup_values.get(i / 4 * 3) - 1) + congestionup_values
-						.get((i / 4 * 3) + 1)) / 2;
-		congestiondown_vec[3] = even ? congestiondown_values.get(i / 4 * 3)
-				: ((congestiondown_values.get(i / 4 * 3) - 1) + congestiondown_values
-						.get((i / 4 * 3) + 1)) / 2;
-		utilizacionup_vec[3] = even ? utilizacionup_values.get(i / 4 * 3)
-				: ((utilizacionup_values.get(i / 4 * 3) - 1) + utilizacionup_values
-						.get((i / 4 * 3) + 1)) / 2;
-		utilizaciondown_vec[3] = even ? utilizaciondown_values.get(i / 4 * 3)
-				: ((utilizaciondown_values.get(i / 4 * 3) - 1) + utilizaciondown_values
-						.get((i / 4 * 3) - 1)) / 2;
+			// higher quartiles
+			congestionup_vec[3] = even ? congestionup_values.get(i / 4 * 3)
+					: ((congestionup_values.get(i / 4 * 3) - 1) + congestionup_values
+							.get((i / 4 * 3) + 1)) / 2;
+			congestiondown_vec[3] = even ? congestiondown_values.get(i / 4 * 3)
+					: ((congestiondown_values.get(i / 4 * 3) - 1) + congestiondown_values
+							.get((i / 4 * 3) + 1)) / 2;
+			utilizacionup_vec[3] = even ? utilizacionup_values.get(i / 4 * 3)
+					: ((utilizacionup_values.get(i / 4 * 3) - 1) + utilizacionup_values
+							.get((i / 4 * 3) + 1)) / 2;
+			utilizaciondown_vec[3] = even ? utilizaciondown_values.get(i / 4 * 3)
+					: ((utilizaciondown_values.get(i / 4 * 3) - 1) + utilizaciondown_values
+							.get((i / 4 * 3) - 1)) / 2;
+			
+		}
+
 
 //		printVec(congestionup_vec);
 //		printVec(congestiondown_vec);
 //		printVec(utilizacionup_vec);
 //		printVec(utilizaciondown_vec);
-//		
-		
+//
+
 		values.add(congestionup_vec);
 		values.add(congestiondown_vec);
 		values.add(utilizacionup_vec);
@@ -215,7 +232,7 @@ public class ChartUtils {
 
 		return values;
 	}
-	
+
 //	private static void printVec(double a[] ){
 //		System.out.println("TESTING [ " + a[0] +"   "+ a[1] +"   "+ a[2] +"   "+ a[3] +"   "+ a[4]  +"]");
 //	}
@@ -330,7 +347,7 @@ public class ChartUtils {
 				Record record = it.next();
 				DateTime dt = new DateTime(record.getTimestamp());
 //				System.out.println("Salida: " + (aux_timestamp - dt.getMillis()));
-				// 20 minutos de de margen entre punto y punto 
+				// 20 minutos de de margen entre punto y punto
 				if (aux_timestamp > 0
 						&& (aux_timestamp - dt.getMillis()) < -(60 * 20 * 1000)) {
 					jump = true;

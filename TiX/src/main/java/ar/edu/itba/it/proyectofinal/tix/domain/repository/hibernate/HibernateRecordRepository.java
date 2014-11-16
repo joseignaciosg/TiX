@@ -52,7 +52,7 @@ public class HibernateRecordRepository extends AbstractHibernateRepo implements 
 		return find("from Record r where user_id = ? and installation = ? and isp = ? order by r.timestamp asc ", user.getId(), installation, isp);
 	}
 
-	public List<? extends Record> getAllForIsp2(int isp, DateTime minDate, DateTime maxDate){
+	public List<? extends Record> getAllForIsp2(int isp, DateTime minDate, DateTime maxDate /*, String  day, Integer minHour, Integer maxHour */){
 		if ( minDate != null && maxDate != null) {
 			return find("from Record r where isp_id = ? and r.timestamp >= ? and r.timestamp <= ? order by r.timestamp asc", isp, minDate, maxDate);
 		}

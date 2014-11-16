@@ -16,7 +16,9 @@ body {
   padding: 100px 100px 100px 100px;
 }
 
-
+.tooltip : {
+       pointFormat: '<span style="color:{series.color}"></span> {series.name}: <b>{point.y}</b><br/>'
+}
 
 .listExpanded i.icon-folder-open{ display:inline-block; }
 .listExpanded i.icon-folder-close { display:none;}
