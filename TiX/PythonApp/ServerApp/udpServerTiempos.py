@@ -194,6 +194,7 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
             rollbar.report_exc_info()
 
     def worker_thread(self, msg):
+        print "Start worker thread!"
         try:
             large_package_msg = msg[4].split(';;')
             if len(large_package_msg)>=3 and large_package_msg[0]=='DATA':
