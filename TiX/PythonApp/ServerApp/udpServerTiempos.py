@@ -178,7 +178,9 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                 socket.sendto(msg[0] + '|' + tstamp +'|' + str(ts()) + '|' + msg[3] + '|' + msg[4], self.client_address)
                 try:
                     # self.worker_thread(msg);
+                    print("before pool")
                     pool.apply_async(self.worker_thread, msg)
+                    print("after pool")
                     # #logger.info("Llamo thread " + str(threading.activeCount()))
                     # thread = threading.Thread(target = self.worker_thread, args=(msg,))
                     # thread.start()
