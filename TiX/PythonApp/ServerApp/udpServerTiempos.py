@@ -15,6 +15,7 @@ import rsa
 import requests, webbrowser, json
 import re
 import linecache
+from multiprocessing.pool import ThreadPool
 from base64 import b64decode
 from random import randrange
 
@@ -64,6 +65,10 @@ hdlr.setFormatter(formatter)
 
 # add ch to logger
 logger.addHandler(hdlr)
+
+def start():
+    pass
+pool = ThreadPool(processes=1, initializer=start)
 
 # Logger examples
 # logger.debug("debug message")
@@ -172,7 +177,8 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
             #Mensaje largo
                 socket.sendto(msg[0] + '|' + tstamp +'|' + str(ts()) + '|' + msg[3] + '|' + msg[4], self.client_address)
                 try:
-                    self.worker_thread(msg);
+                    # self.worker_thread(msg);
+                    pool.apply_async(self.worker_thread, msg)
                     # #logger.info("Llamo thread " + str(threading.activeCount()))
                     # thread = threading.Thread(target = self.worker_thread, args=(msg,))
                     # thread.start()
