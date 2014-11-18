@@ -179,7 +179,7 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                 try:
                     # self.worker_thread(msg);
                     print("before pool")
-                    pool.apply(self.worker_thread, [msg])
+                    pool.apply_async(self.worker_thread, [msg])
                     print("after pool")
                     # #logger.info("Llamo thread " + str(threading.activeCount()))
                     # thread = threading.Thread(target = self.worker_thread, args=(msg,))
