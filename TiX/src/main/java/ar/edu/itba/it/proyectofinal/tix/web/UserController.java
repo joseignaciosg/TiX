@@ -77,6 +77,7 @@ public class UserController {
 		}
 		List<? extends User> allUsersExceptAdmin = userRepo.getAll();
 		allUsersExceptAdmin.remove(me);
+				
 		mav.addObject("userList", allUsersExceptAdmin);
 		return mav;
 
