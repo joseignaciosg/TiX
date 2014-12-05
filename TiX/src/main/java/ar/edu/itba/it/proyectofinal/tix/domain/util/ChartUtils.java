@@ -189,7 +189,7 @@ public class ChartUtils {
 		}
 		
 
-		if ( i != 2 ) {
+		if ( i != 2 && i > 1) {
 			// lower quartiles
 			congestionup_vec[1] = even ? congestionup_values.get(i / 4)
 					: ((congestionup_values.get((i / 4) - 1) + congestionup_values
