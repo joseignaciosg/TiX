@@ -41,9 +41,9 @@
 								</a>
 							</li>
 							<li class="span3">
-								<p style="text-align: center;">OSX Mavericks (10.9)</p>
-								<a href="<c:url value='/download/tix_osx_mavericks.dmg'/>" class="thumbnail"> <img
-									alt="Apple Mavericks"
+								<p style="text-align: center;">OSX</p>
+								<a href="<c:url value='/download/tix_osx.dmg'/>" class="thumbnail"> <img
+									alt="Apple"
 									style=""
 									src="<c:url value='/img/applelogo.jpg'/>">
 								</a>
