@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo /etc/TIX/app/TixClientApp log
+/etc/TIX/app/TixClientApp log
