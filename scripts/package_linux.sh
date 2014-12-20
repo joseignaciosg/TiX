@@ -64,7 +64,6 @@ fpm -n tix_project -s dir -t deb -v 0.1 \
 	--depends libxdamage1  \
 	--depends libffi6  \
 	--depends libquadmath0  \
-	--depends libmikmod2  \
 	--depends libgfortran3  \
 	--depends libcairo2  \
 	--depends libspeex1  \

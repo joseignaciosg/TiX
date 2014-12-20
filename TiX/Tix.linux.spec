@@ -36,7 +36,7 @@ def filter_binaries(all_binaries):
   import subprocess
   excluded_pkgs  = set()
   excluded_files = set()
-  whitelist_prefixes = ('libpython2.7', 'python-', 'libtiff', 'libudev', 'python2.7')
+  whitelist_prefixes = ('libpython2.7', 'python-', 'libtiff', 'libudev', 'python2.7', 'libmikmod2')
   binaries = []
 
   for b in all_binaries:
