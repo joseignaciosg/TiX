@@ -41,9 +41,9 @@
 								</a>
 							</li>
 							<li class="span3">
-								<p style="text-align: center;">OSX Mavericks (10.9)</p>
-								<a href="<c:url value='/download/tix_osx_mavericks.dmg'/>" class="thumbnail"> <img
-									alt="Apple Mavericks"
+								<p style="text-align: center;">OSX</p>
+								<a href="<c:url value='/download/tix_osx.dmg'/>" class="thumbnail"> <img
+									alt="Apple"
 									style=""
 									src="<c:url value='/img/applelogo.jpg'/>">
 								</a>
@@ -84,9 +84,6 @@
 					<p>Para instalar tu aplicativo en MAC debes seguir los siguientes pasos:</p>
 					<ul>
 						<li>Descargar el aplicativo haciendo click sobre el logo del sistema operativo elegido</li>
-							<ul>
-								<li>Notar que seg&uacute;n ud. tenga Mavericks o Mountain Lion debe descargar ejecutables ditintos</li>
-							</ul>
 						<li>Ejecutar el archivo .dmg haciendo doble click</li>
 						<li>Esperar a que se lance la aplicaci&oacute;n</li>
 						<li>Loguearse con su usuario y contrase&ntilde;a, dar un nombre a la instalaci&oacute;n y aguardar a que finalice el proceso y reciba el mensaje de "Instalaci&oacute;n Existosa"</li>
