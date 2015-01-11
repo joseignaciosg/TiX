@@ -187,6 +187,7 @@ public class AccountController {
 		try {
 			user.recoverPassword();
 			mav.setView(ControllerUtil.redirectView("/login"));
+
 		} catch (MessagingException e) {
 			mav.addObject("errorDescription",
 					"No se pudo enviar el mail de recuperación de password");
