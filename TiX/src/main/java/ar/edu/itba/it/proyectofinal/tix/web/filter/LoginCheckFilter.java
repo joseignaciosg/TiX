@@ -43,12 +43,14 @@ public class LoginCheckFilter extends OncePerRequestFilter {
 		}
 		chain.doFilter(req, resp);
 	}
+	
+	
 
 	private boolean isAvaiableWithoutLogin(String requestUrl) {
 		String[] availableUrl = {
 			"login/", "login/login", "user/home","account/register","account/recover",
-			"account/login", "account/recoverpassword", "static/about", "api/authenticate",
-			"api/newInstallation", "api/newISPPost", "user/users", "user/ispcharts"
+			"account/login", "account/changepassword", "account/recoverpassword", 
+			"static/about", "api/authenticate", "api/newInstallation", "api/newISPPost", "user/users", "user/ispcharts"
 		};
 		for (String url: availableUrl) {
 			if (requestUrl.startsWith("bin/" + url)) {
