@@ -51,7 +51,7 @@ public class AccountController {
 	public ModelAndView register(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		if (session.getAttribute("userId") != null) {
-			mav.setView(ControllerUtil.redirectView("/user/profile"));
+			mav.setView(ControllerUtil.redirectView("/login/"));
 			return mav;
 		}
 		mav.setViewName("account/register");
@@ -138,7 +138,7 @@ public class AccountController {
 		String nickname = array[0];
 		User u = userRepo.get(nickname);
 		if ( u == null || u.recoverPassword(cod, passwordRecoveryForm.getPassword1())) {
-			mav.setView(ControllerUtil.redirectView("/user/profile"));
+			mav.setView(ControllerUtil.redirectView("/login/"));
 		} else {
 			mav.addObject("changePasswordFailed", true);
 		}
@@ -153,8 +153,7 @@ public class AccountController {
 		ModelAndView mav = new ModelAndView();
 		if (!errors.hasErrors()) {
 			passwordUpdateForm.clearpasswords();
-//			mav.setView(ControllerUtil.redirectView("/account/edit"));
-			mav.setView(ControllerUtil.redirectView("/login/"));
+			mav.setView(ControllerUtil.redirectView("/account/edit"));
 		} else {
 			passwordUpdateForm.clearOriginalPassword();
 			mav.addObject("userUpdateForm", new UserUpdateForm(me));
