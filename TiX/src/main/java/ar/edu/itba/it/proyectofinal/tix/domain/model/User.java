@@ -140,7 +140,13 @@ public class User extends DBPersistentObject {
 	public void recoverPassword() throws MessagingException {
 		String cod = getNickname() + ":" + System.currentTimeMillis() + ":" + getId();
 		cod = Base64.encodeBytes(cod.getBytes());
-		sendRecoveryMail(cod);
+		System.out.println("Recover Password and cod is :" + cod);
+		try{
+			sendRecoveryMail(cod);			
+		}catch(MessagingException e){
+			e.getStackTrace();
+		}
+		
 		passwordRecoveryRequestCode = cod;
 		System.out.println(cod);
 	}

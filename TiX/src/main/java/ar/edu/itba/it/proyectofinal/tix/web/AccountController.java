@@ -174,17 +174,19 @@ public class AccountController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView recover(
-			PasswordRecoveryCreationForm passwordRecoveryForm, Errors errors) {
+			PasswordRecoveryCreationForm passwordRecoveryForm, Errors errors, HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		User user = userRepo.get(passwordRecoveryForm.getNickname());
+		User user = userRepo.get(passwordRecoveryForm.getNickname());		
 		if (user == null) {
 			mav.addObject("userDoesntExist", "true");
 			mav.addObject("passwordRecoveryForm", passwordRecoveryForm);
 			return mav;
+		}else{
+			System.out.println("####HERE and user id is: " + user.getId() );
 		}
 		try {
 			user.recoverPassword();
-			mav.setView(ControllerUtil.redirectView("/user/profile"));
+			mav.setView(ControllerUtil.redirectView("/login"));
 		} catch (MessagingException e) {
 			mav.addObject("errorDescription",
 					"No se pudo enviar el mail de recuperación de password");

@@ -8,10 +8,11 @@ public class MailBuilder {
 	public static Mail buildUserRecoveryMail(User user, String cod) {
 		Mail mail = new Mail(Config.getInstance().get("mailfrom"), user.getNickname()); // Nickname == email
 		mail.setSubject("Recuperar clave");
+		System.out.println("inside buildUserRecoveryMail!!!!");
 		// TODO: esto tiene que ser leido de un tpt!
 		String body = "<html><body>Para recuperar su contrase&ntilde;a siga el siguiente link "
-			+ "<a href=\"localhost:8080/PawBook/changepassword?cod="
-			+ cod + "\" />localhost:8080/PawBook/changepassword?cod="
+			+ "<a href=\"http://tix.innova-red.net/bin/account/changepassword?cod="
+			+ cod + "\" />tix.innova-red.net/bin/account/changepassword?cod="
 			+ cod + "</body></html>";
 		mail.setContents(body);
 		return mail;
