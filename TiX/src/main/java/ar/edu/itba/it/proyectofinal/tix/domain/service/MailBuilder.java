@@ -11,8 +11,8 @@ public class MailBuilder {
 		System.out.println("inside buildUserRecoveryMail!!!!");
 		// TODO: esto tiene que ser leido de un tpt!
 		String body = "<html><body>Para recuperar su contrase&ntilde;a siga el siguiente link "
-			+ "<a href=\"http://tix.innova-red.net/bin/account/changepassword?cod="
-			+ cod + "\" />tix.innova-red.net/bin/account/changepassword?cod="
+			+ "<a href=\"http://tix.innova-red.net/bin/account/recoverpassword?cod="
+			+ cod + "\" />tix.innova-red.net/bin/account/recoverpassword?cod="
 			+ cod + "</body></html>";
 		mail.setContents(body);
 		return mail;
