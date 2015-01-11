@@ -153,7 +153,8 @@ public class AccountController {
 		ModelAndView mav = new ModelAndView();
 		if (!errors.hasErrors()) {
 			passwordUpdateForm.clearpasswords();
-			mav.setView(ControllerUtil.redirectView("/account/edit"));
+//			mav.setView(ControllerUtil.redirectView("/account/edit"));
+			mav.setView(ControllerUtil.redirectView("/login/"));
 		} else {
 			passwordUpdateForm.clearOriginalPassword();
 			mav.addObject("userUpdateForm", new UserUpdateForm(me));
