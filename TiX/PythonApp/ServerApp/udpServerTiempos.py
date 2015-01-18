@@ -68,7 +68,67 @@ logger.addHandler(hdlr)
 
 def start():
     pass
-pool = ThreadPool(processes=1, initializer=start)
+
+
+from functools import wraps
+import errno
+import os
+import signal
+
+class TimeoutError(Exception):
+    pass
+
+class timeout:
+    def __init__(self, seconds=1, error_message='Timeout'):
+        self.seconds = seconds
+        self.error_message = error_message
+    def handle_timeout(self, signum, frame):
+        raise TimeoutError(self.error_message)
+    def __enter__(self):
+        signal.signal(signal.SIGALRM, self.handle_timeout)
+        signal.alarm(self.seconds)
+    def __exit__(self, type, value, traceback):
+        signal.alarm(0)
+
+
+from Queue import Queue
+from threading import Thread
+
+class Worker(Thread):
+    """Thread executing tasks from a given tasks queue"""
+    def __init__(self, tasks):
+        Thread.__init__(self)
+        self.tasks = tasks
+        self.daemon = True
+        self.start()
+    
+    def run(self):
+        while True:
+            func, args, kargs = self.tasks.get()
+            try: 
+                with timeout(seconds=1):
+                    func(*args, **kargs)
+            except TimeoutError, e: 
+                print "=== TIMEOUT ERROR" 
+                print e
+            except Exception, e: 
+                print e
+
+class ThreadPool:
+    """Pool of threads consuming tasks from a queue"""
+    def __init__(self, num_threads):
+        self.tasks = Queue(num_threads)
+        for _ in range(num_threads): Worker(self.tasks)
+
+    def add_task(self, func, *args, **kargs):
+        """Add a task to the queue"""
+        self.tasks.put((func, args, kargs))
+
+    def wait_completion(self):
+        """Wait for completion of all the tasks in the queue"""
+        self.tasks.join()
+
+pool = ThreadPool(1)
 
 # Logger examples
 # logger.debug("debug message")
@@ -179,7 +239,7 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                 try:
                     # self.worker_thread(msg);
                     print("before pool")
-                    pool.apply_async(self.worker_thread, [msg])
+                    pool.add_task(self.worker_thread, msg)
                     print("after pool")
                     # #logger.info("Llamo thread " + str(threading.activeCount()))
                     # thread = threading.Thread(target = self.worker_thread, args=(msg,))
