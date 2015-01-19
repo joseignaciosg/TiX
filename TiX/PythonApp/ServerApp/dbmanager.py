@@ -53,6 +53,12 @@ class DBManager(object):
 			self.INSTANCE = DBManager()
 		return self.INSTANCE
 
+	def close_connection(conn):
+		csr = conn.cursor()
+		csr.close()
+		del csr
+		conn.close()
+
 	@classmethod
 	def insert_record(cls, calidad_down,utiliz_down,h_rs_down,h_wave_down,timestamp,calidad_up,utiliz_up,h_rs_up,h_wave_up,userdowncongestion,userupcongestion,installation_id,isp_id,user_id):
 		DBManagerInst = DBManager.get_instance()
@@ -64,6 +70,7 @@ class DBManager(object):
 			cursor.query
 		except Exception, e:
 			logger.error("[DBManager] No se ha podido insertar el record en la DB (" + str(cursor.query) + "): " + str(e))
+		close_connection(conn)
 
 	@classmethod
 	def getInstallationAndClientId(cls, publicKey):
@@ -77,6 +84,7 @@ class DBManager(object):
 			return data
 		except Exception, e:
 			logger.error("[DBManager] No se ha podido obtener el client_id y el installation_id (" + str(cursor.query) + ") de la siguiente publickey: " + str(publicKey) + " | " + str(e))
+		close_connection(conn)
 
 if __name__ == "__main__":
 	# DBManager.insert_record(11100,20,53,'2013-04-14 16:20:12.345678',55,50,"false","false",1,1,1)
