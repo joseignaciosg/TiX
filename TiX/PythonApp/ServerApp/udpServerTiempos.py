@@ -106,8 +106,7 @@ class Worker(Thread):
         while True:
             func, args, kargs = self.tasks.get()
             try: 
-                with timeout(seconds=1):
-                    func(*args, **kargs)
+                func(*args, **kargs)
             except TimeoutError, e: 
                 print "=== TIMEOUT ERROR" 
                 print e
@@ -117,8 +116,8 @@ class Worker(Thread):
 class ThreadPool:
     """Pool of threads consuming tasks from a queue"""
     def __init__(self, num_threads):
-        self.tasks = Queue(num_threads)
-        for _ in range(num_threads): Worker(self.tasks)
+        self.tasks = Queue(0)
+        Worker(1)
 
     def add_task(self, func, *args, **kargs):
         """Add a task to the queue"""
