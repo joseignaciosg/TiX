@@ -63,6 +63,11 @@ public class HibernateRecordRepository extends AbstractHibernateRepo implements 
 	public List<ISP> getISPs(){
 		return find("from ISP ");
 	}
+	
+	public List<ISP> getISPsForUser(User user){
+		Session session = getSession();
+		return session.createQuery("select distinct isp as i from Record r where user_id = " + user.getId()).list();
+	}
 
 	public List<ISP> getISPsForInstallation(User user, Installation installation) {
 		Session session = getSession();

@@ -390,8 +390,10 @@ public class UserController {
 		// poner gráfico de usuario mensual
 		// hacer tablita de medias
 		ModelAndView mav = new ModelAndView();
-
-		List<ISP> isps = recordRepo.getISPs();
+		
+		User reqProfile = userRepo.get(nickname);
+		
+		List<ISP> isps = recordRepo.getISPsForUser(reqProfile);
 
 		List<String> ispNames = new ArrayList<String>();
 
@@ -412,7 +414,7 @@ public class UserController {
 			medianList.add(medians);
 		}
 
-		User reqProfile = userRepo.get(nickname);
+		
 		List<Installation> userInstallations = reqProfile.getInstallations();
 		List<String> userInstallationsnames = new ArrayList<String>();
 		List<HighChart> javaChart_list = new ArrayList<HighChart>();
