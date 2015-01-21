@@ -236,14 +236,9 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
             #Mensaje largo
                 socket.sendto(msg[0] + '|' + tstamp +'|' + str(ts()) + '|' + msg[3] + '|' + msg[4], self.client_address)
                 try:
-                    # self.worker_thread(msg);
-                    print("before pool")
-                    pool.add_task(self.worker_thread, msg)
-                    print("after pool")
-                    # #logger.info("Llamo thread " + str(threading.activeCount()))
-                    # thread = threading.Thread(target = self.worker_thread, args=(msg,))
-                    # thread.start()
-                    # thread.join()
+                    large_package_msg = msg[4].split(';;')
+                    if len(large_package_msg)>=3 and large_package_msg[0]=='DATA':
+                        pool.add_task(self.worker_thread, msg)
                 except Exception, e:
                     logger.info("Error: No se pudo iniciar el thread")
                     logger.info(str(e))
@@ -267,8 +262,8 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                 client_msg_filename = large_package_msg[3]
                 client_plain_msg = b64decode(large_package_msg[4])
 
-                logger.info("Se ha recibido el siguiente paquete de datos: " + client_msg_filename)
-                # print "<public key>\n" + client_pub_key_str + "\n</public key>\n"
+                # logger.info("Se ha recibido el siguiente paquete de datos: " + client_msg_filename)
+                # # print "<public key>\n" + client_pub_key_str + "\n</public key>\n"
                 # print "Signed msg: " + client_signed_msg
                 # print "Filename: " + client_msg_filename
                 # print "<plain msg>\n" + client_plain_msg + "\n</plain msg>\n"
@@ -277,9 +272,9 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                 pubKey = rsa.PublicKey.load_pkcs1(client_pub_key_str)
 
                 if rsa.verify(client_plain_msg, client_signed_msg, pubKey):
-                    logger.debug("Chequeo de integridad satisfactorio para " + client_msg_filename)
+                    # logger.debug("Chequeo de integridad satisfactorio para " + client_msg_filename)
                     client_data = dbmanager.DBManager.getInstallationAndClientId(client_pub_key_str_b64)
-                    logger.debug("Se ha obtenido la siguiente client_data " + str(client_data))
+                    # logger.debug("Se ha obtenido la siguiente client_data " + str(client_data))
 
                     if client_data is not None:
                         installation_id = client_data[0]
@@ -306,9 +301,9 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
 
                         # Check if we have at least 1hr (twelve 5 minutes files) of data
                         if len(os.walk(client_records_server_folder).next()[2]) == 60:
-                            logger.info("La instalacion " + client_server_folder + " tiene 1h de datos. Empezando procesamiento ...")
-
-                            logger.info("checkpoint 1")
+                            # logger.info("La instalacion " + client_server_folder + " tiene 1h de datos. Empezando procesamiento ...")
+                            #
+                            # logger.info("checkpoint 1")
                             # print "Starting calculation for the following files:"
                             files_to_process =  get_files_by_mdate(client_records_server_folder)
                             #files_to_process = [f for f in get_files_by_mdate(client_records_server_folder) if re.match(r'log_*', f)]
@@ -318,30 +313,32 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                             if len(files_to_process) < 60:
                                 logger.error("Error al procesar los archivos de " + client_server_folder)
                             else:
-                                cwd = os.getcwd()
-                                os.chdir('/home/pfitba/tix_production/data_processing')
-                                logger.info("checkpoint 3")
+                                # cwd = os.getcwd()
+                                # os.chdir('/home/pfitba/tix_production/data_processing')
+                                # logger.info("checkpoint 3")
+                                print "Start analyse data"
                                 ansDictionary = completo_III.analyse_data(files_to_process)
-                                logger.info("checkpoint 4")
-                                logger.debug(ansDictionary)
-                                logger.info("checkpoint 5")
-                                os.chdir(cwd)
-                                logger.info("checkpoint 6")
-
-
-                                logger.info("Completando logs en " + "compare_timestamps_"+ client_records_server_folder+".log" )
-                                file_compare=open("/etc/TIX/records/logs_compare/" + "compare_timestamps_"+ client_server_folder+".log","a")
-                                logger.info("checkpoint 7")
-                                logger.info("oldest file: " + get_oldest_file(client_records_server_folder))
-                                oldest_line = linecache.getline( client_records_server_folder +"/"+ get_oldest_file(client_records_server_folder), 1)
-                                newest_line = get_last_line( client_records_server_folder +"/" + get_newest_file(client_records_server_folder))
-                                logger.info("oldest_line " + oldest_line)
-                                logger.info("newest_line " + newest_line)
-                                file_compare.write(oldest_line+"\n")
-                                file_compare.write(newest_line+"\n")
-                                file_compare.write("\n")
-                                file_compare.close()
-                                logger.info("Log completo" )
+                                print "Finish analyse data"
+                                # logger.info("checkpoint 4")
+                                # logger.debug(ansDictionary)
+                                # logger.info("checkpoint 5")
+                                # os.chdir(cwd)
+                                # logger.info("checkpoint 6")
+                                #
+                                #
+                                # logger.info("Completando logs en " + "compare_timestamps_"+ client_records_server_folder+".log" )
+                                # file_compare=open("/etc/TIX/records/logs_compare/" + "compare_timestamps_"+ client_server_folder+".log","a")
+                                # logger.info("checkpoint 7")
+                                # logger.info("oldest file: " + get_oldest_file(client_records_server_folder))
+                                # oldest_line = linecache.getline( client_records_server_folder +"/"+ get_oldest_file(client_records_server_folder), 1)
+                                # newest_line = get_last_line( client_records_server_folder +"/" + get_newest_file(client_records_server_folder))
+                                # logger.info("oldest_line " + oldest_line)
+                                # logger.info("newest_line " + newest_line)
+                                # file_compare.write(oldest_line+"\n")
+                                # file_compare.write(newest_line+"\n")
+                                # file_compare.write("\n")
+                                # file_compare.close()
+                                # logger.info("Log completo" )
 
                                 # Remove 10 oldest logs
                                 for count in range(0,9):
@@ -357,7 +354,6 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                                     new_isp_name = 'Unknown'
                                 payload = {'isp_name': str(new_isp_name)}
                                 headers = {'content-type': 'application/json'}
-                                logger.info("checkpoint 8")
                                 r = requests.post(tixBaseUrl + 'bin/api/newISPPost', data=json.dumps(payload), headers=headers)
 
                                 jsonUserData = []
@@ -368,14 +364,12 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                                 except Exception, e:
                                     rollbar.report_exc_info()
                                     isp_id = 0
-                                logger.info("checkpoint 9")
                                 if(r is not None and len(jsonUserData) > 0):
                                     isp_id = jsonUserData['id']
                                     logger.debug("Utilizando ISP = " + new_isp_name + " con ID = " + str(isp_id))
                                 else:
                                     logger.error("No se ha podido insertar el nuevo ISP en la DB, se utilizara default (" + client_server_folder + ") |  jsonUserData: " + str(jsonUserData))
                                     isp_id = 0
-                                logger.info("checkpoint 10")
                                 logger.debug("Intentando insertar nuevo record en la DB de la carpeta: " +  client_records_server_folder)
                                 try:
                                     dbmanager.DBManager.insert_record(ansDictionary['calidad_Down'],ansDictionary['utiliz_Down'],ansDictionary['H_RS_Down'],ansDictionary['H_Wave_Down'],time.strftime('%Y-%m-%d %H:%M:%S'),ansDictionary['calidad_Up'],ansDictionary['utiliz_Up'],ansDictionary['H_RS_Up'],ansDictionary['H_Wave_Up'],False,False,installation_id,isp_id,client_id)
@@ -383,6 +377,7 @@ class ThreadingUDPRequestHandler(SocketServer.BaseRequestHandler):
                                     logger.error("Error al insertar nuevo record en la DB de la carpeta: " + client_records_server_folder)
                                     logger.error(e)
                                     rollbar.report_exc_info()
+                                print "---- SUCCESSFUL FINISH"
                     else:
                         logger.debug("No se ha podido obtener la client_data para la siguiente pubKey= " + str(client_pub_key_str_b64))
         except:
