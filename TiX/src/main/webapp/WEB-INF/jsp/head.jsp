@@ -27,6 +27,8 @@
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script type="text/javascript" src="<c:url value='/js/bootstrap.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/bootstrap-datepicker.js'/>"></script>
+<script type="text/javascript" src="http://code.jugal.me/js/jugalsLib.js" ></script>
 <script src="http://code.highcharts.com/stock/highstock.js"></script>
+<script src="http://code.highcharts.com/stock/highcharts-more.js"></script>
 <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
 <script src="<c:url value='/js/tix.js'/>"></script>

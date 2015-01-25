@@ -40,7 +40,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 					</table>
 				</div>
 				<div id="meantabledescription">
-					Esta tabla muestra las medianas mensuales de cada uno de los parámetros estudiados para cada uno de los proveedores de internet que utilizó el usuario. 
+					Esta tabla muestra las medianas mensuales de cada uno de los parámetros estudiados para cada uno de los proveedores de internet que utilizó el usuario.
 				</div>
 				</br></br>
 		</div>
@@ -84,21 +84,25 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 	                var chart;
 	                $(document).ready(function() {
 	                    chart = new Highcharts.Chart({
+
 	                        chart: {
+	                        		// type: 'columnrange'
 	                            renderTo: 'graphcontainer${status.index}',
 	                          	marginRight: 130,
 	                           	marginBottom: 40
 	                        },
+
 	                        title: {
 	                            text: title,
 	                            x: -20 //center
 	                        },
+
 	                        subtitle: {
 	                            text: subtitle,
 	                            x: -20
 	                        },
+
 	                        xAxis: {
-	                            max: 50,
 	                        	type: 'datetime',
 	                            //plotBands: redmarker,
 	                            categories: fechas,
@@ -106,10 +110,12 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 	                            labels: {
 	                            	enabled: true,
 	                                formatter: function() {
-	                                    return Highcharts.dateFormat('%d/%m <br/>(%H:%Mhs)', this.value);
+	                                    // return Highcharts.dateFormat('%d/%m <br/>(%H:%Mhs)', this.value);
+	                                    return Highcharts.dateFormat('%d/%m', this.value);
 	                                },
 	                            },
 	                        },
+
 	                        yAxis: {
 	                            title: {
 	                                text: '% de utilizacion'
@@ -121,36 +127,36 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 	                                }],
 	                           	min: 0, max: 100
 	                        },
-	                         plotOptions: {
-	                series: {
-	                    cursor: 'pointer',
-	                    enableMouseTracking: false,
-	                    shadow: false, 
-	                    animation: false, 
-	                    point: {
-	                        events: {
-	                            click: function() {
-	                                $.holdReady(true);
-	                                $.get("./changeCongestionStatus?id=" + this.id + "&type=" + this.type, function() {
-									  $.holdReady(false);
-									});
-	                              //  $.sleep(800);
-								//	$(location).attr('href', $(location).attr('href')).delay(2000);
-								var delay = 500; //Your delay in milliseconds
-									setTimeout(function(){ window.location = $(location).attr('href'); }, delay);
-	                            }
-	                        }
-	                    },
-	                    marker: {
-	                        lineWidth: 1
-	                    }
-	                }
-	            },
-	                        tooltip: {
 
+	                         plotOptions: {
+							                series: {
+							                    cursor: 'pointer',
+							                    enableMouseTracking: false,
+							                    shadow: false,
+							                    animation: false,
+							                    point: {
+							                        events: {
+							                            click: function() {
+							                                $.holdReady(true);
+							                                $.get("./changeCongestionStatus?id=" + this.id + "&type=" + this.type, function() {
+															  $.holdReady(false);
+															});
+															var delay = 500; //Your delay in milliseconds
+															setTimeout(function(){ window.location = $(location).attr('href'); }, delay);
+							                            }
+							                        }
+							                    },
+							                    marker: {
+							                        lineWidth: 1
+							                    }
+							                }
+	            						},
+
+	                        tooltip: {
 	                            shared: true,
 	                            crosshairs: true
 	                        },
+
 	                        legend: {
 	                            layout: 'vertical',
 	                            align: 'right',
@@ -159,9 +165,11 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 	                            y: 100,
 	                            borderWidth: 0
 	                        },
+
 	                        scrollbar: {
-	                            enabled: true
+	                            enabled: false
 	                        },
+
 	                        series: datos
 	                    });
 	                });
@@ -169,4 +177,6 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 	        </script>
 </c:forEach>
+
 </html>
+
