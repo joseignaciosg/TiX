@@ -89,11 +89,12 @@ tix_update_files_and_restart() {
     get_os
     case $os in
       linux)
-
         sudo cp -rfv downloaded/releases/TixApp/* /usr/share/tix/
+        nohup /etc/TIX/app/startupAppCaller.sh
         ;;
       mac)
         sudo cp -rfv downloaded/releases/TixApp.app/* /Applications/TixApp.app/
+        nohup /etc/TIX/app/startupAppCaller.sh
 		;;
     esac
   fi
