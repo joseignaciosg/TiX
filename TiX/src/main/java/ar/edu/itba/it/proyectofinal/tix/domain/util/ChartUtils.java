@@ -102,6 +102,7 @@ public class ChartUtils {
 		double[] congestiondown_vec = new double[5];
 		double[] utilizacionup_vec = new double[5];
 		double[] utilizaciondown_vec = new double[5];
+		double[] occurrences = new double[1]; // gives the number of occurrences in the boxplot 
 
 		List<double[]> values = new ArrayList<double[]>();
 
@@ -154,6 +155,8 @@ public class ChartUtils {
 			i++;
 		}
 
+		occurrences[0] = (double)i;
+		
 		// sorting
 		Collections.sort(congestionup_values);
 		Collections.sort(congestiondown_values);
@@ -234,6 +237,7 @@ public class ChartUtils {
 		values.add(congestiondown_vec);
 		values.add(utilizacionup_vec);
 		values.add(utilizaciondown_vec);
+		values.add(occurrences);
 
 		return values;
 	}
