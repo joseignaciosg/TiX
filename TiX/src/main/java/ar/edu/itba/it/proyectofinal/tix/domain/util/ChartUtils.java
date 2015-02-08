@@ -258,6 +258,14 @@ public class ChartUtils {
 		// printVec(utilizacionup_vec);
 		// printVec(utilizaciondown_vec);
 		//
+		
+		for (int k =0; k<5;k++){
+			 DecimalFormat df = new DecimalFormat("#.00");
+			 congestionup_vec[k] = Double.parseDouble( df.format(congestionup_vec[k]));
+			 congestiondown_vec[k] = Double.parseDouble( df.format(congestiondown_vec[k]));
+			 utilizacionup_vec[k] = Double.parseDouble( df.format(utilizacionup_vec[k]));
+			 utilizaciondown_vec[k] = Double.parseDouble( df.format(utilizaciondown_vec[k]));
+		}
 
 		values.add(congestionup_vec);
 		values.add(congestiondown_vec);
