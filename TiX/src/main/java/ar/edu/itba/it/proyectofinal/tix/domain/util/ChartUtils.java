@@ -240,6 +240,19 @@ public class ChartUtils {
 			utilizaciondown_vec[2] = utilizaciondown_vec[3];
 		}
 		
+		if (congestionup_vec[2] < congestionup_vec[1] ){
+			congestionup_vec[1] = congestionup_vec[2];
+		}
+		if (congestiondown_vec[2] < congestiondown_vec[1] ){
+			congestiondown_vec[1] = congestiondown_vec[2];
+		}
+		if (utilizacionup_vec[2] < utilizacionup_vec[1] ){
+			utilizacionup_vec[1] = utilizacionup_vec[2];
+		}
+		if (utilizaciondown_vec[2] < utilizaciondown_vec[1] ){
+			utilizaciondown_vec[1] = utilizaciondown_vec[2];
+		}
+		
 				// printVec(congestionup_vec);
 		// printVec(congestiondown_vec);
 		// printVec(utilizacionup_vec);

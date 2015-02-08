@@ -6,6 +6,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@
 taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
@@ -321,6 +322,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
         series: [{
             name: '${entry.isp_name}',
             data: [
+                   //                [<fmt:formatNumber type="number"  maxFractionDigits="2" value="${entry.congestionUpChart[0]}" />, <fmt:formatNumber type="number"  maxFractionDigits="2" value="${entry.congestionUpChart[1]}" />, <fmt:formatNumber type="number"  maxFractionDigits="2" value="${entry.congestionUpChart[2]}" />, <fmt:formatNumber type="number"  maxFractionDigits="2" value="${entry.congestionUpChart[3]}" />, <fmt:formatNumber type="number"  maxFractionDigits="2" value="${entry.congestionUpChart[4]}" />],
                 [${entry.congestionUpChart[0]}, ${entry.congestionUpChart[1]}, ${entry.congestionUpChart[2]}, ${entry.congestionUpChart[3]}, ${entry.congestionUpChart[4]}],
                 [${entry.congestionDownChart[0]}, ${entry.congestionDownChart[1]}, ${entry.congestionDownChart[2]}, ${entry.congestionDownChart[3]}, ${entry.congestionDownChart[4]}],
                 [${entry.utilizacionUpChart[0]}, ${entry.utilizacionUpChart[1]}, ${entry.utilizacionUpChart[2]}, ${entry.utilizacionUpChart[3]}, ${entry.utilizacionUpChart[4]}],
