@@ -58,7 +58,7 @@ public class ChartUtils {
 
 		// medians
 
-		if (i > 1) {
+		if (i > 4) {
 			if (congestionup_values.size() != 0
 					&& congestiondown_values.size() != 0
 					&& utilizacionup_values.size() != 0
