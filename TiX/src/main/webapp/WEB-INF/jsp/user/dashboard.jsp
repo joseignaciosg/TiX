@@ -29,8 +29,6 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 		             		</c:forEach>
 					</ul>
 
-
-
 	              	<c:forEach items="${installationISPMap}" var="entry">
 		              	<c:if test="${entry.key.id != user.defaultInstallation.id}">
 		            		<li class='<c:if test="${entry.key.id == currentInstallation.id}">active listExpanded</c:if><c:if test="${entry.key.id != currentInstallation.id}">listCollapsed</c:if>'>
@@ -51,8 +49,6 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 			              	</ul>
 			              </c:if>
 					</c:forEach>
-
-
 
 	  	          <li class="divider"></li>
 	              	<li><a href="../installation/downloadapp"><i class="icon-plus-sign"></i>Nueva instalaci&oacute;n</a></li>

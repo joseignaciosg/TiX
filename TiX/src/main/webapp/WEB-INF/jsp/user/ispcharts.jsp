@@ -6,6 +6,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@
 taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
@@ -118,9 +119,8 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
     </div>
     <hr/>
 </c:forEach>
-
 <c:forEach items="${boxplot_list}" var="entry">
-    <h3 class="isp-name" style="margin-left:180px;">${entry.isp_name}</h3>
+    <h3 class="isp-name" style="margin-left:180px;">${entry.isp_name} ( ${entry.occurrences} ocurrencias )</h3>
     <div id="container${entry.isp_id}" style="height: 400px; margin: auto; min-width: 310px; max-width: 600px"></div>
     <br/>
 </c:forEach>

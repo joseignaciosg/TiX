@@ -6,6 +6,7 @@ public class IspBoxplotDisplayer {
 
 	private String isp_name;
 	private int isp_id;
+	private int occurrences;
 	private double[] congestionUpChart = null;
 	private double[] congestionDownChart = null;
 	private double[] utilizacionUpChart = null;
@@ -29,6 +30,14 @@ public class IspBoxplotDisplayer {
 
 	public void setIsp_id(int isp_id) {
 		this.isp_id = isp_id;
+	}
+	
+	public int getOccurrences() {
+		return occurrences;
+	}
+
+	public void setOccurrences(int occurrences) {
+		this.occurrences = occurrences;
 	}
 
 	public double[] getCongestionUpChart() {

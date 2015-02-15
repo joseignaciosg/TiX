@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@
@@ -40,18 +40,18 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 					</table>
 				</div>
 				<div id="meantabledescription">
-					Esta tabla muestra las medianas mensuales de cada uno de los par·metros estudiados para cada uno de los proveedores de internet que utilizÛ el usuario.
+					Esta tabla muestra las medianas mensuales de cada uno de los par√°metros estudiados para cada uno de los proveedores de internet que utiliz√≥ el usuario.
 				</div>
 				</br></br>
 		</div>
 	</div>
 	<div class="container-fluid">
-	 <!-- para cada una de las instalaciones tengo que mostrar el gr√°fico del usuario -->
+	 <!-- para cada una de las instalaciones tengo que mostrar el gr√É¬°fico del usuario -->
 
 	 <c:forEach items="${javaChart_list}" var="entry" varStatus="status">
 			<div id="graphcontainer${status.index}"></div>
 			<div id="chartdescription">
-					Este gr·fico muestra la evoluciÛn de los cuatro par·metros estudiados con informaciÛn para los datos obtenidos para la instalaciÛn ${userInstallations[status.index]}
+					Este gr√°fico muestra la evoluci√≥n de los cuatro par√°metros estudiados con informaci√≥n para los datos obtenidos para la instalaci√≥n ${userInstallations[status.index]}
 			</div>
 			</br></br>
 	 </c:forEach>

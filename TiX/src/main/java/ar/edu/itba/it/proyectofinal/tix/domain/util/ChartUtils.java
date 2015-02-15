@@ -58,7 +58,7 @@ public class ChartUtils {
 
 		// medians
 
-		if (i > 1) {
+		if (i > 4) {
 			if (congestionup_values.size() != 0
 					&& congestiondown_values.size() != 0
 					&& utilizacionup_values.size() != 0
@@ -102,6 +102,7 @@ public class ChartUtils {
 		double[] congestiondown_vec = new double[5];
 		double[] utilizacionup_vec = new double[5];
 		double[] utilizaciondown_vec = new double[5];
+		double[] occurrences = new double[1]; // gives the number of occurrences in the boxplot 
 
 		List<double[]> values = new ArrayList<double[]>();
 
@@ -154,6 +155,8 @@ public class ChartUtils {
 			i++;
 		}
 
+		occurrences[0] = (double)i;
+		
 		// sorting
 		Collections.sort(congestionup_values);
 		Collections.sort(congestiondown_values);
@@ -224,16 +227,51 @@ public class ChartUtils {
 
 		}
 
-		// printVec(congestionup_vec);
+		if (congestionup_vec[2] > congestionup_vec[3] ){
+			congestionup_vec[2] = congestionup_vec[3];
+		}
+		if (congestiondown_vec[2] > congestiondown_vec[3] ){
+			congestiondown_vec[2] = congestiondown_vec[3];
+		}
+		if (utilizacionup_vec[2] > utilizacionup_vec[3] ){
+			utilizacionup_vec[2] = utilizacionup_vec[3];
+		}
+		if (utilizaciondown_vec[2] > utilizaciondown_vec[3] ){
+			utilizaciondown_vec[2] = utilizaciondown_vec[3];
+		}
+		
+		if (congestionup_vec[2] < congestionup_vec[1] ){
+			congestionup_vec[1] = congestionup_vec[2];
+		}
+		if (congestiondown_vec[2] < congestiondown_vec[1] ){
+			congestiondown_vec[1] = congestiondown_vec[2];
+		}
+		if (utilizacionup_vec[2] < utilizacionup_vec[1] ){
+			utilizacionup_vec[1] = utilizacionup_vec[2];
+		}
+		if (utilizaciondown_vec[2] < utilizaciondown_vec[1] ){
+			utilizaciondown_vec[1] = utilizaciondown_vec[2];
+		}
+		
+				// printVec(congestionup_vec);
 		// printVec(congestiondown_vec);
 		// printVec(utilizacionup_vec);
 		// printVec(utilizaciondown_vec);
 		//
+		
+		for (int k =0; k<5;k++){
+			 DecimalFormat df = new DecimalFormat("#.00");
+			 congestionup_vec[k] = Double.parseDouble( df.format(congestionup_vec[k]));
+			 congestiondown_vec[k] = Double.parseDouble( df.format(congestiondown_vec[k]));
+			 utilizacionup_vec[k] = Double.parseDouble( df.format(utilizacionup_vec[k]));
+			 utilizaciondown_vec[k] = Double.parseDouble( df.format(utilizaciondown_vec[k]));
+		}
 
 		values.add(congestionup_vec);
 		values.add(congestiondown_vec);
 		values.add(utilizacionup_vec);
 		values.add(utilizaciondown_vec);
+		values.add(occurrences);
 
 		return values;
 	}

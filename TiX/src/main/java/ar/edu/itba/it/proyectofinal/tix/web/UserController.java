@@ -559,6 +559,7 @@ public class UserController {
 				boxplot.setCongestionDownChart(boxplotdata.get(1));
 				boxplot.setUtilizacionUpChart(boxplotdata.get(2));
 				boxplot.setUtilizacionDownChart(boxplotdata.get(3));
+				boxplot.setOccurrences((int)boxplotdata.get(4)[0]);
 			}
 			boxplot_list.add(boxplot);
 			System.out.println(boxplot);
