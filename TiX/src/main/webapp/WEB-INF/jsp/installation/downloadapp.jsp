@@ -6,7 +6,7 @@
 	<div class="container">
 		<section id="typography">
 			<div class="page-header">
-				<h1>Nueva instalaci&oacute;n</h1>
+				<h1>Nueva instalaci&oacute;n o actualizaci&oacute;n</h1>
 			</div>
 
 			<!-- Headings & Paragraph Copy -->
