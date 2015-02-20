@@ -315,14 +315,15 @@ public class ChartUtils {
 	public static int[] generateHistogramUtilizacionUp(List<Record> records,
 			String title) {
 		Iterator<Record> it = records.iterator();
-		int[] classes = new int[11];
+		int[] classes = new int[10];
 		while (it.hasNext()) {
 			Record record = it.next();
 			double index = record.getUtilizacionUpstream() / 10;
 			int cong = (int) index;
-			if (cong <= 10) {
-				classes[cong]++;
-			}
+			if (cong == 10) {
+        cong--;
+      }
+      classes[cong]++;
 		}
 		return classes;
 	}
@@ -330,14 +331,15 @@ public class ChartUtils {
 	public static int[] generateHistogramUtilizacionDown(List<Record> records,
 			String title) {
 		Iterator<Record> it = records.iterator();
-		int[] classes = new int[11];
+		int[] classes = new int[10];
 		while (it.hasNext()) {
 			Record record = it.next();
 			double index = record.getUtilizacionDownstream() / 10;
 			int cong = (int) index;
-			if (cong <= 10) {
-				classes[cong]++;
-			}
+			if (cong == 10) {
+        cong--;
+      }
+      classes[cong]++;
 		}
 		return classes;
 	}
