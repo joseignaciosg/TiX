@@ -1,9 +1,0 @@
-hibernate.show_sql            	= false
-hibernate.hbm2ddl.auto        	= validate
-hibernate.format_sql			= true
-hibernate.use_sql_comments		= true
-hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-jdbc.driverClassName=org.postgresql.Driver
-jdbc.url=jdbc:postgresql://localhost:5432/internetqos
-jdbc.username=paw
-jdbc.password=paw
