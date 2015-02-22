@@ -59,6 +59,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 	</div>
 
 </body>
+
 <c:forEach items="${javaChart_list}" var="entry" varStatus="status">
 	<script type="text/javascript">
 	            $(function () {
@@ -106,7 +107,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 	                        	type: 'datetime',
 	                            //plotBands: redmarker,
 	                            categories: fechas,
-	                            tickInterval: 10,
+	                            tickInterval: 6,
 	                            labels: {
 	                            	enabled: true,
 	                                formatter: function() {
@@ -131,6 +132,7 @@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 	                         plotOptions: {
 							                series: {
 							                    cursor: 'pointer',
+							                    turboThreshold: 2000,
 							                    enableMouseTracking: false,
 							                    shadow: false,
 							                    animation: false,

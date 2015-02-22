@@ -437,6 +437,7 @@ public class UserController {
 									+ getFormattedDate(maxDate) + ")" : ""),
 					ChartType.GENERAL_GRAPH);
 
+		
 			javaChart_list.add(chart);
 
 		}

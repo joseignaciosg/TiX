@@ -576,12 +576,10 @@ public class ChartUtils {
 				j.put("marker", utilizacionMarkerOptions);
 				js.put(j);
 				utilizacion_final = utilizacion_js;
-
 			}
 
 			chart = new HighChart(timestamps, js, title, subtitle,
 					utilizacion_final);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
