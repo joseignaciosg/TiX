@@ -114,7 +114,7 @@ class LoginScreen(BoxLayout): #BoxLayout para poner arriba el form y abajo el bo
     content = BoxLayout(orientation='vertical', spacing=10)
     btncreateinstallation = Button(text='Desinstalar', size_hint_y=None,  size_hint_x=0.4, height='50sp', pos_hint={'center_x': 0.5})
     btncreateinstallation.bind(on_press=deleteExistingInstallation)
-    content.add_widget(Label(text='Usted ya posee una instalacion de TiX en esta PC.'))
+    content.add_widget(Label(text='Usted ya posee una instalacion de TiX en esta PC. - Version ACTUALIZADA'))
     content.add_widget(btncreateinstallation)
     content.add_widget(btnclose)
     popup = Popup(title='Error',content=content,size_hint=(None, None), size=(600, 200), auto_dismiss=False)
